@@ -1,0 +1,101 @@
+/* ========================= */
+/* NAVBAR CONTAINER */
+/* ========================= */
+
+.custom-navbar {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  padding: 12px 0;
+  transition: all 0.3s ease;
+}
+
+/* ========================= */
+/* BRAND */
+/* ========================= */
+
+.brand-text {
+  font-weight: 800;
+  font-size: 1.4rem;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================= */
+/* NAV LINKS */
+/* ========================= */
+
+.nav-links .nav-link {
+  font-weight: 500;
+  margin-right: 15px;
+  color: #333 !important;
+  transition: all 0.3s ease;
+}
+
+.nav-links .nav-link:hover {
+  color: #667eea !important;
+  transform: translateY(-1px);
+}
+
+/* ========================= */
+/* USER INFO */
+/* ========================= */
+
+.user-info {
+  font-weight: 500;
+  color: #555;
+}
+
+/* ========================= */
+/* LOGIN LINK */
+/* ========================= */
+
+.login-link {
+  font-weight: 500;
+  color: #333 !important;
+}
+
+.login-link:hover {
+  color: #667eea !important;
+}
+
+/* ========================= */
+/* REGISTER BUTTON */
+/* ========================= */
+
+.register-btn {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* ========================= */
+/* LOGOUT BUTTON */
+/* ========================= */
+
+.logout-btn {
+  background: linear-gradient(90deg, #ff6a6a, #ff4b4b);
+  border: none;
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 75, 75, 0.4);
+}
