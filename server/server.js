@@ -1,13 +1,13 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const path = require('path');
-const connectDB = require('./config/db');
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const path = require("path");
+const connectDB = require("./config/db");
 
 // Route files
-const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
-const chatRoutes = require('./routes/chatRoutes');
+const authRoutes = require("./routes/authRoutes");
+const productRoutes = require("./routes/productRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 dotenv.config();
 
@@ -19,54 +19,49 @@ app.use(cors());
 app.use(express.json());
 
 // Make uploads folder publicly accessible
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // Mount routes
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/chat', chatRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/chat", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, console.log(`Server running on port ${PORT}`));
 
-const io = require('socket.io')(server, {
-    pingTimeout: 60000,
-    cors: {
-        origin: "http://localhost:5173", // Vite default port
-    },
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:5173", // Vite default port
+  },
 });
 
-io.on('connection', (socket) => {
-    console.log('Connected to socket.io');
+io.on("connection", (socket) => {
+  console.log("Connected to socket.io");
 
-    socket.on('setup', (userData) => {
-        socket.join(userData._id);
-        socket.emit('connected');
-    });
+  socket.on("setup", (userData) => {
+    socket.join(userData._id);
+    socket.emit("connected");
+  });
 
-    socket.on('join chat', (room) => {
-        socket.join(room);
-        console.log('User Joined Room: ' + room);
-    });
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("User Joined Room: " + room);
+  });
 
-    socket.on('typing', (room) => socket.in(room).emit('typing'));
-    socket.on('stop typing', (room) => socket.in(room).emit('stop typing'));
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
-    socket.on('new message', (newMessageRecieved) => {
-        var chat = newMessageRecieved.chat;
+  socket.on("new message", (newMessageRecieved) => {
+    var chat = newMessageRecieved.chat;
 
-        if (!chat.participants) return console.log('chat.participants not defined');
+    if (!chat.participants) return console.log("chat.participants not defined");
 
-        chat.participants.forEach(user => {
-            if (user._id == newMessageRecieved.sender._id) return;
+    socket.in(chat._id).emit("message recieved", newMessageRecieved);
+  });
 
-            socket.in(user._id).emit('message recieved', newMessageRecieved);
-        });
-    });
-
-    socket.off('setup', () => {
-        console.log('USER DISCONNECTED');
-        socket.leave(userData._id);
-    });
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
 });
