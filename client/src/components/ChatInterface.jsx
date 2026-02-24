@@ -1,34 +1,17 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "axios";
-import io from "socket.io-client";
 import AuthContext from "../context/AuthContext";
 
-const ENDPOINT = "http://localhost:5000";
-let socket;
 
 
-const ChatInterface = ({ selectedChat }) => {
+const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState([]);
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", user);
-    socket.on("connected", () => setSocketConnected(true));
-
-    socket.on("online users", (users) => {
-    setOnlineUsers(users);
-  });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [user]);
 
   const isOtherUserOnline = () => {
 
@@ -41,7 +24,9 @@ const ChatInterface = ({ selectedChat }) => {
 
   if (!otherUser) return false;
 
-  return onlineUsers.includes(otherUser._id);
+   return onlineUsers.some(
+    (id) => id.toString() === otherUser._id.toString()
+  );
 };
 
   useEffect(() => {
