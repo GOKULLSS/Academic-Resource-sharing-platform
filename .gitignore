@@ -4,4 +4,6 @@ dist
 .env.*
 *.log
 .vscode
-uploads
+# Ignore uploaded images only
+server/uploads/*
+!server/uploads/.gitkeep
