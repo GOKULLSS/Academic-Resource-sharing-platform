@@ -9,6 +9,8 @@ const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 
+let onlineUsers = [];
+
 dotenv.config();
 
 connectDB();
@@ -42,6 +44,16 @@ io.on("connection", (socket) => {
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);
+
+    socket.userId = userData._id;
+
+    // Add user if not already online
+    if (!onlineUsers.includes(userData._id)) {
+      onlineUsers.push(userData._id);
+    }
+
+    io.emit("online users", onlineUsers);
+
     socket.emit("connected");
   });
 
@@ -63,5 +75,10 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
+    onlineUsers = onlineUsers.filter(
+      (userId) => userId !== socket.userId
+    );
+
+    io.emit("online users", onlineUsers);
   });
 });
