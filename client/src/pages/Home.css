@@ -78,8 +78,10 @@ body {
 /* Product Image */
 
 .product-image {
+  width: 100%;        /* ADD THIS */
   height: 230px;
-  object-fit: cover;
+  object-fit: contain;
+  display: block;     /* prevents small spacing issues */
   transition: transform 0.4s ease;
 }
 
