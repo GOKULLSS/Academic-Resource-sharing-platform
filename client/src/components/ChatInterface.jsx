@@ -7,11 +7,13 @@ import AuthContext from "../context/AuthContext";
 const ENDPOINT = "http://localhost:5000";
 let socket;
 
+
 const ChatInterface = ({ selectedChat }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -19,10 +21,28 @@ const ChatInterface = ({ selectedChat }) => {
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
 
+    socket.on("online users", (users) => {
+    setOnlineUsers(users);
+  });
+
     return () => {
       socket.disconnect();
     };
   }, [user]);
+
+  const isOtherUserOnline = () => {
+
+
+  if (!selectedChat || !selectedChat.participants || !user) return false;
+
+  const otherUser = selectedChat.participants.find(
+    (p) => p._id !== user._id
+  );
+
+  if (!otherUser) return false;
+
+  return onlineUsers.includes(otherUser._id);
+};
 
   useEffect(() => {
     if (!socket) return;
@@ -104,7 +124,16 @@ const ChatInterface = ({ selectedChat }) => {
   return (
     <div className="d-flex flex-column h-100">
       <div className="p-3 border-bottom bg-light">
-        <strong>{getOtherUserName()}</strong>
+        <div className="d-flex align-items-center">
+          <strong>{getOtherUserName()}</strong>
+          <span
+            className={`ms-2 badge ${
+              isOtherUserOnline() ? "bg-success" : "bg-secondary"
+            }`}
+  >
+            {isOtherUserOnline() ? "Online" : "Offline"}
+          </span>
+        </div>
       </div>
       <div
         className="flex-grow-1 p-3"
@@ -112,7 +141,7 @@ const ChatInterface = ({ selectedChat }) => {
       >
         {messages.map((m, i) => (
           <div
-            key={i}
+            key={m._id}
             className={`d-flex mb-2 ${m.sender._id === user._id ? "justify-content-end" : "justify-content-start"}`}
           >
             <div
