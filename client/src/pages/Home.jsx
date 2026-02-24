@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Row, Col, Card, Badge, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import './Home.css';
 
 const Home = () => {
     const { user } = useContext(AuthContext);
@@ -50,66 +51,112 @@ const Home = () => {
     };
 
     return (
-        <Container className="mt-4">
-            <h1 className="mb-4">Campus Marketplace</h1>
-            <Row className="mb-4">
-                <Col md={4}>
-                    <Form.Select value={category} onChange={(e) => setCategory(e.target.value)}>
-                        <option value="">All Categories</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Books">Books</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Other">Other</option>
-                    </Form.Select>
-                </Col>
-                <Col md={4}>
-                    <Form.Select value={type} onChange={(e) => setType(e.target.value)}>
-                        <option value="">All Types</option>
-                        <option value="Buy">Buy</option>
-                        <option value="Rent">Rent</option>
-                    </Form.Select>
-                </Col>
-            </Row>
+  <Container className="mt-5">
+    {/* 🔥 Header Section */}
+    <div className="text-center mb-5 marketplace-header">
+      <h1 className="fw-bold">Campus Marketplace</h1>
+      <p className="text-muted">
+        Buy, sell or rent items easily within your campus.
+      </p>
+    </div>
 
-            <Row>
-                {products.length === 0 ? (
-                    <Col><p>No products found.</p></Col>
-                ) : (
-                    products.map((product) => (
-                        <Col key={product._id} md={4} className="mb-4">
-                            <Card className="h-100 shadow-sm">
-                                {product.image && (
-                                    <Card.Img
-                                        variant="top"
-                                        src={`http://localhost:5000${product.image}`}
-                                        style={{ height: '200px', objectFit: 'cover' }}
-                                    />
-                                )}
-                                <Card.Body>
-                                    <Card.Title>{product.title}</Card.Title>
-                                    <Card.Text>{product.description.substring(0, 100)}...</Card.Text>
-                                    <h5 className="text-primary">${product.price}</h5>
-                                    <div className="mb-2">
-                                        <Badge bg="info" className="me-2">{product.category}</Badge>
-                                        <Badge bg={product.transactionType === 'Buy' ? 'success' : 'warning'}>
-                                            {product.transactionType}
-                                        </Badge>
-                                    </div>
-                                    <Button
-                                        variant="outline-primary"
-                                        className="w-100"
-                                        onClick={() => handleMessageSeller(product.seller._id)}
-                                    >
-                                        Message Seller
-                                    </Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))
-                )}
-            </Row>
-        </Container>
-    );
+    {/* 🔎 Filter Section */}
+    <Card className="filter-card mb-4">
+      <Row>
+        <Col md={6}>
+          <Form.Select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="rounded-3"
+          >
+            <option value="">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books">Books</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Other">Other</option>
+          </Form.Select>
+        </Col>
+
+        <Col md={6}>
+          <Form.Select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="rounded-3"
+          >
+            <option value="">All Types</option>
+            <option value="Buy">Buy</option>
+            <option value="Rent">Rent</option>
+          </Form.Select>
+        </Col>
+      </Row>
+    </Card>
+
+    {/* 🛒 Products Grid */}
+    <Row>
+      {products.length === 0 ? (
+        <Col>
+          <div className="text-center text-muted py-5">
+            <h5>No products found</h5>
+            <p>Try adjusting filters or check back later.</p>
+          </div>
+        </Col>
+      ) : (
+        products.map((product) => (
+          <Col key={product._id} md={4} className="mb-4">
+            <Card className="h-100 product-card">
+              {product.image && (
+                <Card.Img
+                  variant="top"
+                  src={`http://localhost:5000${product.image}`}
+                  className="product-image"
+                />
+              )}
+
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="product-title">
+                  {product.title}
+                </Card.Title>
+
+                <Card.Text className="product-description flex-grow-1">
+                  {product.description.substring(0, 90)}...
+                </Card.Text>
+
+                <div className="mb-2">
+                  <Badge bg="light" text="dark" className="custom-badge me-2">
+                    {product.category}
+                  </Badge>
+                  <Badge
+                    bg={
+                      product.transactionType === "Buy"
+                        ? "success"
+                        : "warning"
+                    }
+                    className="custom-badge"
+                  >
+                    {product.transactionType}
+                  </Badge>
+                </div>
+
+                <h4 className="product-price mb-3">
+                  ₹{product.price}
+                </h4>
+
+                <Button
+                  className="w-100 custom-btn"
+                  onClick={() =>
+                    handleMessageSeller(product.seller._id)
+                  }
+                >
+                  Message Seller
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))
+      )}
+    </Row>
+  </Container>
+);
 };
 
 export default Home;
