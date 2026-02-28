@@ -7,11 +7,14 @@ const {
     getPendingProducts,
     approveProduct,
     deleteProduct,
-    getLiveProducts
+    getLiveProducts,
+    getMyProducts
 } = require('../controllers/productController');
 
 // Public route
 router.get('/', getLiveProducts);
+router.get('/my', protect, getMyProducts);
+
 
 // Admin routes
 router.get('/pending', protect, admin, getPendingProducts);

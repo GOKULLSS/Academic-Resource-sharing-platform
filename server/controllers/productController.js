@@ -103,11 +103,25 @@ const getLiveProducts = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Get logged-in user's products
+// @route   GET /api/products/my
+// @access  Private
+const getMyProducts = async (req, res) => {
+    try {
+        const products = await Product.find({ seller: req.user.id })
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 module.exports = {
     createProduct,
     getPendingProducts,
     approveProduct,
     deleteProduct,
-    getLiveProducts
+    getLiveProducts,
+    getMyProducts
 };
