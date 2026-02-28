@@ -186,7 +186,7 @@ const StudentDashboard = () => {
           </Card>
         </Col>
         <Col md={12}>
-          <Card className="mt-4">
+          <Card className="mt-4 mb-4">
             <Card.Body>
               <h3>Upload New Product</h3>
               {message.text && (

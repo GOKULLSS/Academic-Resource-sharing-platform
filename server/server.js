@@ -3,11 +3,13 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
 const connectDB = require("./config/db");
+const chatRoutes = require("./routes/chatRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 // Route files
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
-const chatRoutes = require("./routes/chatRoutes");
+
 
 let onlineUsers = [];
 
@@ -27,6 +29,7 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/orders", orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 
@@ -38,7 +41,7 @@ const io = require("socket.io")(server, {
     origin: "http://localhost:5173", // Vite default port
   },
 });
-
+app.set("io", io);
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
 

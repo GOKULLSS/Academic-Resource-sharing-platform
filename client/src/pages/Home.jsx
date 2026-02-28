@@ -142,12 +142,12 @@ const Home = () => {
                 </h4>
 
                 <Button
-                  className="w-100 custom-btn"
-                  onClick={() =>
-                    handleMessageSeller(product.seller._id)
-                  }
+                       className="w-100 custom-btn mb-2"
+                       onClick={() =>
+                       navigate("/checkout", { state: { product } })
+                       }
                 >
-                  Message Seller
+                 Buy Now
                 </Button>
               </Card.Body>
             </Card>

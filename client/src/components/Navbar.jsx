@@ -34,16 +34,25 @@ const NavigationBar = () => {
               </Nav.Link>
             )}
 
-            {user && user.role === "student" && (
-              <>
-                <Nav.Link as={Link} to="/student">
+           {user && user.role === "student" && (
+           <>
+              <Nav.Link as={Link} to="/student">
                   My Dashboard
-                </Nav.Link>
-                <Nav.Link as={Link} to="/chat">
-                  Messages
-                </Nav.Link>
-              </>
-            )}
+              </Nav.Link>
+
+              <Nav.Link as={Link} to="/buyer-dashboard">
+                  My Purchases
+              </Nav.Link>
+
+              <Nav.Link as={Link} to="/seller-dashboard">
+                  Incoming Orders
+              </Nav.Link>
+
+              <Nav.Link as={Link} to="/chat">
+                 Messages
+              </Nav.Link>
+           </>
+         )}
           </Nav>
 
           <Nav className="align-items-center">

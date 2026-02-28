@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
     category: { type: String, required: true },
     image: { type: String }, // Path to local upload or cloud URL
     transactionType: { type: String, enum: ['Buy', 'Rent'], required: true },
-    status: { type: String, enum: ['pending', 'live'], default: 'pending' },
+    status: { type: String, enum: ['pending', 'live', 'sold'], default: 'pending' },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
