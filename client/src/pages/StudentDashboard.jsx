@@ -157,6 +157,11 @@ const StudentDashboard = () => {
                      <tbody>
                     {myProducts.map((product) => (
                      <tr key={product._id}>
+                        <td>
+                            {product.image ? (
+                                 <img src={`http://localhost:5000${product.image}`} alt={product.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                            ) : 'No Image'}
+                        </td>
                         <td>{product.title}</td>
                         <td>${product.price}</td>
                         <td>
