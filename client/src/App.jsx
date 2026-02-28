@@ -8,6 +8,10 @@ import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Chat from './pages/Chat';
+import SellerDashboard from "./pages/SellerDashboard";
+import BuyerDashboard from "./pages/BuyerDashboard";
+import Checkout from "./pages/Checkout";
+
 
 function App() {
   return (
@@ -27,6 +31,10 @@ function App() {
           <Route element={<ProtectedRoute adminOnly={true} />}>
             <Route path="/admin" element={<AdminDashboard />} />
           </Route>
+
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
+          <Route path="/seller-dashboard" element={<SellerDashboard />} />
         </Routes>
       </Router>
     </AuthProvider>
