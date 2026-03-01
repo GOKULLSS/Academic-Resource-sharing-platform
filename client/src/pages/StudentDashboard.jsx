@@ -157,12 +157,23 @@ const StudentDashboard = () => {
                         <td>{product.title}</td>
                         <td>${product.price}</td>
                         <td>
-                          {product.status === "pending" ? (
-                            <span style={{ color: "orange" }}>
+                          {product.status === "pending" && (
+                            <span className="badge bg-warning text-dark">
                               Pending Approval
                             </span>
-                          ) : (
-                            <span style={{ color: "green" }}>Approved</span>
+                          )}
+                          {product.status === "live" && (
+                            <span className="badge bg-success">Live</span>
+                          )}
+                          {product.status === "sold" && (
+                            <span className="badge bg-danger">
+                              Sold Out
+                            </span>
+                          )}
+                          {product.status === "Rented" && (
+                            <span className="badge bg-info text-dark">
+                              Under Rent
+                            </span>
                           )}
                         </td>
                         <td>
