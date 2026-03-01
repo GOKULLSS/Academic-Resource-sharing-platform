@@ -8,7 +8,6 @@ const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('student');
     const [error, setError] = useState('');
     const { register, user } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -23,14 +22,14 @@ const Register = () => {
         e.preventDefault();
         setError('');
         try {
-            await register(name, email, password, role);
+            await register(name, email, password);
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to register');
         }
     };
 
-     return (
+    return (
         <div className="register-page">
             <Container>
                 <Row className="justify-content-md-center">
@@ -75,17 +74,6 @@ const Register = () => {
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                         />
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-4">
-                                        <Form.Label>Role</Form.Label>
-                                        <Form.Select
-                                            value={role}
-                                            onChange={(e) => setRole(e.target.value)}
-                                        >
-                                            <option value="student">Student</option>
-                                            <option value="admin">Admin</option>
-                                        </Form.Select>
                                     </Form.Group>
 
                                     <Button
