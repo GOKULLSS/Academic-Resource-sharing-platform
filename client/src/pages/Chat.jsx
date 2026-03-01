@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Container, Row, Col, ListGroup, Card } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 import ChatInterface from '../components/ChatInterface';
-import { useRef } from "react";
 import io from "socket.io-client";
 
 const Chat = () => {
@@ -13,24 +13,30 @@ const Chat = () => {
     const [onlineUsers, setOnlineUsers] = useState([]);
     const ENDPOINT = "http://localhost:5000";
     const socketRef = useRef(null);
+    const location = useLocation();
 
     useEffect(() => {
         fetchChats();
-    }, []);
+
+        // If navigated with a specific chat in state, auto-select it
+        if (location.state?.chat) {
+            setSelectedChat(location.state.chat);
+        }
+    }, [location.state]);
 
     useEffect(() => {
-    socketRef.current = io(ENDPOINT);
+        socketRef.current = io(ENDPOINT);
 
-    socketRef.current.emit("setup", user);
+        socketRef.current.emit("setup", user);
 
-    socketRef.current.on("online users", (users) => {
-        setOnlineUsers(users);
-    });
+        socketRef.current.on("online users", (users) => {
+            setOnlineUsers(users);
+        });
 
-    return () => {
-        socketRef.current.disconnect();
-    };
-}, [user]);
+        return () => {
+            socketRef.current.disconnect();
+        };
+    }, [user]);
 
     const fetchChats = async () => {
         try {
@@ -51,7 +57,7 @@ const Chat = () => {
     return (
         <Container className="mt-4" style={{ height: '80vh' }}>
             <Row className="h-100">
-                <Col md={4} className="h-100">
+                <Col xs={4} className="h-100">
                     <Card className="h-100">
                         <Card.Header>My Chats</Card.Header>
                         <ListGroup variant="flush" style={{ overflowY: 'auto' }}>
@@ -62,19 +68,22 @@ const Chat = () => {
                                     active={selectedChat?._id === chat._id}
                                     onClick={() => setSelectedChat(chat)}
                                 >
-                                <div className="d-flex justify-content-between align-items-center">
-                                   <span>{getChatName(user, chat.participants)}</span>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span className="d-block fw-bold">{getChatName(user, chat.participants)}</span>
+                                            {chat.product && <small className="text-muted">Item: {chat.product.title}</small>}
+                                        </div>
 
-                                  {onlineUsers.some(
-                                       id =>
-                                           id.toString() ===
-                                           chat.participants.find(p => p._id !== user._id)._id.toString()
-                                  ) ? (
-                                          <span className="badge bg-success">Online</span>
-                                  ) : (
-                                          <span className="badge bg-secondary">Offline</span>
-                                  )}
-                                </div>
+                                        {onlineUsers.some(
+                                            id =>
+                                                id.toString() ===
+                                                chat.participants.find(p => p._id !== user._id)._id.toString()
+                                        ) ? (
+                                            <span className="badge bg-success">Online</span>
+                                        ) : (
+                                            <span className="badge bg-secondary">Offline</span>
+                                        )}
+                                    </div>
                                 </ListGroup.Item>
                             ))}
                             {chats.length === 0 && (
@@ -83,13 +92,13 @@ const Chat = () => {
                         </ListGroup>
                     </Card>
                 </Col>
-                <Col md={8} className="h-100">
+                <Col xs={8} className="h-100">
                     <Card className="h-100">
                         {selectedChat ? (
                             <ChatInterface
-                                  selectedChat={selectedChat}
-                                  onlineUsers={onlineUsers}
-                                  socket={socketRef.current}
+                                selectedChat={selectedChat}
+                                onlineUsers={onlineUsers}
+                                socket={socketRef.current}
                             />
                         ) : (
                             <div className="d-flex align-items-center justify-content-center h-100 text-muted">

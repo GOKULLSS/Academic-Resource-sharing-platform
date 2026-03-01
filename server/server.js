@@ -5,6 +5,7 @@ const path = require("path");
 const connectDB = require("./config/db");
 const chatRoutes = require("./routes/chatRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const rentalRoutes = require("./routes/rentalRoutes");
 
 // Route files
 const authRoutes = require("./routes/authRoutes");
@@ -30,6 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/rentals", rentalRoutes);
 
 const PORT = process.env.PORT || 5000;
 

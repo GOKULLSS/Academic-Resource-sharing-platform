@@ -11,6 +11,7 @@ import Chat from './pages/Chat';
 import SellerDashboard from "./pages/SellerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import Checkout from "./pages/Checkout";
+import RentCheckout from "./pages/RentCheckout";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           </Route>
 
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/rent-checkout" element={<RentCheckout />} />
           <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
           <Route path="/seller-dashboard" element={<SellerDashboard />} />
         </Routes>

@@ -8,7 +8,8 @@ const {
     approveProduct,
     deleteProduct,
     getLiveProducts,
-    getMyProducts
+    getMyProducts,
+    updateProduct
 } = require('../controllers/productController');
 
 // Public route
@@ -22,6 +23,7 @@ router.put('/:id/approve', protect, admin, approveProduct);
 
 // Protected routes (Student/Admin)
 router.post('/', protect, upload.single('image'), createProduct);
+router.put('/:id', protect, upload.single('image'), updateProduct);
 router.delete('/:id', protect, deleteProduct);
 
 module.exports = router;
