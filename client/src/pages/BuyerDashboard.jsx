@@ -4,6 +4,7 @@ import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
 
 const BuyerDashboard = () => {
   const [orders, setOrders] = useState([]);
+  const [rentals, setRentals] = useState([]);
 
   const fetchOrders = async () => {
     try {
@@ -18,11 +19,25 @@ const BuyerDashboard = () => {
     }
   };
 
+  const fetchRentals = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        "http://localhost:5000/api/rentals/my-rentals",
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setRentals(res.data);
+    } catch (error) {
+      console.error("Failed to fetch buyer rentals", error);
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
+    fetchRentals();
   }, []);
 
-  const updateStatus = async (id, status) => {
+  const updateOrderStatus = async (id, status) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -55,12 +70,12 @@ const BuyerDashboard = () => {
                     order.status === "Pending"
                       ? "warning"
                       : order.status === "Confirmed"
-                      ? "primary"
-                      : order.status === "Completed"
-                      ? "success"
-                      : order.status === "Rejected"
-                      ? "danger"
-                      : "secondary"
+                        ? "primary"
+                        : order.status === "Completed"
+                          ? "success"
+                          : order.status === "Rejected"
+                            ? "danger"
+                            : "secondary"
                   }
                 >
                   {order.status}
@@ -72,7 +87,7 @@ const BuyerDashboard = () => {
               {order.status === "Pending" && (
                 <Button
                   variant="secondary"
-                  onClick={() => updateStatus(order._id, "Cancelled")}
+                  onClick={() => updateOrderStatus(order._id, "Cancelled")}
                 >
                   Cancel Order
                 </Button>
@@ -81,10 +96,59 @@ const BuyerDashboard = () => {
               {order.status === "Confirmed" && (
                 <Button
                   variant="success"
-                  onClick={() => updateStatus(order._id, "Completed")}
+                  onClick={() => updateOrderStatus(order._id, "Completed")}
                 >
                   Confirm Received
                 </Button>
+              )}
+            </Col>
+          </Row>
+        </Card>
+      ))}
+
+      <h3 className="mt-5">My Rentals</h3>
+
+      {rentals.length === 0 && <p>No rentals requested yet.</p>}
+
+      {rentals.map((rental) => (
+        <Card key={rental._id} className="mb-3 p-3 border-warning">
+          <Row>
+            <Col md={8}>
+              <h5>{rental.product?.title || "Unknown Product"}</h5>
+              <p className="mb-1">Owner: {rental.owner?.name || "Unknown"}</p>
+              <p className="mb-1">Dates: {new Date(rental.startDate).toLocaleDateString()} to {new Date(rental.endDate).toLocaleDateString()} ({rental.totalDays} Days)</p>
+              <p className="mb-1">Total Rent: ₹{rental.totalAmount} (incl. ₹{rental.deposit} deposit)</p>
+              {rental.lateFee > 0 && <p className="mb-1 text-danger fw-bold">Late Fee: ₹{rental.lateFee}</p>}
+              <p className="mt-2">
+                Status:{" "}
+                <Badge
+                  bg={
+                    rental.status === "Requested"
+                      ? "warning"
+                      : rental.status === "Approved"
+                        ? "primary"
+                        : rental.status === "Active"
+                          ? "success"
+                          : rental.status === "Returned"
+                            ? "secondary"
+                            : rental.status === "Overdue"
+                              ? "danger"
+                              : "dark"
+                  }
+                >
+                  {rental.status}
+                </Badge>
+              </p>
+            </Col>
+            <Col md={4} className="d-flex flex-column justify-content-center">
+              {rental.status === "Approved" && (
+                <Badge bg="info" className="p-2 mb-2">Item is ready for pickup</Badge>
+              )}
+              {rental.status === "Active" && (
+                <Badge bg="success" className="p-2 mb-2">You have the item</Badge>
+              )}
+              {rental.status === "Overdue" && (
+                <Badge bg="danger" className="p-2 mb-2">Please return ASAP!</Badge>
               )}
             </Col>
           </Row>

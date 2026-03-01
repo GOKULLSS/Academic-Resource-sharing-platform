@@ -1,32 +1,45 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
-import { Container, Card, Button, Form } from "react-bootstrap";
+import { Container, Card, Button, Form, Alert } from "react-bootstrap";
+import AuthContext from "../context/AuthContext";
 
 const Checkout = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [pickup, setPickup] = useState("Meet on campus");
+  const [error, setError] = useState("");
 
   const handleConfirm = async () => {
-    const token = localStorage.getItem("token");
+    if (user && user._id === state.product.seller) {
+      setError("You cannot buy your own product.");
+      return;
+    }
 
-    await axios.post(
-      "http://localhost:5000/api/orders",
-      {
-        productId: state.product._id,
-        pickupPreference: pickup,
-      },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      const token = localStorage.getItem("token");
 
-    navigate("/buyer-dashboard");
+      await axios.post(
+        "http://localhost:5000/api/orders",
+        {
+          productId: state.product._id,
+          pickupPreference: pickup,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      navigate("/buyer-dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Error creating order.");
+    }
   };
 
   return (
     <Container className="mt-4">
       <Card className="p-4">
         <h3>Checkout</h3>
+        {error && <Alert variant="danger">{error}</Alert>}
         <p><strong>{state.product.title}</strong></p>
         <p>₹{state.product.price}</p>
 

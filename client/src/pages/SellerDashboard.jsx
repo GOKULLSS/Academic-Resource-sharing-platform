@@ -4,6 +4,7 @@ import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
 
 const SellerDashboard = () => {
   const [orders, setOrders] = useState([]);
+  const [rentalRequests, setRentalRequests] = useState([]);
 
   const fetchOrders = async () => {
     try {
@@ -18,8 +19,21 @@ const SellerDashboard = () => {
     }
   };
 
+  const fetchRentalRequests = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data } = await axios.get("http://localhost:5000/api/rentals/owner-requests", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setRentalRequests(data);
+    } catch (error) {
+      console.error("Failed to fetch rental requests", error);
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
+    fetchRentalRequests();
   }, []);
 
   const updateStatus = async (id, status) => {
@@ -36,9 +50,21 @@ const SellerDashboard = () => {
     }
   };
 
+  const handleRentalStatus = async (id, status) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`http://localhost:5000/api/rentals/${id}/status`, { status }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchRentalRequests();
+    } catch (error) {
+      console.error("Failed to update rental status", error);
+    }
+  };
+
   return (
     <Container className="mt-4">
-      <h3>Incoming Orders</h3>
+      <h3>Incoming Orders (Buy)</h3>
 
       {orders.length === 0 && <p>No incoming orders.</p>}
 
@@ -46,9 +72,9 @@ const SellerDashboard = () => {
         <Card key={order._id} className="mb-3 p-3">
           <Row>
             <Col md={8}>
-              <h5>{order.product.title}</h5>
-              <p>Price: ₹{order.product.price}</p>
-              <p>Buyer: {order.buyer.name}</p>
+              <h5>{order.product?.title || "Product Deleted"}</h5>
+              {order.product && <p>Price: ₹{order.product.price}</p>}
+              <p>Buyer: {order.buyer?.name || "Unknown User"}</p>
               <p>
                 Status:{" "}
                 <Badge
@@ -56,12 +82,12 @@ const SellerDashboard = () => {
                     order.status === "Pending"
                       ? "warning"
                       : order.status === "Confirmed"
-                      ? "primary"
-                      : order.status === "Completed"
-                      ? "success"
-                      : order.status === "Rejected"
-                      ? "danger"
-                      : "secondary"
+                        ? "primary"
+                        : order.status === "Completed"
+                          ? "success"
+                          : order.status === "Rejected"
+                            ? "danger"
+                            : "secondary"
                   }
                 >
                   {order.status}
@@ -110,6 +136,81 @@ const SellerDashboard = () => {
 
               {order.status === "Completed" && (
                 <Badge bg="success">Product Sold</Badge>
+              )}
+            </Col>
+          </Row>
+        </Card>
+      ))}
+
+      <h3 className="mt-5">Incoming Rental Requests</h3>
+
+      {rentalRequests.length === 0 && <p>No rental requests yet.</p>}
+
+      {rentalRequests.map((req) => (
+        <Card key={req._id} className="mb-3 p-3 border-warning">
+          <Row>
+            <Col md={8}>
+              <h5>{req.product?.title || "Product Deleted"}</h5>
+              <p className="mb-1">Renter: {req.renter?.name || "Unknown Renter"} ({req.renter?.email || "N/A"})</p>
+              <p className="mb-1">Dates: {new Date(req.startDate).toLocaleDateString()} to {new Date(req.endDate).toLocaleDateString()}</p>
+              <p className="mb-1">Total Rent: ₹{req.totalAmount}</p>
+              <p className="mt-2">
+                Status:{" "}
+                <Badge
+                  bg={
+                    req.status === "Requested"
+                      ? "warning"
+                      : req.status === "Approved"
+                        ? "primary"
+                        : req.status === "Active"
+                          ? "success"
+                          : req.status === "Returned"
+                            ? "secondary"
+                            : req.status === "Overdue"
+                              ? "danger"
+                              : "dark"
+                  }
+                >
+                  {req.status}
+                </Badge>
+              </p>
+            </Col>
+
+            <Col md={4} className="d-flex flex-column justify-content-center">
+              {req.status === "Requested" && (
+                <>
+                  <Button
+                    variant="success"
+                    className="mb-2"
+                    onClick={() => handleRentalStatus(req._id, "Approved")}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleRentalStatus(req._id, "Rejected")}
+                  >
+                    Reject
+                  </Button>
+                </>
+              )}
+
+              {req.status === "Approved" && (
+                <Button
+                  variant="info"
+                  onClick={() => handleRentalStatus(req._id, "Active")}
+                >
+                  Mark as Given (Active)
+                </Button>
+              )}
+
+              {(req.status === "Active" || req.status === "Overdue") && (
+                <Button
+                  variant="primary"
+                  onClick={() => handleRentalStatus(req._id, "Returned")}
+                >
+                  Confirm Return
+                </Button>
               )}
             </Col>
           </Row>

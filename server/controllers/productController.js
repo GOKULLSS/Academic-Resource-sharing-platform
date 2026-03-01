@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 // @access  Private
 const createProduct = async (req, res) => {
     try {
-        const { title, description, price, category, transactionType } = req.body;
+        const { title, description, price, category, transactionType, deposit } = req.body;
 
         let imagePath = '';
         if (req.file) {
@@ -19,6 +19,7 @@ const createProduct = async (req, res) => {
             price,
             category,
             transactionType,
+            deposit: deposit || 0,
             image: imagePath,
             seller: req.user.id,
             status: 'pending' // Enforcing pending status

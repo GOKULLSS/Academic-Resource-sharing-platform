@@ -22,6 +22,7 @@ const StudentDashboard = () => {
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [myProducts, setMyProducts] = useState([]);
+  const [deposit, setDeposit] = useState("");
 
   useEffect(() => {
     fetchMyProducts();
@@ -42,6 +43,7 @@ const StudentDashboard = () => {
       console.error(error);
     }
   };
+
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -66,6 +68,9 @@ const StudentDashboard = () => {
     formData.append("price", price);
     formData.append("category", category);
     formData.append("transactionType", transactionType);
+    if (transactionType === "Rent" && deposit) {
+      formData.append("deposit", deposit);
+    }
     if (image) {
       formData.append("image", image);
     }
@@ -85,6 +90,7 @@ const StudentDashboard = () => {
       setTitle("");
       setDescription("");
       setPrice("");
+      setDeposit("");
       setImage(null);
     } catch (error) {
       setMessage({
@@ -252,7 +258,20 @@ const StudentDashboard = () => {
                       </Form.Select>
                     </Form.Group>
                   </Col>
-                  <Col md={6}>
+                  {transactionType === "Rent" && (
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Security Deposit ($)</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={deposit}
+                          onChange={(e) => setDeposit(e.target.value)}
+                          required
+                        />
+                      </Form.Group>
+                    </Col>
+                  )}
+                  <Col md={transactionType === "Rent" ? 12 : 6} className={transactionType === "Rent" ? "mt-3" : ""}>
                     <Form.Group className="mb-3">
                       <Form.Label>Product Image</Form.Label>
                       <Form.Control
