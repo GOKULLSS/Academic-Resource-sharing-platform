@@ -9,6 +9,7 @@ import {
   Button,
   Alert,
   Table,
+  Modal
 } from "react-bootstrap";
 import AuthContext from "../context/AuthContext";
 
@@ -23,6 +24,18 @@ const StudentDashboard = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [myProducts, setMyProducts] = useState([]);
   const [deposit, setDeposit] = useState("");
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    category: "Electronics",
+    transactionType: "Buy",
+    deposit: "",
+    image: null,
+  });
 
   useEffect(() => {
     fetchMyProducts();
@@ -97,6 +110,52 @@ const StudentDashboard = () => {
         type: "danger",
         text: error.response?.data?.message || "Error uploading product",
       });
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setEditProduct(product._id);
+    setEditFormData({
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      category: product.category || "Electronics",
+      transactionType: product.transactionType || "Buy",
+      deposit: product.deposit || "",
+      image: null,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", editFormData.title);
+    formData.append("description", editFormData.description);
+    formData.append("price", editFormData.price);
+    formData.append("category", editFormData.category);
+    formData.append("transactionType", editFormData.transactionType);
+    if (editFormData.transactionType === "Rent" && editFormData.deposit) {
+      formData.append("deposit", editFormData.deposit);
+    }
+    if (editFormData.image) {
+      formData.append("image", editFormData.image);
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`http://localhost:5000/api/products/${editProduct}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setShowEditModal(false);
+      fetchMyProducts();
+      setMessage({ type: "success", text: "Product updated successfully! It is pending admin approval." });
+    } catch (error) {
+      console.error(error);
+      setMessage({ type: "danger", text: error.response?.data?.message || "Error updating product." });
     }
   };
 
@@ -189,6 +248,7 @@ const StudentDashboard = () => {
                           <Button
                             variant="warning"
                             size="sm"
+                            onClick={() => handleEditClick(product)}
                             disabled={product.status === "live" ? false : false}
                           >
                             Edit
@@ -301,6 +361,103 @@ const StudentDashboard = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Edit Product Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleEditSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                value={editFormData.title}
+                onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editFormData.description}
+                onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
+                required
+              />
+            </Form.Group>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Price ($)</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={editFormData.price}
+                    onChange={(e) => setEditFormData({ ...editFormData, price: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Select
+                    value={editFormData.category}
+                    onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
+                  >
+                    <option value="Electronics">Electronics</option>
+                    <option value="Books">Books</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Other">Other</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Transaction Type</Form.Label>
+                  <Form.Select
+                    value={editFormData.transactionType}
+                    onChange={(e) => setEditFormData({ ...editFormData, transactionType: e.target.value })}
+                  >
+                    <option value="Buy">Buy (Sell permanently)</option>
+                    <option value="Rent">Rent (Temporary)</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              {editFormData.transactionType === "Rent" && (
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Security Deposit ($)</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={editFormData.deposit}
+                      onChange={(e) => setEditFormData({ ...editFormData, deposit: e.target.value })}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              )}
+              <Col md={editFormData.transactionType === "Rent" ? 12 : 6} className={editFormData.transactionType === "Rent" ? "mt-3" : ""}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Update Product Image (Optional)</Form.Label>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setEditFormData({ ...editFormData, image: e.target.files[0] })}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Button variant="primary" type="submit" className="w-100 mt-2">
+              Save Changes
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

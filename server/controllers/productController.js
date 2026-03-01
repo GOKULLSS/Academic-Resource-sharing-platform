@@ -1,4 +1,6 @@
 const Product = require('../models/Product');
+const fs = require('fs');
+const path = require('path');
 
 // @desc    Create a product (Student)
 // @route   POST /api/products
@@ -79,6 +81,17 @@ const deleteProduct = async (req, res) => {
             return res.status(401).json({ message: 'User not authorized' });
         }
 
+        // Delete the associated image file if it exists
+        if (product.image) {
+            // product.image is typically like "/uploads/filename.jpg"
+            const imagePath = path.join(__dirname, '..', 'uploads', path.basename(product.image));
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.error("Error deleting image file:", err);
+                }
+            });
+        }
+
         await product.deleteOne();
 
         res.status(200).json({ id: req.params.id });
@@ -117,6 +130,50 @@ const getMyProducts = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Update a product (Student/Seller)
+// @route   PUT /api/products/:id
+// @access  Private
+const updateProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Check if user is the seller
+        if (product.seller.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(401).json({ message: 'User not authorized to update this product' });
+        }
+
+        const { title, description, price, category, transactionType, deposit } = req.body;
+
+        product.title = title || product.title;
+        product.description = description || product.description;
+        product.price = price || product.price;
+        product.category = category || product.category;
+        product.transactionType = transactionType || product.transactionType;
+
+        if (transactionType === 'Rent') {
+            product.deposit = deposit || product.deposit;
+        } else {
+            product.deposit = 0;
+        }
+
+        if (req.file) {
+            product.image = `/uploads/${req.file.filename}`;
+        }
+
+        // Change status to pending when edited so admin can review it again
+        product.status = 'pending';
+
+        const updatedProduct = await product.save();
+
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 module.exports = {
     createProduct,
@@ -124,5 +181,6 @@ module.exports = {
     approveProduct,
     deleteProduct,
     getLiveProducts,
-    getMyProducts
+    getMyProducts,
+    updateProduct
 };

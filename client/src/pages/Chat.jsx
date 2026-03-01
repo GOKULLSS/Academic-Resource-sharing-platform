@@ -57,7 +57,7 @@ const Chat = () => {
     return (
         <Container className="mt-4" style={{ height: '80vh' }}>
             <Row className="h-100">
-                <Col md={4} className="h-100">
+                <Col xs={4} className="h-100">
                     <Card className="h-100">
                         <Card.Header>My Chats</Card.Header>
                         <ListGroup variant="flush" style={{ overflowY: 'auto' }}>
@@ -92,7 +92,7 @@ const Chat = () => {
                         </ListGroup>
                     </Card>
                 </Col>
-                <Col md={8} className="h-100">
+                <Col xs={8} className="h-100">
                     <Card className="h-100">
                         {selectedChat ? (
                             <ChatInterface
