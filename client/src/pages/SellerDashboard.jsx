@@ -87,7 +87,20 @@ const SellerDashboard = () => {
       {orders.map((order) => (
         <Card key={order._id} className="mb-3 p-3">
           <Row>
-            <Col md={8}>
+            <Col md={2}>
+              {order.product?.image ? (
+                <img
+                  src={`http://localhost:5000${order.product.image}`}
+                  alt={order.product?.title || "Product"}
+                  style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                />
+              ) : (
+                <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
+                  <span className="text-muted" style={{ fontSize: "0.8rem" }}>No Image</span>
+                </div>
+              )}
+            </Col>
+            <Col md={6}>
               <h5>{order.product?.title || "Product Deleted"}</h5>
               {order.product && <p>Price: ₹{order.product.price}</p>}
               <p>Buyer: {order.buyer?.name || "Unknown User"}</p>
@@ -173,7 +186,20 @@ const SellerDashboard = () => {
       {rentalRequests.map((req) => (
         <Card key={req._id} className="mb-3 p-3 border-warning">
           <Row>
-            <Col md={8}>
+            <Col md={2}>
+              {req.product?.image ? (
+                <img
+                  src={`http://localhost:5000${req.product.image}`}
+                  alt={req.product?.title || "Product"}
+                  style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                />
+              ) : (
+                <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
+                  <span className="text-muted" style={{ fontSize: "0.8rem" }}>No Image</span>
+                </div>
+              )}
+            </Col>
+            <Col md={6}>
               <h5>{req.product?.title || "Product Deleted"}</h5>
               <p className="mb-1">Renter: {req.renter?.name || "Unknown Renter"} ({req.renter?.email || "N/A"})</p>
               <p className="mb-1">Dates: {new Date(req.startDate).toLocaleDateString()} to {new Date(req.endDate).toLocaleDateString()}</p>

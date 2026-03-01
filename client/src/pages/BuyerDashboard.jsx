@@ -76,9 +76,22 @@ const BuyerDashboard = () => {
       {orders.map((order) => (
         <Card key={order._id} className="mb-3 p-3">
           <Row>
-            <Col md={8}>
-              <h5>{order.product.title}</h5>
-              <p>Price: ₹{order.product.price}</p>
+            <Col md={2}>
+              {order.product?.image ? (
+                <img
+                  src={`http://localhost:5000${order.product.image}`}
+                  alt={order.product?.title || "Product"}
+                  style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                />
+              ) : (
+                <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
+                  <span className="text-muted" style={{ fontSize: "0.8rem" }}>No Image</span>
+                </div>
+              )}
+            </Col>
+            <Col md={6}>
+              <h5>{order.product?.title || "Product Deleted"}</h5>
+              {order.product && <p>Price: ₹{order.product.price}</p>}
               <p>
                 Status:{" "}
                 <Badge
@@ -137,7 +150,20 @@ const BuyerDashboard = () => {
       {rentals.map((rental) => (
         <Card key={rental._id} className="mb-3 p-3 border-warning">
           <Row>
-            <Col md={8}>
+            <Col md={2}>
+              {rental.product?.image ? (
+                <img
+                  src={`http://localhost:5000${rental.product.image}`}
+                  alt={rental.product?.title || "Product"}
+                  style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                />
+              ) : (
+                <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
+                  <span className="text-muted" style={{ fontSize: "0.8rem" }}>No Image</span>
+                </div>
+              )}
+            </Col>
+            <Col md={6}>
               <h5>{rental.product?.title || "Unknown Product"}</h5>
               <p className="mb-1">Owner: {rental.owner?.name || "Unknown"}</p>
               <p className="mb-1">Dates: {new Date(rental.startDate).toLocaleDateString()} to {new Date(rental.endDate).toLocaleDateString()} ({rental.totalDays} Days)</p>

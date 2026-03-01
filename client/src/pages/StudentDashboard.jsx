@@ -249,7 +249,7 @@ const StudentDashboard = () => {
                             variant="warning"
                             size="sm"
                             onClick={() => handleEditClick(product)}
-                            disabled={product.status === "live" ? false : false}
+                            disabled={product.status === "sold"}
                           >
                             Edit
                           </Button>

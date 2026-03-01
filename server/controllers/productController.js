@@ -141,6 +141,10 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
+        if (product.status === 'sold') {
+            return res.status(400).json({ message: 'Cannot edit a sold-out product' });
+        }
+
         // Check if user is the seller
         if (product.seller.toString() !== req.user.id && req.user.role !== 'admin') {
             return res.status(401).json({ message: 'User not authorized to update this product' });
