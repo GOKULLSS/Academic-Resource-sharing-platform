@@ -1,5 +1,7 @@
 const Rental = require('../models/Rental');
 const Product = require('../models/Product');
+const Chat = require('../models/Chat');
+const Message = require('../models/Message');
 
 // Create a new rental request
 exports.requestRental = async (req, res) => {
@@ -23,6 +25,19 @@ exports.requestRental = async (req, res) => {
         const deposit = product.deposit || 0;
         const totalAmount = (totalDays * rentPerDay) + deposit;
 
+        // Create or find chat
+        let chat = await Chat.findOne({
+            participants: { $all: [req.user.id, product.seller] },
+            product: productId,
+        });
+
+        if (!chat) {
+            chat = await Chat.create({
+                participants: [req.user.id, product.seller],
+                product: productId,
+            });
+        }
+
         const rental = new Rental({
             product: productId,
             renter: req.user.id,
@@ -33,10 +48,18 @@ exports.requestRental = async (req, res) => {
             rentPerDay,
             deposit,
             totalAmount,
+            chat: chat._id,
             status: 'Requested'
         });
 
         await rental.save();
+
+        // System message
+        await Message.create({
+            chat: chat._id,
+            sender: req.user.id,
+            text: `Rental requested for ${totalDays} days for "${product.title}". Status: Requested`,
+        });
         res.status(201).json({ message: 'Rental requested successfully', rental });
     } catch (error) {
         console.error('Error requesting rental:', error);
@@ -99,6 +122,14 @@ exports.updateRentalStatus = async (req, res) => {
         }
 
         await rental.save();
+
+        if (rental.chat) {
+            await Message.create({
+                chat: rental.chat,
+                sender: req.user.id,
+                text: `Rental status updated to: ${status}`,
+            });
+        }
         res.status(200).json({ message: `Rental status updated to ${status}`, rental });
     } catch (error) {
         console.error('Error updating rental status:', error);

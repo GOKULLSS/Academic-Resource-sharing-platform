@@ -29,7 +29,7 @@ const Home = () => {
     }
   };
 
-  const handleMessageSeller = async (sellerId) => {
+  const handleMessageSeller = async (sellerId, productId) => {
     if (!user) {
       navigate('/login');
       return;
@@ -41,10 +41,10 @@ const Home = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/chat', { userId: sellerId }, {
+      const res = await axios.post('http://localhost:5000/api/chat', { userId: sellerId, productId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      navigate('/chat');
+      navigate('/chat', { state: { chat: res.data } });
     } catch (error) {
       console.error("Error creating/fetching chat", error);
     }
@@ -153,6 +153,13 @@ const Home = () => {
                     }}
                   >
                     {product.transactionType === "Rent" ? "Take on Rent" : "Buy Now"}
+                  </Button>
+                  <Button
+                    className="w-100 custom-btn"
+                    variant="outline-info"
+                    onClick={() => handleMessageSeller(product.seller, product._id)}
+                  >
+                    💬 Chat
                   </Button>
                 </Card.Body>
               </Card>

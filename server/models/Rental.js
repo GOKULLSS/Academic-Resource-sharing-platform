@@ -11,6 +11,7 @@ const rentalSchema = new mongoose.Schema({
     deposit: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
     lateFee: { type: Number, default: 0 },
+    chat: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },
     status: {
         type: String,
         enum: ['Requested', 'Approved', 'Active', 'Returned', 'Overdue', 'Rejected'],

@@ -16,18 +16,18 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
   const isOtherUserOnline = () => {
 
 
-  if (!selectedChat || !selectedChat.participants || !user) return false;
+    if (!selectedChat || !selectedChat.participants || !user) return false;
 
-  const otherUser = selectedChat.participants.find(
-    (p) => p._id !== user._id
-  );
+    const otherUser = selectedChat.participants.find(
+      (p) => p._id !== user._id
+    );
 
-  if (!otherUser) return false;
+    if (!otherUser) return false;
 
-   return onlineUsers.some(
-    (id) => id.toString() === otherUser._id.toString()
-  );
-};
+    return onlineUsers.some(
+      (id) => id.toString() === otherUser._id.toString()
+    );
+  };
 
   useEffect(() => {
     if (!socket) return;
@@ -111,11 +111,15 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
       <div className="p-3 border-bottom bg-light">
         <div className="d-flex align-items-center">
           <strong>{getOtherUserName()}</strong>
+          {selectedChat?.product && (
+            <span className="ms-2 text-muted" style={{ fontSize: '0.9em' }}>
+              ({selectedChat.product.title})
+            </span>
+          )}
           <span
-            className={`ms-2 badge ${
-              isOtherUserOnline() ? "bg-success" : "bg-secondary"
-            }`}
-  >
+            className={`ms-2 badge ${isOtherUserOnline() ? "bg-success" : "bg-secondary"
+              }`}
+          >
             {isOtherUserOnline() ? "Online" : "Offline"}
           </span>
         </div>

@@ -1,10 +1,26 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const BuyerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [rentals, setRentals] = useState([]);
+  const navigate = useNavigate();
+
+  const handleChat = async (userId, productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "http://localhost:5000/api/chat",
+        { userId, productId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      navigate("/chat", { state: { chat: res.data } });
+    } catch (error) {
+      console.error("Failed to start chat", error);
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -84,6 +100,14 @@ const BuyerDashboard = () => {
             </Col>
 
             <Col md={4} className="d-flex flex-column justify-content-center">
+              <Button
+                variant="outline-info"
+                className="mb-2"
+                onClick={() => handleChat(order.seller, order.product._id)}
+              >
+                💬 Chat with Seller
+              </Button>
+
               {order.status === "Pending" && (
                 <Button
                   variant="secondary"
@@ -141,6 +165,14 @@ const BuyerDashboard = () => {
               </p>
             </Col>
             <Col md={4} className="d-flex flex-column justify-content-center">
+              <Button
+                variant="outline-info"
+                className="mb-2"
+                onClick={() => handleChat(rental.owner._id, rental.product._id)}
+              >
+                💬 Chat with Owner
+              </Button>
+
               {rental.status === "Approved" && (
                 <Badge bg="info" className="p-2 mb-2">Item is ready for pickup</Badge>
               )}

@@ -5,19 +5,27 @@ const Message = require('../models/Message');
 // @route   POST /api/chat
 // @access  Private
 const accessChat = async (req, res) => {
-    const { userId } = req.body; // ID of the user to chat with
+    const { userId, productId } = req.body; // ID of the user to chat with and optional productId
 
     if (!userId) {
         return res.status(400).json({ message: "UserId param not sent with request" });
     }
 
     // Check if chat exists
-    let isChat = await Chat.find({
+    let matchQuery = {
         $and: [
             { participants: { $elemMatch: { $eq: req.user._id } } },
             { participants: { $elemMatch: { $eq: userId } } }
         ]
-    }).populate("participants", "-password");
+    };
+
+    if (productId) {
+        matchQuery.product = productId;
+    }
+
+    let isChat = await Chat.find(matchQuery)
+        .populate("participants", "-password")
+        .populate("product");
 
     if (isChat.length > 0) {
         res.send(isChat[0]);
@@ -25,10 +33,15 @@ const accessChat = async (req, res) => {
         var chatData = {
             participants: [req.user._id, userId],
         };
+        if (productId) {
+            chatData.product = productId;
+        }
 
         try {
             const createdChat = await Chat.create(chatData);
-            const FullChat = await Chat.findOne({ _id: createdChat._id }).populate("participants", "-password");
+            const FullChat = await Chat.findOne({ _id: createdChat._id })
+                .populate("participants", "-password")
+                .populate("product");
             res.status(200).send(FullChat);
         } catch (error) {
             res.status(400).json({ message: error.message });
@@ -43,6 +56,7 @@ const fetchChats = async (req, res) => {
     try {
         Chat.find({ participants: { $elemMatch: { $eq: req.user._id } } })
             .populate("participants", "-password")
+            .populate("product")
             .sort({ updatedAt: -1 })
             .then(async (results) => {
                 res.status(200).send(results);

@@ -1,10 +1,26 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const SellerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [rentalRequests, setRentalRequests] = useState([]);
+  const navigate = useNavigate();
+
+  const handleChat = async (userId, productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "http://localhost:5000/api/chat",
+        { userId, productId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      navigate("/chat", { state: { chat: res.data } });
+    } catch (error) {
+      console.error("Failed to start chat", error);
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -63,7 +79,7 @@ const SellerDashboard = () => {
   };
 
   return (
-    <Container className="mt-4">
+    <Container className="mt-4 pb-3">
       <h3>Incoming Orders (Buy)</h3>
 
       {orders.length === 0 && <p>No incoming orders.</p>}
@@ -96,6 +112,14 @@ const SellerDashboard = () => {
             </Col>
 
             <Col md={4} className="d-flex flex-column justify-content-center">
+              <Button
+                variant="outline-info"
+                className="mb-2"
+                onClick={() => handleChat(order.buyer._id, order.product._id)}
+              >
+                💬 Chat with Buyer
+              </Button>
+
               {order.status === "Pending" && (
                 <>
                   <Button
@@ -177,6 +201,14 @@ const SellerDashboard = () => {
             </Col>
 
             <Col md={4} className="d-flex flex-column justify-content-center">
+              <Button
+                variant="outline-info"
+                className="mb-2"
+                onClick={() => handleChat(req.renter._id, req.product._id)}
+              >
+                💬 Chat with Renter
+              </Button>
+
               {req.status === "Requested" && (
                 <>
                   <Button

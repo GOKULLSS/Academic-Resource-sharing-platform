@@ -98,6 +98,14 @@ const updateOrderStatus = async (req, res) => {
 
   await order.save();
 
+  if (order.chat) {
+    await Message.create({
+      chat: order.chat,
+      sender: req.user._id,
+      text: `Order status updated to: ${status}`,
+    });
+  }
+
   // Real-time updates
   req.app.get("io").to(order.buyer.toString()).emit("order update", order);
   req.app.get("io").to(order.seller.toString()).emit("order update", order);
