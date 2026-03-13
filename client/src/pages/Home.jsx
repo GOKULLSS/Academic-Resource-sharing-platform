@@ -72,7 +72,14 @@ const Home = () => {
               <option value="">All Categories</option>
               <option value="Electronics">Electronics</option>
               <option value="Books">Books</option>
+              <option value="Hostel Needs">Hostel Needs</option>
+              <option value="Question Bank">Question Bank</option>
+              <option value="Stationary">Stationary</option>
+              <option value="Sports">Sports</option>
               <option value="Furniture">Furniture</option>
+              <option value="Food and Health">Food and Health</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Beauty">Beauty</option>
               <option value="Other">Other</option>
             </Form.Select>
           </Col>
@@ -131,10 +138,15 @@ const Home = () => {
                           ? "success"
                           : "warning"
                       }
-                      className="custom-badge"
+                      className="custom-badge me-2"
                     >
                       {product.transactionType}
                     </Badge>
+                    {user && (product.seller?._id === user._id || product.seller === user._id) && (
+                      <Badge bg="info" className="custom-badge">
+                        ✨ Your Product
+                      </Badge>
+                    )}
                   </div>
 
                   <h4 className="product-price mb-3">
@@ -144,8 +156,10 @@ const Home = () => {
                   <Button
                     className="w-100 custom-btn mb-2"
                     variant={product.transactionType === "Rent" ? "warning" : "primary"}
+                    disabled={user && (product.seller?._id === user._id || product.seller === user._id)}
+                    style={(user && (product.seller?._id === user._id || product.seller === user._id)) ? { backgroundColor: 'transparent', borderColor: 'transparent', color: 'gray', opacity: 0.6 } : {}}
                     onClick={() => {
-                      if (user && user._id === product.seller) {
+                      if (user && (product.seller?._id === user._id || product.seller === user._id)) {
                         alert("You cannot buy or rent your own product.");
                         return;
                       }
@@ -157,7 +171,9 @@ const Home = () => {
                   <Button
                     className="w-100 custom-btn"
                     variant="outline-info"
-                    onClick={() => handleMessageSeller(product.seller, product._id)}
+                    disabled={user && (product.seller?._id === user._id || product.seller === user._id)}
+                    style={(user && (product.seller?._id === user._id || product.seller === user._id)) ? { backgroundColor: 'transparent', borderColor: 'transparent', color: 'gray', opacity: 0.6 } : {}}
+                    onClick={() => handleMessageSeller(product.seller?._id || product.seller, product._id)}
                   >
                     💬 Chat
                   </Button>

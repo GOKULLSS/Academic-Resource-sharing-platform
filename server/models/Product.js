@@ -8,6 +8,8 @@ const productSchema = new mongoose.Schema({
     image: { type: String }, // Path to local upload or cloud URL
     transactionType: { type: String, enum: ['Buy', 'Rent'], required: true },
     deposit: { type: Number, default: 0 }, // For Rentals
+    condition: { type: String, enum: ['New', 'Like New', 'Good', 'Fair', 'Poor'] }, // Specific to Rent, can apply to Buy too
+    lateFeePerDay: { type: Number, default: 0 }, // Penalty fee
     status: { type: String, enum: ['pending', 'live', 'sold', 'Rented'], default: 'pending' },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });

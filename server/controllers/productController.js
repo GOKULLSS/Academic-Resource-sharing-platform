@@ -7,7 +7,7 @@ const path = require('path');
 // @access  Private
 const createProduct = async (req, res) => {
     try {
-        const { title, description, price, category, transactionType, deposit } = req.body;
+        const { title, description, price, category, transactionType, deposit, condition, lateFeePerDay } = req.body;
 
         let imagePath = '';
         if (req.file) {
@@ -22,6 +22,8 @@ const createProduct = async (req, res) => {
             category,
             transactionType,
             deposit: deposit || 0,
+            condition,
+            lateFeePerDay: lateFeePerDay || 0,
             image: imagePath,
             seller: req.user.id,
             status: 'pending' // Enforcing pending status
@@ -150,18 +152,23 @@ const updateProduct = async (req, res) => {
             return res.status(401).json({ message: 'User not authorized to update this product' });
         }
 
-        const { title, description, price, category, transactionType, deposit } = req.body;
+        const { title, description, price, category, transactionType, deposit, condition, lateFeePerDay } = req.body;
 
         product.title = title || product.title;
         product.description = description || product.description;
         product.price = price || product.price;
         product.category = category || product.category;
         product.transactionType = transactionType || product.transactionType;
+        
+        // Also update condition if provided
+        if (condition) product.condition = condition;
 
         if (transactionType === 'Rent') {
             product.deposit = deposit || product.deposit;
+            product.lateFeePerDay = lateFeePerDay || product.lateFeePerDay || 0;
         } else {
             product.deposit = 0;
+            product.lateFeePerDay = 0;
         }
 
         if (req.file) {
