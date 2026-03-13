@@ -24,6 +24,8 @@ const StudentDashboard = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [myProducts, setMyProducts] = useState([]);
   const [deposit, setDeposit] = useState("");
+  const [condition, setCondition] = useState("Good");
+  const [lateFeePerDay, setLateFeePerDay] = useState(0);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
@@ -34,6 +36,8 @@ const StudentDashboard = () => {
     category: "Electronics",
     transactionType: "Buy",
     deposit: "",
+    condition: "Good",
+    lateFeePerDay: 0,
     image: null,
   });
 
@@ -81,8 +85,10 @@ const StudentDashboard = () => {
     formData.append("price", price);
     formData.append("category", category);
     formData.append("transactionType", transactionType);
-    if (transactionType === "Rent" && deposit) {
-      formData.append("deposit", deposit);
+    formData.append("condition", condition);
+    if (transactionType === "Rent") {
+      if (deposit) formData.append("deposit", deposit);
+      formData.append("lateFeePerDay", lateFeePerDay);
     }
     if (image) {
       formData.append("image", image);
@@ -104,6 +110,8 @@ const StudentDashboard = () => {
       setDescription("");
       setPrice("");
       setDeposit("");
+      setCondition("Good");
+      setLateFeePerDay(0);
       setImage(null);
     } catch (error) {
       setMessage({
@@ -122,6 +130,8 @@ const StudentDashboard = () => {
       category: product.category || "Electronics",
       transactionType: product.transactionType || "Buy",
       deposit: product.deposit || "",
+      condition: product.condition || "Good",
+      lateFeePerDay: product.lateFeePerDay || 0,
       image: null,
     });
     setShowEditModal(true);
@@ -135,8 +145,10 @@ const StudentDashboard = () => {
     formData.append("price", editFormData.price);
     formData.append("category", editFormData.category);
     formData.append("transactionType", editFormData.transactionType);
-    if (editFormData.transactionType === "Rent" && editFormData.deposit) {
-      formData.append("deposit", editFormData.deposit);
+    formData.append("condition", editFormData.condition);
+    if (editFormData.transactionType === "Rent") {
+      if (editFormData.deposit) formData.append("deposit", editFormData.deposit);
+      formData.append("lateFeePerDay", editFormData.lateFeePerDay);
     }
     if (editFormData.image) {
       formData.append("image", editFormData.image);
@@ -336,7 +348,24 @@ const StudentDashboard = () => {
                       </Form.Select>
                     </Form.Group>
                   </Col>
-                  {transactionType === "Rent" && (
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Condition</Form.Label>
+                      <Form.Select
+                        value={condition}
+                        onChange={(e) => setCondition(e.target.value)}
+                      >
+                        <option value="New">New</option>
+                        <option value="Like New">Like New</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Poor">Poor</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                {transactionType === "Rent" && (
+                  <Row>
                     <Col md={6}>
                       <Form.Group className="mb-3">
                         <Form.Label>Security Deposit ($)</Form.Label>
@@ -348,18 +377,28 @@ const StudentDashboard = () => {
                         />
                       </Form.Group>
                     </Col>
-                  )}
-                  <Col md={transactionType === "Rent" ? 12 : 6} className={transactionType === "Rent" ? "mt-3" : ""}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Product Image</Form.Label>
-                      <Form.Control
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setImage(e.target.files[0])}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Late Fee Per Day ($)</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={lateFeePerDay}
+                          onChange={(e) => setLateFeePerDay(e.target.value)}
+                          min="0"
+                          required
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                )}
+                <Form.Group className="mb-3">
+                  <Form.Label>Product Image</Form.Label>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
+                  />
+                </Form.Group>
                 <Button variant="primary" type="submit">
                   Submit Product
                 </Button>
@@ -443,7 +482,24 @@ const StudentDashboard = () => {
                   </Form.Select>
                 </Form.Group>
               </Col>
-              {editFormData.transactionType === "Rent" && (
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Condition</Form.Label>
+                  <Form.Select
+                    value={editFormData.condition}
+                    onChange={(e) => setEditFormData({ ...editFormData, condition: e.target.value })}
+                  >
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                    <option value="Poor">Poor</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+            {editFormData.transactionType === "Rent" && (
+              <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
                     <Form.Label>Security Deposit ($)</Form.Label>
@@ -455,18 +511,28 @@ const StudentDashboard = () => {
                     />
                   </Form.Group>
                 </Col>
-              )}
-              <Col md={editFormData.transactionType === "Rent" ? 12 : 6} className={editFormData.transactionType === "Rent" ? "mt-3" : ""}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Update Product Image (Optional)</Form.Label>
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setEditFormData({ ...editFormData, image: e.target.files[0] })}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Late Fee Per Day ($)</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={editFormData.lateFeePerDay}
+                      onChange={(e) => setEditFormData({ ...editFormData, lateFeePerDay: e.target.value })}
+                      min="0"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+            )}
+            <Form.Group className="mb-3">
+              <Form.Label>Update Product Image (Optional)</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                onChange={(e) => setEditFormData({ ...editFormData, image: e.target.files[0] })}
+              />
+            </Form.Group>
             <Button variant="primary" type="submit" className="w-100 mt-2">
               Save Changes
             </Button>

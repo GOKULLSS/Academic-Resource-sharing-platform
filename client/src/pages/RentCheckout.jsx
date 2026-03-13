@@ -30,12 +30,20 @@ const RentCheckout = () => {
         return <Container className="mt-4"><h3>Redirecting...</h3></Container>;
     }
 
-    // Default values for missing product data fields
+    // Use provided product data or fallbacks
     const ownerName = product.seller?.name || "Campus User";
-    const itemCondition = "Good";
-    const pickupLocation = "Campus Main Gate";
-    const minRentalPeriod = 1;
-    const lateFeePerDay = Math.round((product.price || 0) * 1.5);
+    const itemCondition = product.condition || "Good";
+    const lateFeePerDay = product.lateFeePerDay !== undefined ? product.lateFeePerDay : Math.round((product.price || 0) * 1.5);
+
+    // Calculate local today string more safely
+    const getLocalDateStr = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    const todayDateStr = getLocalDateStr();
 
     // Calculate Days
     let totalDays = 0;
@@ -52,13 +60,7 @@ const RentCheckout = () => {
     const deposit = product.deposit || 0;
     const totalAmount = subtotal + deposit;
 
-    const todayDateStr = new Date().toISOString().split("T")[0];
-
     const handleOpenModal = () => {
-        if (totalDays < minRentalPeriod) {
-            setError(`Minimum rental period is ${minRentalPeriod} day(s).`);
-            return;
-        }
         if (new Date(endDate) <= new Date(startDate)) {
             setError("End date must be after start date.");
             return;
@@ -91,7 +93,7 @@ const RentCheckout = () => {
 
             setShowModal(false);
             setSuccessMessage("Your rental request has been sent to the owner. Status: Waiting for approval.");
-            
+
             setTimeout(() => {
                 navigate("/buyer-dashboard");
             }, 3000);
@@ -107,7 +109,7 @@ const RentCheckout = () => {
     return (
         <Container className="mt-4 mb-5" style={{ maxWidth: '800px' }}>
             <h2 className="mb-4 text-center fw-bold">Rent Request</h2>
-            
+
             {error && <Alert variant="danger">{error}</Alert>}
             {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
@@ -117,9 +119,9 @@ const RentCheckout = () => {
                     <Row className="align-items-center">
                         <Col md={4} className="text-center mb-3 mb-md-0">
                             {product.image ? (
-                                <img 
-                                    src={`http://localhost:5000${product.image}`} 
-                                    alt={product.title} 
+                                <img
+                                    src={`http://localhost:5000${product.image}`}
+                                    alt={product.title}
                                     style={{ width: '100%', maxHeight: '200px', objectFit: 'contain', borderRadius: '8px' }}
                                 />
                             ) : (
@@ -137,7 +139,6 @@ const RentCheckout = () => {
                             <Row className="text-muted mt-3 g-2">
                                 <Col xs={6}><strong>Owner:</strong> {ownerName}</Col>
                                 <Col xs={6}><strong>Condition:</strong> {itemCondition}</Col>
-                                <Col xs={12}><strong>Pickup Location:</strong> {pickupLocation}</Col>
                             </Row>
                         </Col>
                     </Row>
@@ -185,7 +186,7 @@ const RentCheckout = () => {
                                 {/* Delivery / Pickup Method */}
                                 <Form.Group className="mb-3 mt-4">
                                     <Form.Label className="fw-semibold">Delivery / Pickup Method</Form.Label>
-                                    <Form.Select 
+                                    <Form.Select
                                         value={deliveryMethod}
                                         onChange={(e) => setDeliveryMethod(e.target.value)}
                                     >
@@ -204,11 +205,10 @@ const RentCheckout = () => {
                     <Card className="shadow-sm border-0 bg-light h-100">
                         <Card.Body>
                             <h5 className="mb-3 text-primary border-bottom pb-2">Cost Summary</h5>
-                            
+
                             <div className="mb-3 text-muted small">
                                 <Row className="mb-1"><Col>Price per day:</Col><Col className="text-end">₹{product.price || 0}</Col></Row>
                                 <Row className="mb-1"><Col>Security Deposit:</Col><Col className="text-end">₹{deposit}</Col></Row>
-                                <Row className="mb-1"><Col>Min. Period:</Col><Col className="text-end">{minRentalPeriod} Day(s)</Col></Row>
                                 <Row className="mb-1"><Col>Late Fee:</Col><Col className="text-end">₹{lateFeePerDay}/day</Col></Row>
                             </div>
 
@@ -252,7 +252,7 @@ const RentCheckout = () => {
                         <li>Late returns will incur an extra charge of ₹{lateFeePerDay} per day.</li>
                     </ul>
                     <Form.Group>
-                        <Form.Check 
+                        <Form.Check
                             type="checkbox"
                             id="terms-checkbox"
                             label="I agree to the rental terms and conditions."
@@ -267,7 +267,7 @@ const RentCheckout = () => {
             <Button
                 className="mt-4 w-100 py-3 fw-bold fs-5 shadow"
                 variant="warning"
-                disabled={totalDays < minRentalPeriod || !agreedToTerms || isSubmitting}
+                disabled={totalDays <= 0 || !agreedToTerms || isSubmitting}
                 onClick={handleOpenModal}
             >
                 Send Rent Request
