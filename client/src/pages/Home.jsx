@@ -11,6 +11,7 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const categoryRef = useRef(null);
 
@@ -33,13 +34,14 @@ const Home = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [category, type]);
+  }, [category, type, searchQuery]);
 
   const fetchProducts = async () => {
     try {
       let url = 'http://localhost:5000/api/products?';
       if (category) url += `category=${category}&`;
-      if (type) url += `type=${type}`;
+      if (type) url += `type=${type}&`;
+      if (searchQuery) url += `search=${searchQuery}&`;
 
       const res = await axios.get(url);
       setProducts(res.data);
@@ -110,8 +112,16 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 🔎 Type Filter Section */}
-      <div className="d-flex justify-content-end mb-4">
+      {/* 🔎 Search and Filter Section */}
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <Form.Control
+          type="text"
+          placeholder="Search product..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="rounded-3 shadow-sm flex-grow-1"
+          style={{ maxWidth: '400px' }}
+        />
         <Form.Select
           value={type}
           onChange={(e) => setType(e.target.value)}
