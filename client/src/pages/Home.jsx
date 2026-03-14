@@ -113,26 +113,31 @@ const Home = () => {
       </div>
 
       {/* 🔎 Search and Filter Section */}
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <Form.Control
-          type="text"
-          placeholder="Search product..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="rounded-3 shadow-sm flex-grow-1"
-          style={{ maxWidth: '400px' }}
-        />
-        <Form.Select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="rounded-3 w-auto filter-select shadow-sm"
-          style={{ minWidth: '150px' }}
-        >
-          <option value="">All Types</option>
-          <option value="Buy">Buy</option>
-          <option value="Rent">Rent</option>
-        </Form.Select>
-      </div>
+      <Row className="align-items-center mb-4 g-3">
+
+        <Col xs={8}>
+          <Form.Control
+            type="text"
+            placeholder="Search product..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="rounded-3 shadow-sm w-100"
+          />
+        </Col>
+
+        <Col xs={4}>
+          <Form.Select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="rounded-3 filter-select shadow-sm w-100"
+          >
+            <option value="">All Types</option>
+            <option value="Buy">Buy</option>
+            <option value="Rent">Rent</option>
+          </Form.Select>
+        </Col>
+
+      </Row>
 
       {/* 🛒 Products Grid */}
       <Row>
@@ -145,7 +150,7 @@ const Home = () => {
           </Col>
         ) : (
           products.map((product) => (
-            <Col key={product._id} md={4} className="mb-4">
+            <Col key={product._id} lg={3} md={4} xs={6} className="mb-4">
               <Card className="h-100 product-card">
                 {product.image && (
                   <Card.Img

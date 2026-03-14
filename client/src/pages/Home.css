@@ -171,7 +171,7 @@ body {
 .category-bar {
   display: flex;
   gap: 80px;
-  overflow-x: auto;
+  overflow-x: hidden;
   padding: 10px 5px 25px 5px;
   /* bottom padding for hover shadow */
   scroll-behavior: smooth;
@@ -181,6 +181,10 @@ body {
   /* IE and Edge */
   scrollbar-color: #667eea transparent;
 
+}
+
+.category-bar:hover {
+  overflow-x: auto;
 }
 
 .category-bar::-webkit-scrollbar {
