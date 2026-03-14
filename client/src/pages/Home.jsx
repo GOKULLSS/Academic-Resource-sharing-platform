@@ -12,6 +12,7 @@ const Home = () => {
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
 
   const categoryRef = useRef(null);
 
@@ -61,6 +62,23 @@ const Home = () => {
       navigate('/chat', { state: { chat: res.data } });
     } catch (error) {
       console.error("Error creating/fetching chat", error);
+    }
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:5000/api/contact', contactForm);
+      
+      const subject = encodeURIComponent("Contact Message from " + contactForm.name);
+      const body = encodeURIComponent(contactForm.message);
+      window.location.href = `mailto:oncampusmart@gmail.com?subject=${subject}&body=${body}`;
+
+      alert('Message sent successfully! We will get back to you soon.');
+      setContactForm({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error("Error submitting contact message", error);
+      alert('Failed to send message. Please try again.');
     }
   };
 
@@ -341,21 +359,40 @@ const Home = () => {
             <Col lg={7}>
               <div className="contact-card">
                 <h4 className="fw-bold mb-4">Send a Message</h4>
-                <Form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert('Message sent successfully! We will get back to you soon.'); }}>
+                <Form className="contact-form" onSubmit={handleContactSubmit}>
                   <Row>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Control type="text" placeholder="Your Name" required />
+                        <Form.Control 
+                          type="text" 
+                          placeholder="Your Name" 
+                          required 
+                          value={contactForm.name}
+                          onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Control type="email" placeholder="Your Email" required />
+                        <Form.Control 
+                          type="email" 
+                          placeholder="Your Email" 
+                          required 
+                          value={contactForm.email}
+                          onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                        />
                       </Form.Group>
                     </Col>
                   </Row>
                   <Form.Group>
-                    <Form.Control as="textarea" rows={4} placeholder="How can we help you?" required />
+                    <Form.Control 
+                      as="textarea" 
+                      rows={4} 
+                      placeholder="How can we help you?" 
+                      required 
+                      value={contactForm.message}
+                      onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                    />
                   </Form.Group>
                   <Button type="submit" className="btn-primary-custom w-100 mt-2">
                     Submit Message
