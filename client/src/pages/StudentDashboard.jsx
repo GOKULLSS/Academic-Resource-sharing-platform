@@ -326,10 +326,6 @@ const StudentDashboard = () => {
                         <option value="Question Bank">Question Bank</option>
                         <option value="Stationary">Stationary</option>
                         <option value="Sports">Sports</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Food and Health">Food and Health</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Beauty">Beauty</option>
                         <option value="Other">Other</option>
                       </Form.Select>
                     </Form.Group>
@@ -459,10 +455,6 @@ const StudentDashboard = () => {
                     <option value="Question Bank">Question Bank</option>
                     <option value="Stationary">Stationary</option>
                     <option value="Sports">Sports</option>
-                    <option value="Furniture">Furniture</option>
-                    <option value="Food and Health">Food and Health</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Beauty">Beauty</option>
                     <option value="Other">Other</option>
 
                   </Form.Select>
