@@ -69,7 +69,7 @@ const Home = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:5000/api/contact', contactForm);
-      
+
       const subject = encodeURIComponent("Contact Message from " + contactForm.name);
       const body = encodeURIComponent(contactForm.message);
       window.location.href = `mailto:oncampusmart@gmail.com?subject=${subject}&body=${body}`;
@@ -93,8 +93,9 @@ const Home = () => {
     <div className="home-container">
       {/* 🚀 Hero Section */}
       <section className="hero-section">
-        <div className="hero-shape shape-1"></div>
-        <div className="hero-shape shape-2"></div>
+        {/* Blurred Background Shapes */}
+        <div className="blur-circle blur1"></div>
+        <div className="blur-circle blur2"></div>
         <Container className="hero-content">
           <Row className="align-items-center">
             <Col lg={6} className="mb-5 mb-lg-0">
@@ -114,7 +115,7 @@ const Home = () => {
             <Col lg={6}>
               <div className="hero-image-wrapper">
                 <img
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600"
+                  src="src/images/3dcart.jpg"
                   alt="Students smiling"
                   className="hero-illustration"
                 />
@@ -131,18 +132,18 @@ const Home = () => {
             <Carousel.Item>
               <img
                 className="d-block w-100"
-                src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1200"
+                src="src/images/connecting.jpg"
                 alt="University Campus"
               />
               <Carousel.Caption>
                 <h3>Connect with your Campus</h3>
-                <p>Buy and sell directly with students in your university.</p>
+                <p>Buy,Rent and sell directly with students in your university.</p>
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
               <img
                 className="d-block w-100"
-                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1200"
+                src="src/images/exchanging.jpg"
                 alt="Study Materials"
               />
               <Carousel.Caption>
@@ -153,12 +154,12 @@ const Home = () => {
             <Carousel.Item>
               <img
                 className="d-block w-100"
-                src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=1200"
+                src="src/images/throwing.jpg"
                 alt="Student Life"
               />
               <Carousel.Caption>
-                <h3>Upgrade Your Dorm</h3>
-                <p>Rent or buy electronics and furniture effortlessly.</p>
+                <h3>Easy Renting</h3>
+                <p>Rent your items effortlessly.</p>
               </Carousel.Caption>
             </Carousel.Item>
           </Carousel>
@@ -348,13 +349,6 @@ const Home = () => {
                   <span className="text-light" style={{ opacity: 0.8 }}>oncampusmart@gmail.com</span>
                 </div>
               </div>
-              <div className="contact-info-item justify-content-center justify-content-lg-start">
-                <div className="contact-icon">📍</div>
-                <div>
-                  <h6 className="mb-0 fw-bold">Campus Life Office</h6>
-                  <span className="text-light" style={{ opacity: 0.8 }}>Student Union Bldg, Room 204</span>
-                </div>
-              </div>
             </Col>
             <Col lg={7}>
               <div className="contact-card">
@@ -363,10 +357,10 @@ const Home = () => {
                   <Row>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Control 
-                          type="text" 
-                          placeholder="Your Name" 
-                          required 
+                        <Form.Control
+                          type="text"
+                          placeholder="Your Name"
+                          required
                           value={contactForm.name}
                           onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                         />
@@ -374,10 +368,10 @@ const Home = () => {
                     </Col>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Control 
-                          type="email" 
-                          placeholder="Your Email" 
-                          required 
+                        <Form.Control
+                          type="email"
+                          placeholder="Your Email"
+                          required
                           value={contactForm.email}
                           onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                         />
@@ -385,11 +379,11 @@ const Home = () => {
                     </Col>
                   </Row>
                   <Form.Group>
-                    <Form.Control 
-                      as="textarea" 
-                      rows={4} 
-                      placeholder="How can we help you?" 
-                      required 
+                    <Form.Control
+                      as="textarea"
+                      rows={4}
+                      placeholder="How can we help you?"
+                      required
                       value={contactForm.message}
                       onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                     />
@@ -419,7 +413,7 @@ const Home = () => {
                 <a href="#" className="social-icon">🎓</a>
               </div>
             </Col>
-            <Col lg={2} md={4} xs={6} className="mb-4">
+            <Col md={4} xs={6} className="mb-4">
               <h5 className="text-white mb-3 fw-bold">Quick Links</h5>
               <ul className="footer-links">
                 <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>Home</a></li>
@@ -428,21 +422,13 @@ const Home = () => {
                 <li><a href="#" onClick={(e) => { e.preventDefault(); navigate('/student'); }}>Dashboard</a></li>
               </ul>
             </Col>
-            <Col lg={2} md={4} xs={6} className="mb-4">
+            <Col md={4} xs={6} className="mb-4">
               <h5 className="text-white mb-3 fw-bold">Legal</h5>
               <ul className="footer-links">
                 <li><a href="#">Terms of Service</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Safety Guidelines</a></li>
               </ul>
-            </Col>
-            <Col lg={4} md={4} className="mb-4">
-              <h5 className="text-white mb-3 fw-bold">Newsletter</h5>
-              <p>Get updates on new campus listings and deals.</p>
-              <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
-                <Form.Control type="email" placeholder="Email address" className="me-2 rounded-pill border-0" />
-                <Button className="btn-primary-custom rounded-pill" style={{ padding: '8px 20px' }}>Subscribe</Button>
-              </Form>
             </Col>
           </Row>
           <div className="footer-bottom">

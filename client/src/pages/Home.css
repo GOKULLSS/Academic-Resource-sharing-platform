@@ -25,14 +25,47 @@ body {
 /* ========================= */
 /* HERO SECTION */
 /* ========================= */
+/* Blur circles */
+
+.blur-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.6;
+  z-index: 0;
+}
+
+/* Blue blur */
+
+.blur1 {
+  width: 300px;
+  height: 300px;
+  background: #063073;
+  top: -80px;
+  left: -80px;
+}
+
+/* Light blue */
+
+.blur2 {
+  width: 576px;
+  height: 308px;
+  background: #091833;
+  bottom: -120px;
+  left: -220px;
+
+}
+
+
 .hero-section {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium-dark));
+  background: #19438d;
   color: white;
-  padding: 100px 0 80px;
+  padding: 20px 0 0px;
   position: relative;
   overflow: hidden;
   margin-bottom: 40px;
 }
+
 
 .hero-content {
   position: relative;
@@ -54,29 +87,6 @@ body {
   line-height: 1.6;
 }
 
-/* Background Shapes for Hero */
-.hero-shape {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--primary-light);
-  opacity: 0.1;
-  z-index: 1;
-}
-
-.shape-1 {
-  width: 400px;
-  height: 400px;
-  top: -100px;
-  right: -50px;
-}
-
-.shape-2 {
-  width: 250px;
-  height: 250px;
-  bottom: -50px;
-  left: 5%;
-}
-
 /* Hero Image & Animation */
 .hero-image-wrapper {
   position: relative;
@@ -92,15 +102,20 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  border: 4px solid rgba(255,255,255,0.1);
 }
 
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 /* Hero Buttons */
@@ -126,7 +141,7 @@ body {
 .btn-outline-custom {
   background-color: transparent;
   color: white;
-  border: 2px solid rgba(255,255,255,0.7);
+  border: 2px solid rgba(255, 255, 255, 0.7);
   padding: 10px 28px;
   border-radius: 50px;
   font-weight: 600;
@@ -159,16 +174,15 @@ body {
   object-fit: cover;
   height: 100%;
   width: 100%;
-  opacity: 0.7;
+
 }
 
 .custom-carousel .carousel-caption {
   bottom: 30%;
   z-index: 10;
-  background: rgba(0,0,0,0.4);
   padding: 20px;
   border-radius: 15px;
-  backdrop-filter: blur(5px);
+
 }
 
 .custom-carousel .carousel-caption h3 {
@@ -190,7 +204,7 @@ body {
   background-color: #ffffff;
   border-radius: 30px;
   margin-bottom: 50px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .section-title {
@@ -249,14 +263,16 @@ body {
 /* ========================= */
 /* FILTER CARD & INPUTS */
 /* ========================= */
-.form-select, .form-control {
+.form-select,
+.form-control {
   border-radius: 12px !important;
   padding: 12px;
   border: 1px solid #e0e6ed;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
-.form-select:focus, .form-control:focus {
+.form-select:focus,
+.form-control:focus {
   border-color: var(--primary-medium);
   box-shadow: 0 0 0 0.25rem rgba(73, 136, 196, 0.25);
 }
@@ -265,7 +281,7 @@ body {
 /* PRODUCT CARD (Updated) */
 /* ========================= */
 .product-card {
-  border: 1px solid rgba(0,0,0,0.04) !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
   border-radius: 20px !important;
   overflow: hidden;
   background: #ffffff;
@@ -449,13 +465,13 @@ body {
 .contact-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 40px;
 }
 
 .contact-form .form-control {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 12px;
   padding: 12px 20px;
@@ -489,8 +505,9 @@ body {
 /* FOOTER SECTION */
 /* ========================= */
 .footer-section {
-  background: #091833; /* Very dark blue from palette */
-  color: rgba(255,255,255,0.7);
+  background: #091833;
+  /* Very dark blue from palette */
+  color: rgba(255, 255, 255, 0.7);
   padding: 60px 0 20px;
 }
 
@@ -511,7 +528,7 @@ body {
 }
 
 .footer-links a {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: color 0.3s;
   font-size: 1.05rem;
@@ -531,7 +548,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -548,7 +565,7 @@ body {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 25px;
   margin-top: 40px;
   text-align: center;
@@ -559,19 +576,58 @@ body {
 /* RESPONSIVE ADJUSTMENTS */
 /* ========================= */
 @media (max-width: 991px) {
-  .hero-title { font-size: 2.8rem; }
-  .hero-image-wrapper { height: 350px; margin-top: 40px; }
-  .custom-carousel .carousel-item { height: 350px; }
-  .contact-section { padding: 50px 20px; }
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-image-wrapper {
+    height: 350px;
+    margin-top: 40px;
+  }
+
+  .custom-carousel .carousel-item {
+    height: 350px;
+  }
+
+  .contact-section {
+    padding: 50px 20px;
+  }
 }
 
 @media (max-width: 768px) {
-  .hero-title { font-size: 2.2rem; }
-  .hero-subtitle { font-size: 1.1rem; }
-  .hero-section { padding: 60px 0 40px; text-align: center; }
-  .hero-image-wrapper { height: 280px; }
-  .btn-primary-custom, .btn-outline-custom { margin-bottom: 15px; width: 100%; display: block; }
-  .custom-carousel .carousel-caption h3 { font-size: 1.8rem; }
-  .custom-carousel .carousel-item { height: 250px; }
-  .section-title { font-size: 1.8rem; }
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-section {
+    padding: 60px 0 40px;
+    text-align: center;
+  }
+
+  .hero-image-wrapper {
+    height: 280px;
+  }
+
+  .btn-primary-custom,
+  .btn-outline-custom {
+    margin-bottom: 15px;
+    width: 100%;
+    display: block;
+  }
+
+  .custom-carousel .carousel-caption h3 {
+    font-size: 1.8rem;
+  }
+
+  .custom-carousel .carousel-item {
+    height: 250px;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
 }
