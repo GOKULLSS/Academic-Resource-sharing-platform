@@ -99,9 +99,13 @@ const Home = () => {
         <Container className="hero-content">
           <Row className="align-items-center">
             <Col lg={6} className="mb-5 mb-lg-0">
-              <h1 className="hero-title">Buy, Sell & Rent Items Within Your Campus</h1>
+              <h1 className="hero-title">
+                Buy, Sell & Rent <span className="highlight">Smarter</span> on Campus
+              </h1>
+
               <p className="hero-subtitle">
-                The most trusted student marketplace to find second-hand books, electronics, hostel essentials, and more, straight from your peers.
+                Discover affordable second-hand books, electronics, and hostel essentials
+                from students around you. Safe, fast, and built for campus life.
               </p>
               <div className="d-flex flex-wrap gap-3">
                 <Button className="btn-primary-custom" onClick={handleScrollToProducts}>
