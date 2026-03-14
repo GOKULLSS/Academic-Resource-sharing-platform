@@ -87,7 +87,7 @@
 /* ========================= */
 
 .logout-btn {
-  background: linear-gradient(90deg, #ff6a6a, #ff4b4b);
+  background: linear-gradient(2deg, #173f84, #5e4bff);
   border: none;
   border-radius: 12px;
   padding: 6px 14px;
@@ -97,5 +97,5 @@
 
 .logout-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 75, 75, 0.4);
+  box-shadow: 0 8px 20px rgba(70, 69, 69, 0.4);
 }

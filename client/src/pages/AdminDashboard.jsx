@@ -4,11 +4,25 @@ import { Container, Table, Button, Badge, Alert } from 'react-bootstrap';
 
 const AdminDashboard = () => {
     const [pendingProducts, setPendingProducts] = useState([]);
+    const [contactMessages, setContactMessages] = useState([]);
     const [message, setMessage] = useState({ type: '', text: '' });
 
     useEffect(() => {
         fetchPendingProducts();
+        fetchContactMessages();
     }, []);
+
+    const fetchContactMessages = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:5000/api/contact', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setContactMessages(res.data);
+        } catch (error) {
+            console.error("Failed to fetch contact messages");
+        }
+    };
 
     const fetchPendingProducts = async () => {
         try {
@@ -92,6 +106,32 @@ const AdminDashboard = () => {
                                         Reject/Delete
                                     </Button>
                                 </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            )}
+
+            <h3 className="mt-5 mb-3">Contact Messages</h3>
+            {contactMessages.length === 0 ? (
+                <Alert variant="info">No contact messages at the moment.</Alert>
+            ) : (
+                <Table striped bordered hover responsive>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {contactMessages.map((msg) => (
+                            <tr key={msg._id}>
+                                <td>{new Date(msg.createdAt).toLocaleDateString()}</td>
+                                <td>{msg.name}</td>
+                                <td><a href={`mailto:${msg.email}`}>{msg.email}</a></td>
+                                <td>{msg.message}</td>
                             </tr>
                         ))}
                     </tbody>
