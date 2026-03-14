@@ -226,7 +226,7 @@ const StudentDashboard = () => {
                           )}
                         </td>
                         <td>{product.title}</td>
-                        <td>${product.price}</td>
+                        <td>₹{product.price}</td>
                         <td>
                           {product.status === "pending" && (
                             <span className="badge bg-warning text-dark">
@@ -304,7 +304,7 @@ const StudentDashboard = () => {
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Price ($)</Form.Label>
+                      <Form.Label>Price (₹)</Form.Label>
                       <Form.Control
                         type="number"
                         value={price}
@@ -326,10 +326,6 @@ const StudentDashboard = () => {
                         <option value="Question Bank">Question Bank</option>
                         <option value="Stationary">Stationary</option>
                         <option value="Sports">Sports</option>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Food and Health">Food and Health</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Beauty">Beauty</option>
                         <option value="Other">Other</option>
                       </Form.Select>
                     </Form.Group>
@@ -368,7 +364,7 @@ const StudentDashboard = () => {
                   <Row>
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>Security Deposit ($)</Form.Label>
+                        <Form.Label>Security Deposit (₹)</Form.Label>
                         <Form.Control
                           type="number"
                           value={deposit}
@@ -379,7 +375,7 @@ const StudentDashboard = () => {
                     </Col>
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>Late Fee Per Day ($)</Form.Label>
+                        <Form.Label>Late Fee Per Day (₹)</Form.Label>
                         <Form.Control
                           type="number"
                           value={lateFeePerDay}
@@ -437,7 +433,7 @@ const StudentDashboard = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Price ($)</Form.Label>
+                  <Form.Label>Price (₹)</Form.Label>
                   <Form.Control
                     type="number"
                     value={editFormData.price}
@@ -459,10 +455,6 @@ const StudentDashboard = () => {
                     <option value="Question Bank">Question Bank</option>
                     <option value="Stationary">Stationary</option>
                     <option value="Sports">Sports</option>
-                    <option value="Furniture">Furniture</option>
-                    <option value="Food and Health">Food and Health</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Beauty">Beauty</option>
                     <option value="Other">Other</option>
 
                   </Form.Select>
@@ -502,7 +494,7 @@ const StudentDashboard = () => {
               <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Security Deposit ($)</Form.Label>
+                    <Form.Label>Security Deposit (₹)</Form.Label>
                     <Form.Control
                       type="number"
                       value={editFormData.deposit}
@@ -513,7 +505,7 @@ const StudentDashboard = () => {
                 </Col>
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Late Fee Per Day ($)</Form.Label>
+                    <Form.Label>Late Fee Per Day (₹)</Form.Label>
                     <Form.Control
                       type="number"
                       value={editFormData.lateFeePerDay}

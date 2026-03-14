@@ -81,7 +81,7 @@ const AdminDashboard = () => {
                                 </td>
                                 <td>{product.title}</td>
                                 <td><Badge bg="secondary">{product.category}</Badge> {product.transactionType}</td>
-                                <td>${product.price}</td>
+                                <td>₹{product.price}</td>
                                 <td>{product.seller?.name || 'Unknown'}</td>
                                 <td>{new Date(product.createdAt).toLocaleDateString()}</td>
                                 <td>

@@ -107,11 +107,17 @@ const deleteProduct = async (req, res) => {
 // @access  Public
 const getLiveProducts = async (req, res) => {
     try {
-        const { category, type } = req.query;
+        const { category, type, search } = req.query;
         let query = { status: 'live' };
 
         if (category) query.category = category;
         if (type) query.transactionType = type;
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { category: { $regex: search, $options: 'i' } }
+            ];
+        }
 
         const products = await Product.find(query).populate('seller', 'name').sort({ createdAt: -1 });
         res.status(200).json(products);

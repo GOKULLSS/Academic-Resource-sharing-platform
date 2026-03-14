@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Badge, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -11,16 +11,37 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const categoryRef = useRef(null);
+
+  const handleWheel = (e) => {
+    if (categoryRef.current) {
+      e.preventDefault();
+      categoryRef.current.scrollLeft += e.deltaY;
+    }
+  };
+
+  const categories = [
+    { name: 'Electronics', icon: '📱' },
+    { name: 'Books', icon: '📚' },
+    { name: 'Hostel Needs', icon: '🛏️' },
+    { name: 'Question Bank', icon: '📝' },
+    { name: 'Stationary', icon: '✏️' },
+    { name: 'Sports', icon: '⚽' },
+    { name: 'Other', icon: '📦' },
+  ];
 
   useEffect(() => {
     fetchProducts();
-  }, [category, type]);
+  }, [category, type, searchQuery]);
 
   const fetchProducts = async () => {
     try {
       let url = 'http://localhost:5000/api/products?';
       if (category) url += `category=${category}&`;
-      if (type) url += `type=${type}`;
+      if (type) url += `type=${type}&`;
+      if (searchQuery) url += `search=${searchQuery}&`;
 
       const res = await axios.get(url);
       setProducts(res.data);
@@ -60,43 +81,58 @@ const Home = () => {
         </p>
       </div>
 
-      {/* 🔎 Filter Section */}
-      <Card className="filter-card mb-4">
-        <Row>
-          <Col md={6}>
-            <Form.Select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="rounded-3"
+      {/* 🌟 Category Bar */}
+      <div className="category-bar-wrapper mb-4">
+        <div
+          className="category-bar"
+          ref={categoryRef}
+          onWheel={(e) => {
+            if (e.deltaY !== 0) {
+              categoryRef.current.scrollLeft += e.deltaY;
+            }
+          }}
+        >
+          <div
+            className={`category-item ${category === '' ? 'active' : ''}`}
+            onClick={() => setCategory('')}
+          >
+            <div className="category-icon">🌐</div>
+            <span className="category-name">All</span>
+          </div>
+          {categories.map((cat, index) => (
+            <div
+              key={index}
+              className={`category-item ${category === cat.name ? 'active' : ''}`}
+              onClick={() => setCategory(cat.name)}
             >
-              <option value="">All Categories</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Books">Books</option>
-              <option value="Hostel Needs">Hostel Needs</option>
-              <option value="Question Bank">Question Bank</option>
-              <option value="Stationary">Stationary</option>
-              <option value="Sports">Sports</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Food and Health">Food and Health</option>
-              <option value="Fashion">Fashion</option>
-              <option value="Beauty">Beauty</option>
-              <option value="Other">Other</option>
-            </Form.Select>
-          </Col>
+              <div className="category-icon">{cat.icon}</div>
+              <span className="category-name">{cat.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-          <Col md={6}>
-            <Form.Select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="rounded-3"
-            >
-              <option value="">All Types</option>
-              <option value="Buy">Buy</option>
-              <option value="Rent">Rent</option>
-            </Form.Select>
-          </Col>
-        </Row>
-      </Card>
+      {/* 🔎 Search and Filter Section */}
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <Form.Control
+          type="text"
+          placeholder="Search product..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="rounded-3 shadow-sm flex-grow-1"
+          style={{ maxWidth: '400px' }}
+        />
+        <Form.Select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="rounded-3 w-auto filter-select shadow-sm"
+          style={{ minWidth: '150px' }}
+        >
+          <option value="">All Types</option>
+          <option value="Buy">Buy</option>
+          <option value="Rent">Rent</option>
+        </Form.Select>
+      </div>
 
       {/* 🛒 Products Grid */}
       <Row>

@@ -78,10 +78,12 @@ body {
 /* Product Image */
 
 .product-image {
-  width: 100%;        /* ADD THIS */
+  width: 100%;
+  /* ADD THIS */
   height: 230px;
   object-fit: contain;
-  display: block;     /* prevents small spacing issues */
+  display: block;
+  /* prevents small spacing issues */
   transition: transform 0.4s ease;
 }
 
@@ -153,4 +155,102 @@ body {
   padding: 80px 0;
   text-align: center;
   color: #8e9aac;
+}
+
+/* ========================= */
+/* CATEGORY BAR */
+/* ========================= */
+
+.category-bar-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.category-bar {
+  display: flex;
+  gap: 80px;
+  overflow-x: auto;
+  padding: 10px 5px 25px 5px;
+  /* bottom padding for hover shadow */
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-color: #667eea transparent;
+
+}
+
+.category-bar::-webkit-scrollbar {
+  height: 8px;
+  /* Chrome, Safari and Opera */
+}
+
+.category-bar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6be0, #6a3f9a);
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 90px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.category-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6c757d;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.category-item:hover .category-icon {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+}
+
+.category-item:hover .category-name {
+  color: #667eea;
+}
+
+.category-item.active .category-icon {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.category-item.active .category-name {
+  color: #764ba2;
+  font-weight: 700;
+}
+
+.filter-select {
+  border: 1px solid #e0e6ed;
+  transition: all 0.3s ease;
+}
+
+.filter-select:hover {
+  border-color: #667eea;
 }

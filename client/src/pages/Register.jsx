@@ -61,6 +61,7 @@ const Register = () => {
                                             placeholder="Enter your email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
+                                            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                                             required
                                         />
                                     </Form.Group>
