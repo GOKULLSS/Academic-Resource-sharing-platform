@@ -3,7 +3,7 @@
 /* ========================= */
 
 .custom-navbar {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgb(254, 254, 254);
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
   padding: 12px 0;
@@ -15,15 +15,34 @@
 /* ========================= */
 
 .brand-text {
-  font-weight: 800;
-  font-size: 1.4rem;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
 
-  background-clip: text;
-  -webkit-background-clip: text;
+.brand-blue {
+  color: #15367f;
+}
 
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+.brand-orange {
+  color: #ff6a00;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-img {
+  height: 40px;
+}
+
+.logo-img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
 }
 
 /* ========================= */
@@ -87,11 +106,13 @@
 /* ========================= */
 
 .logout-btn {
-  background: linear-gradient(2deg, #173f84, #5e4bff);
-  border: none;
-  border-radius: 12px;
-  padding: 6px 14px;
+  background-color: transparent;
+  color: #fb710e;
+  border: 2px solid rgb(253 110 9);
+  padding: 3px 12px;
+  border-radius: 20px;
   font-weight: 600;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
 }
 

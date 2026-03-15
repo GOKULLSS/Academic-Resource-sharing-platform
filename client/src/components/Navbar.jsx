@@ -16,8 +16,12 @@ const NavigationBar = () => {
   return (
     <Navbar expand="lg" sticky="top" className="custom-navbar">
       <Container>
-        <Navbar.Brand as={Link} to="/" className="brand-text">
-          Campus Market
+        <Navbar.Brand as={Link} to="/" className="brand-logo">
+          <img src="src/images/logo.jpg" alt="OnCampusMart" className="logo-img" />
+          <span className="brand-text">
+            <span className="brand-blue">OnCampus</span>
+            <span className="brand-orange">Mart</span>
+          </span>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -34,25 +38,25 @@ const NavigationBar = () => {
               </Nav.Link>
             )}
 
-           {user && user.role === "student" && (
-           <>
-              <Nav.Link as={Link} to="/student">
+            {user && user.role === "student" && (
+              <>
+                <Nav.Link as={Link} to="/student">
                   My Dashboard
-              </Nav.Link>
+                </Nav.Link>
 
-              <Nav.Link as={Link} to="/buyer-dashboard">
+                <Nav.Link as={Link} to="/buyer-dashboard">
                   My Purchases
-              </Nav.Link>
+                </Nav.Link>
 
-              <Nav.Link as={Link} to="/seller-dashboard">
+                <Nav.Link as={Link} to="/seller-dashboard">
                   Incoming Orders
-              </Nav.Link>
+                </Nav.Link>
 
-              <Nav.Link as={Link} to="/chat">
-                 Messages
-              </Nav.Link>
-           </>
-         )}
+                <Nav.Link as={Link} to="/chat">
+                  Messages
+                </Nav.Link>
+              </>
+            )}
           </Nav>
 
           <Nav className="align-items-center">

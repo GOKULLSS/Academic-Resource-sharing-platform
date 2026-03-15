@@ -84,7 +84,7 @@ body {
 /* Gradient highlight word */
 
 .highlight {
-  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  background: linear-gradient(90deg, #ff6a00, #c9cfd6);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -165,6 +165,45 @@ body {
   background-color: white;
   color: var(--primary-dark);
   border-color: white;
+}
+
+/* Glass container */
+
+.glass-search {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-radius: 16px;
+  padding: 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Glass inputs */
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Focus effect */
+
+.glass-input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
 }
 
 /* ========================= */
@@ -356,6 +395,24 @@ body {
   padding: 10px;
   font-weight: 600;
   transition: all 0.3s ease !important;
+}
+
+
+.custom-btn1 {
+  background: transparent !important;
+  border: 2px solid var(--primary-medium-dark) !important;
+  color: var(--primary-medium-dark) !important;
+  border-radius: 12px !important;
+  padding: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease !important;
+}
+
+.custom-btn1:hover:not(:disabled) {
+  background: var(--primary-medium-dark) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(28, 77, 141, 0.3);
 }
 
 .custom-btn:hover:not(:disabled) {

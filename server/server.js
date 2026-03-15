@@ -11,13 +11,16 @@ const rentalRoutes = require("./routes/rentalRoutes");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-
+const checkOverdueRentalsJob = require('./cron/rentalCron');
 
 let onlineUsers = [];
 
 dotenv.config();
 
 connectDB();
+
+// Initialize Cron Jobs
+checkOverdueRentalsJob();
 
 const app = express();
 
