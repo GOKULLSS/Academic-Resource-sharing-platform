@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../middleware/upload');
+const uploadProductImage = require('../config/cloudinaryConfig');
 const { protect, admin } = require('../middleware/authMiddleware');
 const {
     createProduct,
@@ -22,8 +22,8 @@ router.get('/pending', protect, admin, getPendingProducts);
 router.put('/:id/approve', protect, admin, approveProduct);
 
 // Protected routes (Student/Admin)
-router.post('/', protect, upload.single('image'), createProduct);
-router.put('/:id', protect, upload.single('image'), updateProduct);
+router.post('/', protect, uploadProductImage.single('image'), createProduct);
+router.put('/:id', protect, uploadProductImage.single('image'), updateProduct);
 router.delete('/:id', protect, deleteProduct);
 
 module.exports = router;

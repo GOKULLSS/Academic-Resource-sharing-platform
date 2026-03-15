@@ -100,7 +100,7 @@ const Checkout = () => {
               <div className="d-flex flex-column flex-sm-row gap-3">
                 {product.image ? (
                   <img
-                    src={`http://localhost:5000${product.image}`}
+                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
                     alt={product.title}
                     style={{ width: "120px", height: "120px", objectFit: "cover", borderRadius: "8px" }}
                   />

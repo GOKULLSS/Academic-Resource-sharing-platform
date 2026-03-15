@@ -90,7 +90,7 @@ const AdminDashboard = () => {
                             <tr key={product._id}>
                                 <td>
                                     {product.image ? (
-                                        <img src={`http://localhost:5000${product.image}`} alt={product.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                                        <img src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
                                     ) : 'No Image'}
                                 </td>
                                 <td>{product.title}</td>

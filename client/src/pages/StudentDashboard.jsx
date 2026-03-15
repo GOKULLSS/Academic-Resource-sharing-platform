@@ -213,7 +213,7 @@ const StudentDashboard = () => {
                         <td>
                           {product.image ? (
                             <img
-                              src={`http://localhost:5000${product.image}`}
+                              src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
                               alt={product.title}
                               style={{
                                 width: "50px",
