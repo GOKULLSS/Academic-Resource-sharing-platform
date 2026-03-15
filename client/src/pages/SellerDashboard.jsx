@@ -203,7 +203,8 @@ const SellerDashboard = () => {
               <h5>{req.product?.title || "Product Deleted"}</h5>
               <p className="mb-1">Renter: {req.renter?.name || "Unknown Renter"} ({req.renter?.email || "N/A"})</p>
               <p className="mb-1">Dates: {new Date(req.startDate).toLocaleDateString()} to {new Date(req.endDate).toLocaleDateString()}</p>
-              <p className="mb-1">Total Rent: ₹{req.totalAmount}</p>
+              <p className="mb-1">Total Rent: ₹{req.totalAmount} (incl. ₹{req.deposit || 0} deposit)</p>
+              {req.lateFee > 0 && <p className="mb-1 text-danger fw-bold">Late Fee: ₹{req.lateFee}</p>}
               <p className="mt-2">
                 Status:{" "}
                 <Badge

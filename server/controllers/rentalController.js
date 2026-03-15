@@ -144,21 +144,50 @@ exports.checkOverdueRentals = async (req, res) => {
         // Find rentals that are past their end date and not yet returned
         const overdueRentals = await Rental.find({
             endDate: { $lt: currentDate },
-            status: { $in: ['Active', 'Approved'] }
-        });
+            status: { $in: ['Active', 'Approved', 'Overdue'] }
+        }).populate('chat');
+
+        let processedCount = 0;
 
         for (const rental of overdueRentals) {
-            rental.status = 'Overdue';
+            
+            // Calculate days overdue
+            const end = new Date(rental.endDate);
+            end.setHours(0, 0, 0, 0);
+            const current = new Date(currentDate);
+            current.setHours(0, 0, 0, 0);
 
-            // Calculate late fee (e.g., charge rentPerDay for each day late using diff)
-            const diffTime = Math.abs(currentDate - new Date(rental.endDate));
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffTime = current - end;
+            const diffDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            
+            if (diffDays > 0) {
+                // Update status to overdue
+                rental.status = 'Overdue';
 
-            rental.lateFee = diffDays * rental.rentPerDay; // late fee calculation
-            await rental.save();
+                const expectedLateFee = diffDays * rental.rentPerDay;
+                const alreadyCharged = rental.lateFee || 0;
+                const feeToCharge = expectedLateFee - alreadyCharged;
+
+                if (feeToCharge > 0) {
+                    rental.lateFee = expectedLateFee;
+                    rental.deposit = Math.max(0, rental.deposit - feeToCharge);
+                    await rental.save();
+                    processedCount++;
+
+                    // System notification in chat
+                    if (rental.chat) {
+                        const chatMsg = `System: Product is overdue by ${diffDays} day(s). A late fee of ₹${feeToCharge} has been deducted. Remaining security deposit is ₹${rental.deposit}.`;
+                        await Message.create({
+                            chat: rental.chat._id,
+                            sender: rental.owner, // System message sent by owner for visibility
+                            text: chatMsg,
+                        });
+                    }
+                }
+            }
         }
 
-        res.status(200).json({ message: 'Overdue rentals processed', count: overdueRentals.length });
+        res.status(200).json({ message: 'Overdue rentals processed', count: processedCount });
     } catch (error) {
         console.error('Error checking overdue rentals:', error);
         res.status(500).json({ message: 'Server Error', error });
