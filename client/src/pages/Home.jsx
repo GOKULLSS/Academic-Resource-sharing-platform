@@ -4,6 +4,8 @@ import { Container, Row, Col, Card, Badge, Form, Button, Carousel } from 'react-
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import './Home.css';
+import { FaInstagram, FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa";
+import { MdOutlineMessage } from "react-icons/md";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -104,7 +106,7 @@ const Home = () => {
               </h1>
 
               <p className="hero-subtitle">
-                Discover affordable second-hand books, electronics, and hostel essentials
+                Discover affordable second-hand products
                 from students around you. Safe, fast, and built for campus life.
               </p>
               <div className="d-flex flex-wrap gap-3">
@@ -132,8 +134,8 @@ const Home = () => {
       <Container>
         {/* 📸 Image Carousel */}
         <div className="carousel-wrapper">
-          <Carousel className="custom-carousel" fade>
-            <Carousel.Item>
+          <Carousel className="custom-carousel" fade >
+            <Carousel.Item interval={2500}>
               <img
                 className="d-block w-100"
                 src="src/images/connecting.jpg"
@@ -144,7 +146,7 @@ const Home = () => {
                 <p>Buy,Rent and sell directly with students in your university.</p>
               </Carousel.Caption>
             </Carousel.Item>
-            <Carousel.Item>
+            <Carousel.Item interval={2500}>
               <img
                 className="d-block w-100"
                 src="src/images/exchanging.jpg"
@@ -155,7 +157,7 @@ const Home = () => {
                 <p>Find second-hand books and notes at a fraction of the cost.</p>
               </Carousel.Caption>
             </Carousel.Item>
-            <Carousel.Item>
+            <Carousel.Item interval={2500}>
               <img
                 className="d-block w-100"
                 src="src/images/throwing.jpg"
@@ -170,7 +172,7 @@ const Home = () => {
         </div>
 
         {/* 🌟 Category Bar */}
-        <div id="products-section" className="section-title mt-5 pt-3">Explore Marketplace</div>
+        <div id="products-section" className="section-title mt-5 pt-3">Explore OnCampusMart</div>
 
         <div className="category-bar-wrapper mb-4">
           <div
@@ -203,21 +205,21 @@ const Home = () => {
         </div>
 
         {/* 🔎 Search and Filter Section */}
-        <Row className="align-items-center mb-5 g-3">
+        <Row className="align-items-center mb-5 g-3 glass-search">
           <Col xs={12} md={8}>
             <Form.Control
               type="text"
               placeholder="Search products by title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-100 px-4 py-3"
+              className="glass-input"
             />
           </Col>
           <Col xs={12} md={4}>
             <Form.Select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-100 px-4 py-3"
+              className="glass-input"
             >
               <option value="">All Types (Buy & Rent)</option>
               <option value="Buy">For Sale Only</option>
@@ -268,7 +270,7 @@ const Home = () => {
                       </Badge>
                       {user && (product.seller?._id === user._id || product.seller === user._id) && (
                         <Badge bg="info" className="custom-badge mt-1">
-                          ✨ Your Product
+                          Your Product
                         </Badge>
                       )}
                     </div>
@@ -292,12 +294,12 @@ const Home = () => {
                       {product.transactionType === "Rent" ? "Take on Rent" : "Buy Now"}
                     </Button>
                     <Button
-                      className="w-100 custom-btn btn-outline-info bg-transparent"
+                      className="w-70 custom-btn1 btn-outline-info bg-transparent"
                       disabled={user && (product.seller?._id === user._id || product.seller === user._id)}
                       style={(user && (product.seller?._id === user._id || product.seller === user._id)) ? { backgroundColor: 'transparent', borderColor: 'transparent', color: 'gray', opacity: 0.6, boxShadow: 'none' } : {}}
                       onClick={() => handleMessageSeller(product.seller?._id || product.seller, product._id)}
                     >
-                      💬 Message Seller
+                      <MdOutlineMessage /> Message Seller
                     </Button>
                   </Card.Body>
                 </Card>
@@ -407,14 +409,15 @@ const Home = () => {
         <Container>
           <Row>
             <Col lg={4} className="mb-4 mb-lg-0">
-              <div className="footer-logo">CampusMarket</div>
+              <div className="footer-logo">OnCampusMart</div>
               <p style={{ maxWidth: '300px', lineHeight: '1.6' }}>
                 Your dedicated platform to securely buy, sell, and rent items within your university community.
               </p>
               <div className="social-icons">
-                <a href="#" className="social-icon">📱</a>
-                <a href="#" className="social-icon">💻</a>
-                <a href="#" className="social-icon">🎓</a>
+                <a href="#" className="social-icon"><FaInstagram /></a>
+                <a href="#" className="social-icon"><FaFacebook /></a>
+                <a href="#" className="social-icon"><FaLinkedin /></a>
+                <a href="#" className="social-icon"><FaGithub /></a>
               </div>
             </Col>
             <Col md={4} xs={6} className="mb-4">
