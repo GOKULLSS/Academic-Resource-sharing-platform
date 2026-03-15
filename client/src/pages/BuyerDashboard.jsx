@@ -79,7 +79,7 @@ const BuyerDashboard = () => {
             <Col md={2}>
               {order.product?.image ? (
                 <img
-                  src={`http://localhost:5000${order.product.image}`}
+                  src={order.product.image?.startsWith('http') ? order.product.image : `http://localhost:5000${order.product.image}`}
                   alt={order.product?.title || "Product"}
                   style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
                 />
@@ -153,7 +153,7 @@ const BuyerDashboard = () => {
             <Col md={2}>
               {rental.product?.image ? (
                 <img
-                  src={`http://localhost:5000${rental.product.image}`}
+                  src={rental.product.image?.startsWith('http') ? rental.product.image : `http://localhost:5000${rental.product.image}`}
                   alt={rental.product?.title || "Product"}
                   style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
                 />

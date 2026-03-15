@@ -11,8 +11,7 @@ const createProduct = async (req, res) => {
 
         let imagePath = '';
         if (req.file) {
-            // Store the path relative to the server or full URL, for simplicity we store relative
-            imagePath = `/uploads/${req.file.filename}`;
+            imagePath = req.file.path; // Cloudinary secure URL
         }
 
         const product = await Product.create({
@@ -83,16 +82,7 @@ const deleteProduct = async (req, res) => {
             return res.status(401).json({ message: 'User not authorized' });
         }
 
-        // Delete the associated image file if it exists
-        if (product.image) {
-            // product.image is typically like "/uploads/filename.jpg"
-            const imagePath = path.join(__dirname, '..', 'uploads', path.basename(product.image));
-            fs.unlink(imagePath, (err) => {
-                if (err) {
-                    console.error("Error deleting image file:", err);
-                }
-            });
-        }
+        // Note: For Cloudinary, we'd ideally destroy the remote image, but for simplicity we skip unlink.
 
         await product.deleteOne();
 
@@ -178,7 +168,7 @@ const updateProduct = async (req, res) => {
         }
 
         if (req.file) {
-            product.image = `/uploads/${req.file.filename}`;
+            product.image = req.file.path; // Cloudinary secure URL
         }
 
         // Change status to pending when edited so admin can review it again

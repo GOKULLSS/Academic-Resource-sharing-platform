@@ -120,7 +120,7 @@ const RentCheckout = () => {
                         <Col md={4} className="text-center mb-3 mb-md-0">
                             {product.image ? (
                                 <img
-                                    src={`http://localhost:5000${product.image}`}
+                                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
                                     alt={product.title}
                                     style={{ width: '100%', maxHeight: '200px', objectFit: 'contain', borderRadius: '8px' }}
                                 />
