@@ -1,0 +1,108 @@
+/* Chat.css */
+
+/* Main Card */
+.glass-card {
+  background: color(srgb rgb(239, 233, 233) rgb(239, 239, 239) rgb(243, 243, 243));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(189,232,245,0.5);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  color: #fff;
+  height: 100%;
+  padding: 0;
+}
+
+/* Card Header */
+.glass-card-header {
+  background: rgba(28,77,141,0.4);
+  border-bottom: 1px solid rgba(189,232,245,0.3);
+  backdrop-filter: blur(6px);
+  font-weight: bold;
+}
+
+/* ListGroup */
+.chat-list {
+  overflow-y: auto;
+  height: calc(100% - 56px); /* Adjust header height if needed */
+  padding: 0.5rem;
+}
+
+/* Chat Item */
+.chat-item {
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(189,232,245,0.3);
+  color: #fff; /* default text color */
+  transition: all 0.3s ease;
+  background: rgba(28,77,141,0.2);
+}
+
+/* Active Chat Item */
+.chat-item.active {
+  background: rgba(73,136,196,0.4);
+}
+
+/* Hover effect */
+.chat-item:hover {
+  color: #000; /* text becomes black */
+  cursor: pointer;
+}
+
+/* Ensure product small text also changes on hover */
+.chat-item:hover small {
+  color: #000;
+}
+/* Badges */
+.chat-badge.online {
+  background-color: rgba(73,196,189,0.8);
+  color: #0f2854;
+}
+
+.chat-badge.offline {
+  background-color: rgba(189,232,245,0.4);
+  color: #0f2854;
+}
+
+/* No chats placeholder */
+.no-chats {
+  background: rgba(28,77,141,0.2);
+  color: #fff;
+  text-align: center;
+  border-radius: 12px;
+}
+
+
+/* Right Chat Panel */
+.glass-chat-panel {
+  background: linear-gradient(145deg, rgba(15,40,84,0.8), rgba(28,77,141,0.6));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(189,232,245,0.5);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  color: #fff;
+  padding: 0.5rem;
+}
+
+/* Placeholder text when no chat selected */
+.no-chat-text {
+  color: rgba(255,255,255,0.6);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* Individual messages inside ChatInterface */
+.chat-message {
+  background: rgba(73,136,196,0.2);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  max-width: 70%;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for messages */
+.chat-message:hover {
+  color: #000;
+  background: rgba(189,232,245,0.3);
+}
