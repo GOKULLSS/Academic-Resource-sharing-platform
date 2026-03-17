@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Table, Button, Badge, Alert } from 'react-bootstrap';
+import { Container, Table, Button, Badge, Alert, Card } from 'react-bootstrap';
+import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
     const [pendingProducts, setPendingProducts] = useState([]);
@@ -43,7 +44,7 @@ const AdminDashboard = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMessage({ type: 'success', text: 'Product approved successfully.' });
-            fetchPendingProducts(); // Refresh list
+            fetchPendingProducts();
         } catch (error) {
             setMessage({ type: 'danger', text: 'Error approving product' });
         }
@@ -57,7 +58,7 @@ const AdminDashboard = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMessage({ type: 'success', text: 'Product deleted/rejected.' });
-            fetchPendingProducts(); // Refresh list
+            fetchPendingProducts();
         } catch (error) {
             setMessage({ type: 'danger', text: 'Error rejecting product' });
         }
@@ -65,79 +66,109 @@ const AdminDashboard = () => {
 
     return (
         <Container className="mt-4">
-            <h2>Admin Dashboard (Verification Gate)</h2>
-            <p>Review and verify all pending product uploads before they appear on the public marketplace.</p>
 
-            {message.text && <Alert variant={message.type} onClose={() => setMessage({ type: '', text: '' })} dismissible>{message.text}</Alert>}
+{/* HEADER CARD */}
+<div className="dashboard-header">
+    <h2>Admin Dashboard</h2>
+    <p>Verify and manage product listings before they go live.</p>
 
-            {pendingProducts.length === 0 ? (
-                <Alert variant="info">No pending products at the moment.</Alert>
-            ) : (
-                <Table striped bordered hover responsive>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Seller</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pendingProducts.map((product) => (
-                            <tr key={product._id}>
-                                <td>
-                                    {product.image ? (
-                                        <img src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                                    ) : 'No Image'}
-                                </td>
-                                <td>{product.title}</td>
-                                <td><Badge bg="secondary">{product.category}</Badge> {product.transactionType}</td>
-                                <td>₹{product.price}</td>
-                                <td>{product.seller?.name || 'Unknown'}</td>
-                                <td>{new Date(product.createdAt).toLocaleDateString()}</td>
-                                <td>
-                                    <Button variant="success" size="sm" className="me-2" onClick={() => handleApprove(product._id)}>
-                                        Approve
-                                    </Button>
-                                    <Button variant="danger" size="sm" onClick={() => handleReject(product._id)}>
-                                        Reject/Delete
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            )}
+    <div className="info-box">
+        Admin verification ensures only quality items appear in marketplace.
+    </div>
+</div>
 
-            <h3 className="mt-5 mb-3">Contact Messages</h3>
-            {contactMessages.length === 0 ? (
-                <Alert variant="info">No contact messages at the moment.</Alert>
-            ) : (
-                <Table striped bordered hover responsive>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {contactMessages.map((msg) => (
-                            <tr key={msg._id}>
-                                <td>{new Date(msg.createdAt).toLocaleDateString()}</td>
-                                <td>{msg.name}</td>
-                                <td><a href={`mailto:${msg.email}`}>{msg.email}</a></td>
-                                <td>{msg.message}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            )}
-        </Container>
+{/* ALERT */}
+{message.text && (
+    <Alert
+        variant={message.type}
+        onClose={() => setMessage({ type: '', text: '' })}
+        dismissible
+    >
+        {message.text}
+    </Alert>
+)}
+
+{/* PRODUCTS SECTION */}
+<div className="products-card">
+
+<h3 className="section-title">Pending Products</h3>
+
+{pendingProducts.length === 0 ? (
+    <p className="empty-text">No pending products</p>
+) : (
+    pendingProducts.map((product) => (
+
+        <div key={product._id} className="product-row">
+
+            {/* IMAGE */}
+            <img
+                src={
+                    product.image?.startsWith('http')
+                        ? product.image
+                        : `http://localhost:5000${product.image}`
+                }
+                alt={product.title}
+                className="product-img"
+            />
+
+            {/* TITLE */}
+            <div className="product-title">{product.title}</div>
+
+            {/* PRICE */}
+            <div className="product-price">₹{product.price}</div>
+
+            {/* STATUS */}
+            <div className="status-badge pending">
+                Pending
+            </div>
+
+            {/* ACTIONS */}
+            <div className="action-buttons">
+
+                <Button
+                    size="sm"
+                    className="approve-btn"
+                    onClick={() => handleApprove(product._id)}
+                >
+                    Approve
+                </Button>
+
+                <Button
+                    size="sm"
+                    className="reject-btn"
+                    onClick={() => handleReject(product._id)}
+                >
+                    Reject
+                </Button>
+
+            </div>
+
+        </div>
+    ))
+)}
+
+</div>
+
+{/* CONTACT SECTION */}
+<div className="products-card mt-4">
+
+<h3 className="section-title">Contact Messages</h3>
+
+{contactMessages.length === 0 ? (
+    <p className="empty-text">No messages</p>
+) : (
+    contactMessages.map((msg) => (
+        <div key={msg._id} className="message-row">
+            <div>{msg.name}</div>
+            <div>{msg.email}</div>
+            <div>{msg.message}</div>
+        </div>
+    ))
+)}
+
+</div>
+
+</Container>
     );
 };
 
