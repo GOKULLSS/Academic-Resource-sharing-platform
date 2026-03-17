@@ -1,19 +1,13 @@
 .glass-card {
-background: linear-gradient(
-  135deg,
-  rgba(4, 29, 73, 0.75) 0%,
-  rgba(9, 54, 112, 0.65) 30%,
-  rgba(3, 67, 128, 0.55) 60%,
-  rgba(17, 43, 114, 0.45) 100%
-);
+  background: linear-gradient(135deg, rgb(1 35 96 / 75%) 0%, rgb(21 54 127) 60%, rgb(46 102 255 / 45%) 100%);
 
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
-  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
 
   color: white;
   padding: 15px;
@@ -21,19 +15,19 @@ background: linear-gradient(
   transition: all 0.3s ease;
 }
 
-.glass-card:hover{
+.glass-card:hover {
   transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 }
 
-.glass-card h3{
+.glass-card h3 {
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
-.glass-alert{
-  background: rgba(189,232,245,0.15);
-  border: 1px solid rgba(189,232,245,0.35);
+.glass-alert {
+  background: rgba(189, 232, 245, 0.15);
+  border: 1px solid rgba(189, 232, 245, 0.35);
   color: #eafaff;
   backdrop-filter: blur(5px);
 }
@@ -41,7 +35,7 @@ background: linear-gradient(
 /* Glass Table */
 /* Glass Table */
 
-.glass-table{
+.glass-table {
   background: transparent;
   backdrop-filter: blur(10px);
   border-radius: 12px;
@@ -51,7 +45,7 @@ background: linear-gradient(
 
 /* Remove header color */
 
-.glass-table th{
+.glass-table th {
   background: transparent;
   border: none;
   color: white;
@@ -59,7 +53,7 @@ background: linear-gradient(
 
 /* Table rows */
 
-.glass-table td{
+.glass-table td {
   background: transparent;
   border: none;
   vertical-align: middle;
@@ -67,22 +61,22 @@ background: linear-gradient(
 
 /* Row Hover Effect */
 
-.glass-table tbody tr{
+.glass-table tbody tr {
   transition: all 0.25s ease;
 }
 
-.glass-table tbody tr:hover{
-  background: rgba(255,255,255,0.07);
+.glass-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.07);
   transform: scale(1.01);
 }
 
 /* Product Image */
 
-.product-img{
-  width:50px;
-  height:50px;
-  object-fit:cover;
-  border-radius:8px;
+.product-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 /* Status Badges */
@@ -91,15 +85,19 @@ background: linear-gradient(
   align-items: center;
   justify-content: center;
 
-  width: 80px;     /* fixed width for all badges */
-  height: 28px;    /* fixed height */
-  padding: 0;      /* remove padding to maintain size consistency */
-  
+  width: 80px;
+  /* fixed width for all badges */
+  height: 28px;
+  /* fixed height */
+  padding: 0;
+  /* remove padding to maintain size consistency */
+
   border-radius: 20px;
   font-size: 13px;
   font-weight: 500;
   text-align: center;
-  white-space: nowrap; /* prevent text wrap */
+  white-space: nowrap;
+  /* prevent text wrap */
 }
 
 .pending {
@@ -124,40 +122,42 @@ background: linear-gradient(
 
 /* Buttons */
 
-.btn-delete{
-  background:#ff4d4d;
-  border:none;
+.btn-delete {
+  background: #ff4d4d;
+  border: none;
 }
 
-.btn-delete:hover{
-  background:#ff1a1a;
+.btn-delete:hover {
+  background: #ff1a1a;
 }
 
-.btn-edit{
-  background:#f0ad4e;
-  border:none;
+.btn-edit {
+  background: #f0ad4e;
+  border: none;
 }
 
-.btn-edit:hover{
-  background:#ec971f;
+.btn-edit:hover {
+  background: #ec971f;
 }
 
 /* Upload Card Styling & Hover */
 /* Upload Card with solid background and hover effect */
 .upload-card {
-  background: #1c3d70; /* solid color, adjust as needed */
+  background: rgb(15, 40, 84);
+  /* solid color, adjust as needed */
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
   color: white;
   padding: 15px;
 
-  transition: all 0.3s ease; /* smooth hover */
+  transition: all 0.3s ease;
+  /* smooth hover */
 }
 
 .upload-card:hover {
   transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 }
 
 .upload-card h3 {
