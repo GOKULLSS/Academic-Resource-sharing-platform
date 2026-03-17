@@ -2,9 +2,9 @@
 .page {
   min-height: 100vh;
   background: linear-gradient(135deg,
-      rgb(220, 235, 250),
-      rgb(200, 225, 245),
-      rgb(180, 210, 240));
+      rgb(244, 245, 246),
+      rgb(245, 247, 249),
+      rgb(232, 234, 236));
   padding: 20px;
 }
 
