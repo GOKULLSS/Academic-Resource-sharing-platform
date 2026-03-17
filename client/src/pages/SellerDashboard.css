@@ -1,0 +1,140 @@
+/* Order Card */
+.glass-card1 {
+    background: rgba(255, 255, 255, 0.85);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+
+    color: #1a1a1a;
+    padding: 15px;
+
+    transition: all 0.3s ease;
+}
+
+.glass-card1hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.order-card {
+    background: rgba(255, 255, 255, 0.85);
+    /* light glass */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 15px;
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Highlight for rentals */
+.warning-border {
+    border-left: 4px solid #ffc107;
+}
+
+/* Larger product image */
+.product-img-large {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* No image */
+.no-img {
+    height: 100px;
+    background: #f1f3f5;
+    /* light grey */
+    color: #666;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-chat {
+    background: #17a2b8;
+    border: none;
+}
+
+.btn-success-custom {
+    background: #28a745;
+    border: none;
+}
+
+.btn-danger-custom {
+    background: #dc3545;
+    border: none;
+}
+
+.btn-secondary-custom {
+    background: #6c757d;
+    border: none;
+}
+
+.btn-info-custom {
+    background: #17a2b8;
+    border: none;
+}
+
+.btn-primary-custom {
+    background: #007bff;
+    border: none;
+}
+
+/* Status (reuse student style but extend) */
+.status.confirmed {
+    background: #007bff;
+}
+
+.status.completed {
+    background: #28a745;
+}
+
+.status.rejected {
+    background: #dc3545;
+}
+
+.status.cancelled {
+    background: #6c757d;
+}
+
+.status.requested {
+    background: #ffc107;
+    color: black;
+}
+
+.status.approved {
+    background: #007bff;
+}
+
+.status.active {
+    background: #28a745;
+}
+
+.status.returned {
+    background: #6c757d;
+}
+
+.status.overdue {
+    background: #dc3545;
+}
