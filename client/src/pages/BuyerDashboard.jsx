@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
+import "./BuyerDashboard.css";
 const BuyerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [rentals, setRentals] = useState([]);
@@ -68,6 +68,7 @@ const BuyerDashboard = () => {
   };
 
   return (
+   <div className="page">
     <Container className="mt-4">
       <h3>My Purchases</h3>
 
@@ -81,7 +82,7 @@ const BuyerDashboard = () => {
                 <img
                   src={order.product.image?.startsWith('http') ? order.product.image : `http://localhost:5000${order.product.image}`}
                   alt={order.product?.title || "Product"}
-                  style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                  style={{ width: "100%", height: "100px", objectFit: "contain", borderRadius: "5px" }}
                 />
               ) : (
                 <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
@@ -115,7 +116,7 @@ const BuyerDashboard = () => {
             <Col md={4} className="d-flex flex-column justify-content-center">
               <Button
                 variant="outline-info"
-                className="mb-2"
+                className="mb-2 c-btn"
                 onClick={() => handleChat(order.seller, order.product._id)}
               >
                 💬 Chat with Seller
@@ -124,6 +125,7 @@ const BuyerDashboard = () => {
               {order.status === "Pending" && (
                 <Button
                   variant="secondary"
+                  className="c-btn"
                   onClick={() => updateOrderStatus(order._id, "Cancelled")}
                 >
                   Cancel Order
@@ -133,6 +135,7 @@ const BuyerDashboard = () => {
               {order.status === "Confirmed" && (
                 <Button
                   variant="success"
+                  className="c-btn"
                   onClick={() => updateOrderStatus(order._id, "Completed")}
                 >
                   Confirm Received
@@ -155,7 +158,7 @@ const BuyerDashboard = () => {
                 <img
                   src={rental.product.image?.startsWith('http') ? rental.product.image : `http://localhost:5000${rental.product.image}`}
                   alt={rental.product?.title || "Product"}
-                  style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                  style={{ width: "100%", height: "100px", objectFit: "contain", borderRadius: "5px" }}
                 />
               ) : (
                 <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
@@ -190,10 +193,10 @@ const BuyerDashboard = () => {
                 </Badge>
               </p>
             </Col>
-            <Col md={4} className="d-flex flex-column justify-content-center">
+            <Col md={4} className="d-flex flex-column justify-content-center ">
               <Button
                 variant="outline-info"
-                className="mb-2"
+                className="mb-2 c-btn"
                 onClick={() => handleChat(rental.owner._id, rental.product._id)}
               >
                 💬 Chat with Owner
@@ -213,7 +216,7 @@ const BuyerDashboard = () => {
         </Card>
       ))}
     </Container>
-  );
+   </div>);
 };
 
 export default BuyerDashboard;
