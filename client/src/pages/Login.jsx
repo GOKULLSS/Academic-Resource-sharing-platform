@@ -37,49 +37,49 @@ const Login = () => {
   };
 
   return (
-  <div className="login-page">
-    <Card className="login-card p-4">
-      <Card.Body>
-        <h2 className="text-center mb-4 fw-bold">Login</h2>
+    <div className="login-page">
+      <Card className="login-card p-4">
+        <Card.Body>
+          <h2 className="text-center mb-4 fw-bold">Login</h2>
 
-        {error && <Alert variant="danger">{error}</Alert>}
+          {error && <Alert variant="danger">{error}</Alert>}
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label className="textcolor">Email Address</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className="textcolor">Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-          <Button variant="success" type="submit" className="w-100">
-            Login
-          </Button>
-        </Form>
+            <Button variant="success" type="submit" className="w-100">
+              Login
+            </Button>
+          </Form>
 
-        <div className="mt-3 text-center">
-          Don't have an account?{" "}
-          <Link to="/register" className="fw-bold text-decoration-none">
-            Register here
-          </Link>
-        </div>
-      </Card.Body>
-    </Card>
-  </div>
-);
+          <div className="mt-3 text-center">
+            Don't have an account?{" "}
+            <Link to="/register" className="fw-bold text-decoration-none">
+              Register here
+            </Link>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
+  );
 };
 
 export default Login;

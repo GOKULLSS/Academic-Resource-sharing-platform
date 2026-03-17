@@ -44,7 +44,7 @@ const Register = () => {
 
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Name</Form.Label>
+                                        <Form.Label style={{ color: 'white' }}>Name</Form.Label>
                                         <Form.Control
                                             type="text"
                                             placeholder="Enter your name"
@@ -55,7 +55,7 @@ const Register = () => {
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Email Address</Form.Label>
+                                        <Form.Label style={{ color: 'white' }}>Email Address</Form.Label>
                                         <Form.Control
                                             type="email"
                                             placeholder="Enter your email"
@@ -67,7 +67,7 @@ const Register = () => {
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Password</Form.Label>
+                                        <Form.Label style={{ color: 'white' }}>Password</Form.Label>
                                         <Form.Control
                                             type="password"
                                             placeholder="Create a password"
@@ -81,12 +81,13 @@ const Register = () => {
                                         variant="primary"
                                         type="submit"
                                         className="w-100 register-btn"
+                                        style={{ color: 'white' }}
                                     >
                                         Register
                                     </Button>
                                 </Form>
 
-                                <div className="mt-4 text-center login-link">
+                                <div className="mt-4 text-center login-link" >
                                     Already have an account?{' '}
                                     <Link to="/login">Login here</Link>
                                 </div>
