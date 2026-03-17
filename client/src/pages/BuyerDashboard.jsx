@@ -3,6 +3,7 @@ import axios from "axios";
 import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./BuyerDashboard.css";
+import { MdOutlineMessage } from "react-icons/md";
 const BuyerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [rentals, setRentals] = useState([]);
@@ -68,155 +69,155 @@ const BuyerDashboard = () => {
   };
 
   return (
-   <div className="page">
-    <Container className="mt-4">
-      <h3>My Purchases</h3>
+    <div className="page">
+      <Container className="mt-4">
 
-      {orders.length === 0 && <p>No purchases yet.</p>}
+        {/* PURCHASES */}
+        <h3 className="section-title">My Purchases</h3>
 
-      {orders.map((order) => (
-        <Card key={order._id} className="mb-3 p-3">
-          <Row>
-            <Col md={2}>
-              {order.product?.image ? (
-                <img
-                  src={order.product.image?.startsWith('http') ? order.product.image : `http://localhost:5000${order.product.image}`}
-                  alt={order.product?.title || "Product"}
-                  style={{ width: "100%", height: "100px", objectFit: "contain", borderRadius: "5px" }}
-                />
-              ) : (
-                <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
-                  <span className="text-muted" style={{ fontSize: "0.8rem" }}>No Image</span>
-                </div>
-              )}
-            </Col>
-            <Col md={6}>
-              <h5>{order.product?.title || "Product Deleted"}</h5>
-              {order.product && <p>Price: ₹{order.product.price}</p>}
-              <p>
-                Status:{" "}
-                <Badge
-                  bg={
-                    order.status === "Pending"
-                      ? "warning"
-                      : order.status === "Confirmed"
-                        ? "primary"
-                        : order.status === "Completed"
-                          ? "success"
-                          : order.status === "Rejected"
-                            ? "danger"
-                            : "secondary"
-                  }
-                >
-                  {order.status}
-                </Badge>
-              </p>
-            </Col>
+        {orders.length === 0 && <p>No purchases yet.</p>}
 
-            <Col md={4} className="d-flex flex-column justify-content-center">
-              <Button
-                variant="outline-info"
-                className="mb-2 c-btn"
-                onClick={() => handleChat(order.seller, order.product._id)}
-              >
-                💬 Chat with Seller
-              </Button>
+        {orders.map((order) => (
+          <Card key={order._id} className="glass-card2 mb-3">
+            <Card.Body>
+              <Row className="align-items-center">
 
-              {order.status === "Pending" && (
-                <Button
-                  variant="secondary"
-                  className="c-btn"
-                  onClick={() => updateOrderStatus(order._id, "Cancelled")}
-                >
-                  Cancel Order
-                </Button>
-              )}
+                <Col md={2}>
+                  {order.product?.image ? (
+                    <img
+                      src={
+                        order.product.image.startsWith("http")
+                          ? order.product.image
+                          : `http://localhost:5000${order.product.image}`
+                      }
+                      className="product-img"
+                      alt=""
+                    />
+                  ) : (
+                    <div className="no-img">No Image</div>
+                  )}
+                </Col>
 
-              {order.status === "Confirmed" && (
-                <Button
-                  variant="success"
-                  className="c-btn"
-                  onClick={() => updateOrderStatus(order._id, "Completed")}
-                >
-                  Confirm Received
-                </Button>
-              )}
-            </Col>
-          </Row>
-        </Card>
-      ))}
+                <Col md={6}>
+                  <h5>{order.product?.title || "Product Deleted"}</h5>
+                  <p>₹{order.product?.price}</p>
 
-      <h3 className="mt-5">My Rentals</h3>
+                  <span className={`status ${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                </Col>
 
-      {rentals.length === 0 && <p>No rentals requested yet.</p>}
+                <Col md={4} className="d-flex flex-column gap-2">
 
-      {rentals.map((rental) => (
-        <Card key={rental._id} className="mb-3 p-3 border-warning">
-          <Row>
-            <Col md={2}>
-              {rental.product?.image ? (
-                <img
-                  src={rental.product.image?.startsWith('http') ? rental.product.image : `http://localhost:5000${rental.product.image}`}
-                  alt={rental.product?.title || "Product"}
-                  style={{ width: "100%", height: "100px", objectFit: "contain", borderRadius: "5px" }}
-                />
-              ) : (
-                <div style={{ width: "100%", height: "100px", backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "5px" }}>
-                  <span className="text-muted" style={{ fontSize: "0.8rem" }}>No Image</span>
-                </div>
-              )}
-            </Col>
-            <Col md={6}>
-              <h5>{rental.product?.title || "Unknown Product"}</h5>
-              <p className="mb-1">Owner: {rental.owner?.name || "Unknown"}</p>
-              <p className="mb-1">Dates: {new Date(rental.startDate).toLocaleDateString()} to {new Date(rental.endDate).toLocaleDateString()} ({rental.totalDays} Days)</p>
-              <p className="mb-1">Total Rent: ₹{rental.totalAmount} (incl. ₹{rental.deposit} deposit)</p>
-              {rental.lateFee > 0 && <p className="mb-1 text-danger fw-bold">Late Fee: ₹{rental.lateFee}</p>}
-              <p className="mt-2">
-                Status:{" "}
-                <Badge
-                  bg={
-                    rental.status === "Requested"
-                      ? "warning"
-                      : rental.status === "Approved"
-                        ? "primary"
-                        : rental.status === "Active"
-                          ? "success"
-                          : rental.status === "Returned"
-                            ? "secondary"
-                            : rental.status === "Overdue"
-                              ? "danger"
-                              : "dark"
-                  }
-                >
-                  {rental.status}
-                </Badge>
-              </p>
-            </Col>
-            <Col md={4} className="d-flex flex-column justify-content-center ">
-              <Button
-                variant="outline-info"
-                className="mb-2 c-btn"
-                onClick={() => handleChat(rental.owner._id, rental.product._id)}
-              >
-                💬 Chat with Owner
-              </Button>
+                  <Button
+                    className="c-btn"
+                    onClick={() =>
+                      handleChat(order.seller, order.product._id)
+                    }
+                  >
+                    💬 Chat with Seller
+                  </Button>
 
-              {rental.status === "Approved" && (
-                <Badge bg="info" className="p-2 mb-2">Item is ready for pickup</Badge>
-              )}
-              {rental.status === "Active" && (
-                <Badge bg="success" className="p-2 mb-2">You have the item</Badge>
-              )}
-              {rental.status === "Overdue" && (
-                <Badge bg="danger" className="p-2 mb-2">Please return ASAP!</Badge>
-              )}
-            </Col>
-          </Row>
-        </Card>
-      ))}
-    </Container>
-   </div>);
+                  {order.status === "Pending" && (
+                    <Button
+                      className="c-btn"
+                      onClick={() =>
+                        updateOrderStatus(order._id, "Cancelled")
+                      }
+                    >
+                      Cancel Order
+                    </Button>
+                  )}
+
+                  {order.status === "Confirmed" && (
+                    <Button
+                      className="c-btn success-btn"
+                      onClick={() =>
+                        updateOrderStatus(order._id, "Completed")
+                      }
+                    >
+                      Confirm Received
+                    </Button>
+                  )}
+                </Col>
+
+              </Row>
+            </Card.Body>
+          </Card>
+        ))}
+
+        {/* RENTALS */}
+        <h3 className="section-title mt-5">My Rentals</h3>
+
+        {rentals.length === 0 && <p>No rentals yet.</p>}
+
+        {rentals.map((rental) => (
+          <Card key={rental._id} className="glass-card2 mb-3">
+            <Card.Body>
+              <Row className="align-items-center">
+
+                <Col md={2}>
+                  {rental.product?.image ? (
+                    <img
+                      src={
+                        rental.product.image.startsWith("http")
+                          ? rental.product.image
+                          : `http://localhost:5000${rental.product.image}`
+                      }
+                      className="product-img"
+                      alt=""
+                    />
+                  ) : (
+                    <div className="no-img">No Image</div>
+                  )}
+                </Col>
+
+                <Col md={6}>
+                  <h5>{rental.product?.title}</h5>
+                  <p>Owner: {rental.owner?.name}</p>
+                  <p>
+                    {new Date(rental.startDate).toLocaleDateString()} →{" "}
+                    {new Date(rental.endDate).toLocaleDateString()}
+                  </p>
+
+                  <span className={`status ${rental.status.toLowerCase()}`}>
+                    {rental.status}
+                  </span>
+                </Col>
+
+                <Col md={4} className="d-flex flex-column gap-2">
+
+                  <Button
+                    className="c-btn"
+                    onClick={() =>
+                      handleChat(rental.owner._id, rental.product._id)
+                    }
+                  >
+                    <MdOutlineMessage /> Chat with Owner
+                  </Button>
+
+                  {rental.status === "Approved" && (
+                    <div className="info-box">Ready for pickup</div>
+                  )}
+
+                  {rental.status === "Active" && (
+                    <div className="success-box">You have the item</div>
+                  )}
+
+                  {rental.status === "Overdue" && (
+                    <div className="danger-box">Return ASAP</div>
+                  )}
+
+                </Col>
+
+              </Row>
+            </Card.Body>
+          </Card>
+        ))}
+
+      </Container>
+    </div>
+  );
 };
 
 export default BuyerDashboard;
