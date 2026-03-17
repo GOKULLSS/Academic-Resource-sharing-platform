@@ -12,7 +12,7 @@ import {
   Modal
 } from "react-bootstrap";
 import AuthContext from "../context/AuthContext";
-
+import "./StudentDashboard.css";
 const StudentDashboard = () => {
   const { user } = useContext(AuthContext);
   const [title, setTitle] = useState("");
@@ -174,114 +174,121 @@ const StudentDashboard = () => {
   return (
     <Container className="mt-4">
       <Row>
-        <Col md={12}>
-          <Card>
-            <Card.Body>
-              <h3>Your Dashboard Info</h3>
-              <p>
-                Welcome, {user?.name}. Your uploaded products will enter a
-                pending state until an admin verifies them.
-              </p>
-              <Alert variant="info">
-                Remember, the Verification Gate ensures only high quality items
-                are displayed in the Campus Marketplace.
-              </Alert>
-            </Card.Body>
-          </Card>
-        </Col>
+     <Col md={12}>
+  <Card className="glass-card">
+    <Card.Body>
+      <h3>Your Dashboard Info</h3>
 
-        <Col md={12}>
-          <Card className="mt-4">
-            <Card.Body>
-              <h3>My Products</h3>
+      <p>
+        Welcome, {user?.name}. Your uploaded products will enter a
+        pending state until an admin verifies them.
+      </p>
 
-              {myProducts.length === 0 ? (
-                <p>No products uploaded yet.</p>
-              ) : (
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Price</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {myProducts.map((product) => (
-                      <tr key={product._id}>
-                        <td>
-                          {product.image ? (
-                            <img
-                              src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
-                              alt={product.title}
-                              style={{
-                                width: "50px",
-                                height: "50px",
-                                objectFit: "cover",
-                              }}
-                            />
-                          ) : (
-                            "No Image"
-                          )}
-                        </td>
-                        <td>{product.title}</td>
-                        <td>₹{product.price}</td>
-                        <td>
-                          {product.status === "pending" && (
-                            <span className="badge bg-warning text-dark">
-                              Pending Approval
-                            </span>
-                          )}
-                          {product.status === "live" && (
-                            <span className="badge bg-success">Live</span>
-                          )}
-                          {product.status === "sold" && (
-                            <span className="badge bg-danger">
-                              Sold Out
-                            </span>
-                          )}
-                          {product.status === "Rented" && (
-                            <span className="badge bg-info text-dark">
-                              Under Rent
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() => handleDelete(product._id)}
-                            className="me-2"
-                          >
-                            Delete
-                          </Button>
+      <Alert className="glass-alert">
+        Remember, the Verification Gate ensures only high quality items
+        are displayed in the Campus Marketplace.
+      </Alert>
 
-                          <Button
-                            variant="warning"
-                            size="sm"
-                            onClick={() => handleEditClick(product)}
-                            disabled={product.status === "sold"}
-                          >
-                            Edit
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={12}>
-          <Card className="mt-4 mb-4">
-            <Card.Body>
-              <h3>Upload New Product</h3>
-              {message.text && (
-                <Alert variant={message.type}>{message.text}</Alert>
-              )}
-              <Form onSubmit={handleSubmit}>
+    </Card.Body>
+  </Card>
+</Col>
+<Col md={12}>
+  <Card className="product-card mt-4">
+    <Card.Body>
+      <h3>My Products</h3>
+
+      {myProducts.length === 0 ? (
+        <p>No products uploaded yet.</p>
+      ) : (
+        <Table className="glass-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {myProducts.map((product) => (
+              <tr key={product._id}>
+                <td>
+                  {product.image ? (
+                    <img
+                      src={
+                        product.image.startsWith("http")
+                          ? product.image
+                          : `http://localhost:5000${product.image}`
+                      }
+                      alt={product.title}
+                      className="product-img"
+                    />
+                  ) : (
+                    "No Image"
+                  )}
+                </td>
+
+                <td>{product.title}</td>
+
+                <td>₹{product.price}</td>
+
+                <td>
+                  {product.status === "pending" && (
+                    <span className="status pending">Pending</span>
+                  )}
+
+                  {product.status === "live" && (
+                    <span className="status live">Live</span>
+                  )}
+
+                  {product.status === "sold" && (
+                    <span className="status sold">Sold</span>
+                  )}
+
+                  {product.status === "Rented" && (
+                    <span className="status rented">Rented</span>
+                  )}
+                </td>
+
+                <td>
+                  <Button
+                    className="btn-delete me-2"
+                    size="sm"
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    Delete
+                  </Button>
+
+                  <Button
+                    className="btn-edit"
+                    size="sm"
+                    onClick={() => handleEditClick(product)}
+                    disabled={product.status === "sold"}
+                  >
+                    Edit
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Card.Body>
+  </Card>
+</Col>
+      <Col md={12}>
+<Card className="upload-card mt-4 mb-4">
+    <Card.Body>
+
+      <h3>Upload New Product</h3>
+
+      {message.text && (
+        <Alert className="glass-alert">{message.text}</Alert>
+      )}
+
+      <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
                   <Form.Label>Title</Form.Label>
                   <Form.Control
