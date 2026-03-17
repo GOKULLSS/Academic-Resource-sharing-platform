@@ -3,7 +3,7 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background:white;
     animation: fadeIn 0.8s ease-in-out;
 }
 
@@ -14,12 +14,17 @@
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     padding: 10px;
     animation: slideUp 0.6s ease-out;
+    background: linear-gradient(135deg,
+    rgb(40, 80, 140),
+    rgb(80, 140, 200),
+    rgb(160, 210, 240)
+  );
 }
 
 /* Title styling */
 .register-title {
     font-weight: 700;
-    color: #4b3f72;
+    color: #372c5b;
 }
 
 /* Input styling */
@@ -38,7 +43,7 @@
 
 /* Button styling */
 .register-btn {
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    
     border: none;
     border-radius: 8px;
     padding: 10px;
@@ -53,7 +58,7 @@
 
 /* Login link */
 .login-link a {
-    color: #667eea;
+    color: rgb(15,40,84);
     font-weight: 500;
     text-decoration: none;
 }

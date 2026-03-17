@@ -1,0 +1,31 @@
+
+.c-btn{
+  color: rgb(28 77 141);           
+  border: 2px solid rgb(28 77 141);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.c-btn:hover{
+  background-color: rgb(15 40 84) !important;
+  border-color: rgb(15 40 84) !important;
+  color: white !important;
+}
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgb(40, 80, 140),
+    rgb(80, 140, 200),
+    rgb(160, 210, 240)
+  );
+  padding: 20px;
+}
+.card{
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
