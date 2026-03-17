@@ -3,7 +3,7 @@ import axios from "axios";
 import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./SellerDashboard.css";
-
+import { MdOutlineMessage } from "react-icons/md";
 const SellerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [rentalRequests, setRentalRequests] = useState([]);
@@ -135,7 +135,7 @@ const SellerDashboard = () => {
                       handleChat(order.buyer._id, order.product._id)
                     }
                   >
-                    💬 Chat
+                    <MdOutlineMessage /> Chat
                   </Button>
 
                   {order.status === "Pending" && (
@@ -229,7 +229,7 @@ const SellerDashboard = () => {
                       handleChat(req.renter._id, req.product._id)
                     }
                   >
-                    💬 Chat
+                    <MdOutlineMessage /> Chat
                   </Button>
 
                   {req.status === "Requested" && (

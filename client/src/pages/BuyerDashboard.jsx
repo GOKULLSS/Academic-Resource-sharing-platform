@@ -115,7 +115,7 @@ const BuyerDashboard = () => {
                       handleChat(order.seller, order.product._id)
                     }
                   >
-                    💬 Chat with Seller
+                    <MdOutlineMessage /> Chat with Seller
                   </Button>
 
                   {order.status === "Pending" && (
