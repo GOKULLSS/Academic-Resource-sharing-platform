@@ -10,6 +10,24 @@
   transition: all 0.3s ease;
 }
 
+/* Smooth dropdown animation */
+.custom-collapse {
+  max-height: 0;
+  overflow: hidden;
+
+  opacity: 0;
+
+}
+
+/* When open */
+.custom-collapse.open {
+  max-height: 500px;
+  /* enough to show all links */
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+}
+
 /* ========================= */
 /* BRAND */
 /* ========================= */
@@ -119,4 +137,29 @@
 .logout-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(70, 69, 69, 0.4);
+}
+
+
+/* Apply animation ONLY on mobile */
+@media (max-width: 991px) {
+  .custom-collapse {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+
+  .custom-collapse.open {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+/* On large screens → always visible */
+@media (min-width: 992px) {
+  .custom-collapse {
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+  }
 }
