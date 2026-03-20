@@ -115,7 +115,7 @@ const AdminDashboard = () => {
             <div className="product-title">{product.title}</div>
 
             {/* PRICE */}
-            <div className="product-price">₹{product.price}</div>
+            <div className="product-price">₹{product.price}{product.transactionType === "Rent" && " / day"}</div>
 
             {/* STATUS */}
             <div className="status-badge pending">

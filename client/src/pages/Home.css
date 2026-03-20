@@ -24,37 +24,7 @@ body {
 
 /* ========================= */
 /* HERO SECTION */
-/* ========================= */
-/* Blur circles */
 
-.blur-circle {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.6;
-  z-index: 0;
-}
-
-/* Blue blur */
-
-.blur1 {
-  width: 300px;
-  height: 300px;
-  background: #1630c2;
-  top: -80px;
-  left: -80px;
-}
-
-/* Light blue */
-
-.blur2 {
-  width: 576px;
-  height: 308px;
-  background: #091833;
-  bottom: -120px;
-  left: -220px;
-
-}
 
 
 .hero-section {
@@ -370,9 +340,10 @@ body {
 }
 
 .product-price {
-  font-weight: 800;
+  font-weight: 500;
   font-size: 1.35rem;
   color: var(--primary-dark);
+  width: 100%;
 }
 
 /* ========================= */
@@ -443,14 +414,14 @@ body {
 
 .category-bar {
   display: flex;
-  gap: 50px;
+  gap: 17px;
   overflow-x: hidden;
   padding: 10px 5px 25px 5px;
   scroll-behavior: smooth;
   scrollbar-width: thin;
   -ms-overflow-style: none;
   scrollbar-color: var(--primary-medium) transparent;
-  padding-left: 80px;
+  padding-left: 12px;
 }
 
 .category-bar:hover {

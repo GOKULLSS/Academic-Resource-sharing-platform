@@ -17,10 +17,10 @@ let onlineUsers = [];
 
 dotenv.config();
 
-connectDB();
-
-// Initialize Cron Jobs
-checkOverdueRentalsJob();
+connectDB().then(() => {
+  // Initialize Cron Jobs
+  checkOverdueRentalsJob();
+});
 
 const app = express();
 

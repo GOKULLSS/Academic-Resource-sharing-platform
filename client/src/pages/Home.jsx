@@ -95,9 +95,7 @@ const Home = () => {
     <div className="home-container">
       {/* 🚀 Hero Section */}
       <section className="hero-section">
-        {/* Blurred Background Shapes */}
-        <div className="blur-circle blur1"></div>
-        <div className="blur-circle blur2"></div>
+
         <Container className="hero-content">
           <Row className="align-items-center">
             <Col lg={6} className="mb-5 mb-lg-0">
@@ -206,7 +204,7 @@ const Home = () => {
 
         {/* 🔎 Search and Filter Section */}
         <Row className="align-items-center mb-5 g-3 glass-search">
-          <Col xs={12} md={8}>
+          <Col xs={6} md={8}>
             <Form.Control
               type="text"
               placeholder="Search products by title..."
@@ -215,7 +213,7 @@ const Home = () => {
               className="glass-input"
             />
           </Col>
-          <Col xs={12} md={4}>
+          <Col xs={6} md={4}>
             <Form.Select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -239,7 +237,7 @@ const Home = () => {
             </Col>
           ) : (
             products.map((product) => (
-              <Col key={product._id} lg={3} md={4} sm={6} xs={12} className="mb-4">
+              <Col key={product._id} lg={3} md={4} xs={6} className="mb-4">
                 <Card className="h-100 product-card">
                   {product.image && (
                     <Card.Img
@@ -275,8 +273,8 @@ const Home = () => {
                       )}
                     </div>
 
-                    <h4 className="product-price mb-3">
-                      ₹{product.price}
+                    <h4 className="product-price mb-3 w-100">
+                      ₹{product.price}{product.transactionType === "Rent" && " / day"}
                     </h4>
 
                     <Button
@@ -284,6 +282,10 @@ const Home = () => {
                       disabled={user && (product.seller?._id === user._id || product.seller === user._id)}
                       style={(user && (product.seller?._id === user._id || product.seller === user._id)) ? { backgroundColor: 'transparent', borderColor: 'transparent', color: 'gray', opacity: 0.6, boxShadow: 'none' } : {}}
                       onClick={() => {
+                        if (!user) {
+                          navigate('/login');
+                          return;
+                        }
                         if (user && (product.seller?._id === user._id || product.seller === user._id)) {
                           alert("You cannot buy or rent your own product.");
                           return;
@@ -344,7 +346,7 @@ const Home = () => {
         <section className="contact-section">
           <Row className="px-lg-5 align-items-center">
             <Col lg={5} className="mb-5 mb-lg-0 text-center text-lg-start">
-              <h2 className="fw-bold mb-4" style={{ fontSize: '2.5rem' }}>Get In Touch</h2>
+              <h2 className="fw-bold mb-4" style={{ fontSize: '2.5rem', color: 'white' }}>Get In Touch</h2>
               <p className="mb-5 text-light" style={{ fontSize: '1.1rem', opacity: 0.9 }}>
                 Have a question or need support with a transaction? We're here to help make your campus marketplace experience smooth.
               </p>
@@ -358,7 +360,7 @@ const Home = () => {
             </Col>
             <Col lg={7}>
               <div className="contact-card">
-                <h4 className="fw-bold mb-4">Send a Message</h4>
+                <h4 className="fw-bold mb-4" style={{ color: 'white' }}>Send a Message</h4>
                 <Form className="contact-form" onSubmit={handleContactSubmit}>
                   <Row>
                     <Col md={6}>
