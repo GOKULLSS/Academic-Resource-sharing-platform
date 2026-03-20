@@ -17,7 +17,7 @@ const NavigationBar = () => {
     <Navbar expand="lg" sticky="top" className="custom-navbar">
       <Container>
         <Navbar.Brand as={Link} to="/" className="brand-logo">
-          <img src="src/images/logo.jpg" alt="OnCampusMart" className="logo-img" />
+          <img src="/logo.jpg" alt="OnCampusMart" className="logo-img" />
           <span className="brand-text">
             <span className="brand-blue">OnCampus</span>
             <span className="brand-orange">Mart</span>
