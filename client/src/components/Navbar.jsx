@@ -1,20 +1,27 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import "./Navbar.css";
 
+
 const NavigationBar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handleNavClick = () => setExpanded(false);
+
   const handleLogout = () => {
     logout();
+    setExpanded(false);
     navigate("/login");
   };
 
   return (
-    <Navbar expand="lg" sticky="top" className="custom-navbar">
+    <Navbar expand="lg" sticky="top" className="custom-navbar" expanded={expanded}>
       <Container>
         <Navbar.Brand as={Link} to="/" className="brand-logo">
           <img src="/logo.jpg" alt="OnCampusMart" className="logo-img" />
@@ -24,35 +31,38 @@ const NavigationBar = () => {
           </span>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
 
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className={`custom-collapse ${expanded ? "open" : ""}`}
+        >
           <Nav className="me-auto nav-links">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" onClick={handleNavClick}>
               Home
             </Nav.Link>
 
             {user && user.role === "admin" && (
-              <Nav.Link as={Link} to="/admin">
+              <Nav.Link as={Link} to="/admin" onClick={handleNavClick}>
                 Admin Dashboard
               </Nav.Link>
             )}
 
             {user && user.role === "student" && (
               <>
-                <Nav.Link as={Link} to="/student">
+                <Nav.Link as={Link} to="/student" onClick={handleNavClick}>
                   My Dashboard
                 </Nav.Link>
 
-                <Nav.Link as={Link} to="/buyer-dashboard">
+                <Nav.Link as={Link} to="/buyer-dashboard" onClick={handleNavClick}>
                   My Purchases
                 </Nav.Link>
 
-                <Nav.Link as={Link} to="/seller-dashboard">
+                <Nav.Link as={Link} to="/seller-dashboard" onClick={handleNavClick}>
                   Incoming Orders
                 </Nav.Link>
 
-                <Nav.Link as={Link} to="/chat">
+                <Nav.Link as={Link} to="/chat" onClick={handleNavClick}>
                   Messages
                 </Nav.Link>
               </>
@@ -75,7 +85,7 @@ const NavigationBar = () => {
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login" className="login-link">
+                <Nav.Link as={Link} to="/login" className="login-link" onClick={handleNavClick}>
                   Login
                 </Nav.Link>
                 <Button
@@ -83,6 +93,7 @@ const NavigationBar = () => {
                   to="/register"
                   className="register-btn"
                   size="sm"
+                  onClick={handleNavClick}
                 >
                   Register
                 </Button>
