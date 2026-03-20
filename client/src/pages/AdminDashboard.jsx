@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     const fetchContactMessages = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/contact', {
+            const res = await axios.get('https://academic-resource-sharing-platform.onrender.com/api/contact', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setContactMessages(res.data);
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
     const fetchPendingProducts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/products/pending', {
+            const res = await axios.get('https://academic-resource-sharing-platform.onrender.com/api/products/pending', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPendingProducts(res.data);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
     const handleApprove = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/products/${id}/approve`, {}, {
+            await axios.put(`https://academic-resource-sharing-platform.onrender.com/api/products/${id}/approve`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMessage({ type: 'success', text: 'Product approved successfully.' });
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
         if (!window.confirm("Are you sure you want to delete this pending product?")) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/products/${id}`, {
+            await axios.delete(`https://academic-resource-sharing-platform.onrender.com/api/products/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMessage({ type: 'success', text: 'Product deleted/rejected.' });
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
                 src={
                     product.image?.startsWith('http')
                         ? product.image
-                        : `http://localhost:5000${product.image}`
+                        : `https://academic-resource-sharing-platform.onrender.com${product.image}`
                 }
                 alt={product.title}
                 className="product-img"
