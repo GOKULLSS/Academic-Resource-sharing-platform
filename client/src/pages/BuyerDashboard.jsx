@@ -180,6 +180,12 @@ const BuyerDashboard = () => {
                     {new Date(rental.endDate).toLocaleDateString()}
                   </p>
 
+                  {rental.lateFee > 0 && (
+                    <p className="text-danger fw-bold m-0 mb-2">
+                      Late Fee Deducted: ₹{rental.lateFee}
+                    </p>
+                  )}
+
                   <span className={`status ${rental.status.toLowerCase()}`}>
                     {rental.status}
                   </span>

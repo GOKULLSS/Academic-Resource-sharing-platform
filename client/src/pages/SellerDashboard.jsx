@@ -216,6 +216,12 @@ const SellerDashboard = () => {
                     {new Date(req.endDate).toLocaleDateString()}
                   </p>
 
+                  {req.lateFee > 0 && (
+                    <p className="text-danger fw-bold m-0 mb-2">
+                      Late Fee Deducted: ₹{req.lateFee}
+                    </p>
+                  )}
+
                   <span className={`status ${req.status.toLowerCase()}`}>
                     {req.status}
                   </span>
