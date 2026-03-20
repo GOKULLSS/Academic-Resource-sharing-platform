@@ -284,6 +284,10 @@ const Home = () => {
                       disabled={user && (product.seller?._id === user._id || product.seller === user._id)}
                       style={(user && (product.seller?._id === user._id || product.seller === user._id)) ? { backgroundColor: 'transparent', borderColor: 'transparent', color: 'gray', opacity: 0.6, boxShadow: 'none' } : {}}
                       onClick={() => {
+                        if (!user) {
+                          navigate('/login');
+                          return;
+                        }
                         if (user && (product.seller?._id === user._id || product.seller === user._id)) {
                           alert("You cannot buy or rent your own product.");
                           return;
