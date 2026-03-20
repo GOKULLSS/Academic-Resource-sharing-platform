@@ -13,7 +13,7 @@ const BuyerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/chat",
+        "https://academic-resource-sharing-platform.onrender.com/api/chat",
         { userId, productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -27,7 +27,7 @@ const BuyerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/orders/buyer",
+        "https://academic-resource-sharing-platform.onrender.com/api/orders/buyer",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setOrders(res.data);
@@ -40,7 +40,7 @@ const BuyerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/rentals/my-rentals",
+        "https://academic-resource-sharing-platform.onrender.com/api/rentals/my-rentals",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setRentals(res.data);
@@ -58,7 +58,7 @@ const BuyerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/orders/${id}/status`,
+        `https://academic-resource-sharing-platform.onrender.com/api/orders/${id}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -88,7 +88,7 @@ const BuyerDashboard = () => {
                       src={
                         order.product.image.startsWith("http")
                           ? order.product.image
-                          : `http://localhost:5000${order.product.image}`
+                          : `https://academic-resource-sharing-platform.onrender.com${order.product.image}`
                       }
                       className="product-img"
                       alt=""
@@ -162,7 +162,7 @@ const BuyerDashboard = () => {
                       src={
                         rental.product.image.startsWith("http")
                           ? rental.product.image
-                          : `http://localhost:5000${rental.product.image}`
+                          : `https://academic-resource-sharing-platform.onrender.com${rental.product.image}`
                       }
                       className="product-img"
                       alt=""

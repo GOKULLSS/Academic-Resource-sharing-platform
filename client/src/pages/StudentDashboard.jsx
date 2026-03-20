@@ -49,7 +49,7 @@ const StudentDashboard = () => {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.get(
-        "http://localhost:5000/api/products/my",
+        "https://academic-resource-sharing-platform.onrender.com/api/products/my",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -65,7 +65,7 @@ const StudentDashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:5000/api/products/${id}`, {
+      await axios.delete(`https://academic-resource-sharing-platform.onrender.com/api/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -96,7 +96,7 @@ const StudentDashboard = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/products", formData, {
+      await axios.post("https://academic-resource-sharing-platform.onrender.com/api/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -156,7 +156,7 @@ const StudentDashboard = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/products/${editProduct}`, formData, {
+      await axios.put(`https://academic-resource-sharing-platform.onrender.com/api/products/${editProduct}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -220,7 +220,7 @@ const StudentDashboard = () => {
                       src={
                         product.image.startsWith("http")
                           ? product.image
-                          : `http://localhost:5000${product.image}`
+                          : `https://academic-resource-sharing-platform.onrender.com${product.image}`
                       }
                       alt={product.title}
                       className="product-img"

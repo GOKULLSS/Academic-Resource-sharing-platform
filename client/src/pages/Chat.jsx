@@ -12,7 +12,7 @@ const Chat = () => {
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
-    const ENDPOINT = "http://localhost:5000";
+    const ENDPOINT = "https://academic-resource-sharing-platform.onrender.com";
     const socketRef = useRef(null);
     const location = useLocation();
 
@@ -42,7 +42,7 @@ const Chat = () => {
     const fetchChats = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/chat', {
+            const res = await axios.get('https://academic-resource-sharing-platform.onrender.com/api/chat', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setChats(res.data);

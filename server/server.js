@@ -45,7 +45,7 @@ const server = app.listen(PORT, console.log(`Server running on port ${PORT}`));
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:5173", // Vite default port
+    origin: ["http://localhost:5173", "https://academic-resource-sharing-platform.onrender.com"], // Vite default port and Render link
   },
 });
 app.set("io", io);

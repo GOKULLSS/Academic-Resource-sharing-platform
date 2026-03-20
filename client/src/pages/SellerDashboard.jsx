@@ -13,7 +13,7 @@ const SellerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/chat",
+        "https://academic-resource-sharing-platform.onrender.com/api/chat",
         { userId, productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -27,7 +27,7 @@ const SellerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/orders/seller",
+        "https://academic-resource-sharing-platform.onrender.com/api/orders/seller",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setOrders(res.data);
@@ -39,7 +39,7 @@ const SellerDashboard = () => {
   const fetchRentalRequests = async () => {
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("http://localhost:5000/api/rentals/owner-requests", {
+      const { data } = await axios.get("https://academic-resource-sharing-platform.onrender.com/api/rentals/owner-requests", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRentalRequests(data);
@@ -57,7 +57,7 @@ const SellerDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/orders/${id}/status`,
+        `https://academic-resource-sharing-platform.onrender.com/api/orders/${id}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -70,7 +70,7 @@ const SellerDashboard = () => {
   const handleRentalStatus = async (id, status) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/rentals/${id}/status`, { status }, {
+      await axios.put(`https://academic-resource-sharing-platform.onrender.com/api/rentals/${id}/status`, { status }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchRentalRequests();
@@ -107,7 +107,7 @@ const SellerDashboard = () => {
                       src={
                         order.product.image.startsWith("http")
                           ? order.product.image
-                          : `http://localhost:5000${order.product.image}`
+                          : `https://academic-resource-sharing-platform.onrender.com${order.product.image}`
                       }
                       className="product-img-large"
                       alt=""
@@ -198,7 +198,7 @@ const SellerDashboard = () => {
                       src={
                         req.product.image.startsWith("http")
                           ? req.product.image
-                          : `http://localhost:5000${req.product.image}`
+                          : `https://academic-resource-sharing-platform.onrender.com${req.product.image}`
                       }
                       className="product-img-large"
                       alt=""
