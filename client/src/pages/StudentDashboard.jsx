@@ -232,7 +232,7 @@ const StudentDashboard = () => {
 
                 <td>{product.title}</td>
 
-                <td>₹{product.price}</td>
+                <td>₹{product.price}{product.transactionType === "Rent" && " / day"}</td>
 
                 <td>
                   {product.status === "pending" && (
