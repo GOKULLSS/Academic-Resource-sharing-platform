@@ -121,7 +121,7 @@ const Home = () => {
             <Col lg={6}>
               <div className="hero-image-wrapper">
                 <img
-                  src="src/images/3dcart.jpg"
+                  src="/3dcart.jpg"
                   alt="Students smiling"
                   className="hero-illustration"
                 />
@@ -138,7 +138,7 @@ const Home = () => {
             <Carousel.Item interval={2500}>
               <img
                 className="d-block w-100"
-                src="src/images/connecting.jpg"
+                src="/connecting.jpg"
                 alt="University Campus"
               />
               <Carousel.Caption>
@@ -149,7 +149,7 @@ const Home = () => {
             <Carousel.Item interval={2500}>
               <img
                 className="d-block w-100"
-                src="src/images/exchanging.jpg"
+                src="/exchanging.jpg"
                 alt="Study Materials"
               />
               <Carousel.Caption>
@@ -160,7 +160,7 @@ const Home = () => {
             <Carousel.Item interval={2500}>
               <img
                 className="d-block w-100"
-                src="src/images/throwing.jpg"
+                src="/throwing.jpg"
                 alt="Student Life"
               />
               <Carousel.Caption>
