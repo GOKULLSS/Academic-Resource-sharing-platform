@@ -12,8 +12,8 @@ const Chat = () => {
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const [socket, setSocket] = useState(null);
     const ENDPOINT = "https://academic-resource-sharing-platform.onrender.com";
-    const socketRef = useRef(null);
     const location = useLocation();
 
     useEffect(() => {
@@ -26,16 +26,19 @@ const Chat = () => {
     }, [location.state]);
 
     useEffect(() => {
-        socketRef.current = io(ENDPOINT);
+        if (!user) return;
 
-        socketRef.current.emit("setup", user);
+        const newSocket = io(ENDPOINT);
+        setSocket(newSocket);
 
-        socketRef.current.on("online users", (users) => {
+        newSocket.emit("setup", user);
+
+        newSocket.on("online users", (users) => {
             setOnlineUsers(users);
         });
 
         return () => {
-            socketRef.current.disconnect();
+            newSocket.disconnect();
         };
     }, [user]);
 
@@ -107,7 +110,7 @@ const Chat = () => {
                             <ChatInterface
                                 selectedChat={selectedChat}
                                 onlineUsers={onlineUsers}
-                                socket={socketRef.current}
+                                socket={socket}
                             />
                         ) : (
                             <div className="d-flex align-items-center justify-content-center h-100 text-muted no-chat-text">

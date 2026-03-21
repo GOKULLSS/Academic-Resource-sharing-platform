@@ -32,23 +32,30 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("message recieved", (newMessageRecieved) => {
+    const messageHandler = (newMessageRecieved) => {
       if (selectedChat && selectedChat._id === newMessageRecieved.chat._id) {
         setMessages((prev) => [...prev, newMessageRecieved]);
       }
-    });
+    };
+
+    socket.on("message recieved", messageHandler);
 
     return () => {
-      socket.off("message recieved");
+      socket.off("message recieved", messageHandler);
     };
-  }, [selectedChat]);
+  }, [selectedChat, socket]);
 
   useEffect(() => {
     if (selectedChat) {
       fetchMessages();
-      socket.emit("join chat", selectedChat._id);
     }
   }, [selectedChat]);
+
+  useEffect(() => {
+    if (selectedChat && socket) {
+      socket.emit("join chat", selectedChat._id);
+    }
+  }, [selectedChat, socket]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,7 +72,6 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
         },
       );
       setMessages(res.data);
-      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       console.error("Failed to load messages", error);
     }
