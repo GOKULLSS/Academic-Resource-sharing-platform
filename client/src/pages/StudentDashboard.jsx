@@ -28,6 +28,10 @@ const StudentDashboard = () => {
   const [condition, setCondition] = useState("Good");
   const [lateFeePerDay, setLateFeePerDay] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [showImageOptions, setShowImageOptions] = useState(false);
+  const [targetImageField, setTargetImageField] = useState("new");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [editImagePreviewUrl, setEditImagePreviewUrl] = useState(null);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
@@ -118,6 +122,7 @@ const StudentDashboard = () => {
       setCondition("Good");
       setLateFeePerDay(0);
       setImage(null);
+      setImagePreviewUrl(null);
     } catch (error) {
       setMessage({
         type: "danger",
@@ -139,6 +144,13 @@ const StudentDashboard = () => {
       lateFeePerDay: product.lateFeePerDay || 0,
       image: null,
     });
+    setEditImagePreviewUrl(
+      product.image
+        ? (product.image.startsWith("http")
+            ? product.image
+            : `https://academic-resource-sharing-platform.onrender.com${product.image}`)
+        : null
+    );
     setShowEditModal(true);
   };
 
@@ -404,18 +416,23 @@ const StudentDashboard = () => {
                 <Form.Group className="mb-3">
                   <Form.Label>Product Image</Form.Label>
 
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    id="upload"
-                    style={{ display: "none" }}
-                    onChange={(e) => setImage(e.target.files[0])}
-                  />
+                  {imagePreviewUrl && (
+                    <div className="mb-3">
+                      <img src={imagePreviewUrl} alt="Preview" style={{ maxWidth: "200px", borderRadius: "8px" }} />
+                    </div>
+                  )}
 
-                  <label htmlFor="upload" className="btn btn-primary mt-2">
-                    Upload Image
-                  </label>
-
+                  <div>
+                    <Button 
+                      variant="primary" 
+                      onClick={() => {
+                        setTargetImageField("new");
+                        setShowImageOptions(true);
+                      }}
+                    >
+                      Upload Image
+                    </Button>
+                  </div>
                 </Form.Group>
                 <Button variant="primary" type="submit">
                   Submit Product
@@ -541,11 +558,24 @@ const StudentDashboard = () => {
             )}
             <Form.Group className="mb-3">
               <Form.Label>Update Product Image (Optional)</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={(e) => setEditFormData({ ...editFormData, image: e.target.files[0] })}
-              />
+              
+              {editImagePreviewUrl && (
+                <div className="mb-3">
+                  <img src={editImagePreviewUrl} alt="Preview" style={{ maxWidth: "200px", borderRadius: "8px" }} />
+                </div>
+              )}
+
+              <div>
+                <Button 
+                  variant="outline-primary" 
+                  onClick={() => {
+                    setTargetImageField("edit");
+                    setShowImageOptions(true);
+                  }}
+                >
+                  Update Image
+                </Button>
+              </div>
             </Form.Group>
             <Button variant="primary" type="submit" className="w-100 mt-2">
               Save Changes
@@ -553,6 +583,67 @@ const StudentDashboard = () => {
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Image Upload Options Modal */}
+      <Modal show={showImageOptions} onHide={() => setShowImageOptions(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Image Source</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="d-flex justify-content-around p-4">
+          <div className="text-center">
+            <input
+              type="file"
+              accept="image/*"
+              id="upload-gallery"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  if (targetImageField === "new") {
+                    setImage(file);
+                    setImagePreviewUrl(URL.createObjectURL(file));
+                  } else {
+                    setEditFormData({ ...editFormData, image: file });
+                    setEditImagePreviewUrl(URL.createObjectURL(file));
+                  }
+                }
+                setShowImageOptions(false);
+              }}
+            />
+            <label htmlFor="upload-gallery" className="btn btn-outline-primary d-flex flex-column align-items-center p-3" style={{ cursor: "pointer", width: "150px" }}>
+              <span className="fs-1 mb-2">🖼️</span>
+              Gallery
+            </label>
+          </div>
+          <div className="text-center">
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              id="upload-camera"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  if (targetImageField === "new") {
+                    setImage(file);
+                    setImagePreviewUrl(URL.createObjectURL(file));
+                  } else {
+                    setEditFormData({ ...editFormData, image: file });
+                    setEditImagePreviewUrl(URL.createObjectURL(file));
+                  }
+                }
+                setShowImageOptions(false);
+              }}
+            />
+            <label htmlFor="upload-camera" className="btn btn-outline-success d-flex flex-column align-items-center p-3" style={{ cursor: "pointer", width: "150px" }}>
+              <span className="fs-1 mb-2">📷</span>
+              Camera
+            </label>
+          </div>
+        </Modal.Body>
+      </Modal>
+
     </Container >
   );
 };
