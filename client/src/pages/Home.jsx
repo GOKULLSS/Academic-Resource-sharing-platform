@@ -3,14 +3,15 @@ import axios from 'axios';
 import { Container, Row, Col, Card, Badge, Form, Button, Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import LoadingSpinner from '../components/LoadingSpinner';
 import './Home.css';
-import { FaInstagram, FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa";
-import { MdOutlineMessage } from "react-icons/md";
+import { FaInstagram, FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa"; import { MdOutlineMessage } from "react-icons/md";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,6 +34,7 @@ const Home = () => {
   }, [category, type, searchQuery]);
 
   const fetchProducts = async () => {
+    setIsLoading(true);
     try {
       let url = 'https://academic-resource-sharing-platform.onrender.com/api/products?';
       if (category) url += `category=${category}&`;
@@ -43,6 +45,8 @@ const Home = () => {
       setProducts(res.data);
     } catch (error) {
       console.error("Error fetching products", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -228,7 +232,9 @@ const Home = () => {
 
         {/* 🛒 Products Grid */}
         <Row>
-          {products.length === 0 ? (
+          {isLoading ? (
+            <LoadingSpinner message="Fetching products from campus..." />
+          ) : products.length === 0 ? (
             <Col>
               <div className="text-center text-muted py-5 empty-state">
                 <h4 className="fw-bold mb-3">No products found</h4>

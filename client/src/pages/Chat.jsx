@@ -4,12 +4,14 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 import ChatInterface from '../components/ChatInterface';
+import LoadingSpinner from '../components/LoadingSpinner';
 import io from "socket.io-client";
 import "./Chat.css";
 
 const Chat = () => {
     const { user } = useContext(AuthContext);
     const [chats, setChats] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedChat, setSelectedChat] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -43,6 +45,7 @@ const Chat = () => {
     }, [user]);
 
     const fetchChats = async () => {
+        setIsLoading(true);
         try {
             const token = localStorage.getItem('token');
             const res = await axios.get('https://academic-resource-sharing-platform.onrender.com/api/chat', {
@@ -51,6 +54,8 @@ const Chat = () => {
             setChats(res.data);
         } catch (error) {
             console.error("Failed to fetch chats", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -68,36 +73,42 @@ const Chat = () => {
                         <Card.Header className="glass-card-header">My Chats</Card.Header>
 
                         <ListGroup variant="flush" className="chat-list">
-                            {chats.map((chat) => (
-                                <ListGroup.Item
-                                    key={chat._id}
-                                    action
-                                    onClick={() => setSelectedChat(chat)}
-                                    className={`chat-item ${
-                                        selectedChat?._id === chat._id ? 'active' : ''
-                                    }`}
-                                >
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <span className="d-block fw-bold">{getChatName(user, chat.participants)}</span>
-                                            {chat.product && <small>Item: {chat.product.title}</small>}
-                                        </div>
+                            {isLoading ? (
+                                <LoadingSpinner message="Loading chats..." minHeight="20vh" />
+                            ) : (
+                                <>
+                                    {chats.map((chat) => (
+                                        <ListGroup.Item
+                                            key={chat._id}
+                                            action
+                                            onClick={() => setSelectedChat(chat)}
+                                            className={`chat-item ${
+                                                selectedChat?._id === chat._id ? 'active' : ''
+                                            }`}
+                                        >
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span className="d-block fw-bold">{getChatName(user, chat.participants)}</span>
+                                                    {chat.product && <small>Item: {chat.product.title}</small>}
+                                                </div>
 
-                                        {onlineUsers.some(
-                                            (id) =>
-                                                id.toString() ===
-                                                chat.participants.find((p) => p._id !== user._id)._id.toString()
-                                        ) ? (
-                                            <span className="badge chat-badge online">Online</span>
-                                        ) : (
-                                            <span className="badge chat-badge offline">Offline</span>
-                                        )}
-                                    </div>
-                                </ListGroup.Item>
-                            ))}
+                                                {onlineUsers.some(
+                                                    (id) =>
+                                                        id.toString() ===
+                                                        chat.participants.find((p) => p._id !== user._id)._id.toString()
+                                                ) ? (
+                                                    <span className="badge chat-badge online">Online</span>
+                                                ) : (
+                                                    <span className="badge chat-badge offline">Offline</span>
+                                                )}
+                                            </div>
+                                        </ListGroup.Item>
+                                    ))}
 
-                            {chats.length === 0 && (
-                                <ListGroup.Item className="no-chats">No active chats.</ListGroup.Item>
+                                    {chats.length === 0 && (
+                                        <ListGroup.Item className="no-chats">No active chats.</ListGroup.Item>
+                                    )}
+                                </>
                             )}
                         </ListGroup>
                     </Card>

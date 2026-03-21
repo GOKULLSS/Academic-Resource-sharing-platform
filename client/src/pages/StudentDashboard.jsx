@@ -12,6 +12,7 @@ import {
   Modal
 } from "react-bootstrap";
 import AuthContext from "../context/AuthContext";
+import LoadingSpinner from "../components/LoadingSpinner";
 import "./StudentDashboard.css";
 const StudentDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -26,6 +27,7 @@ const StudentDashboard = () => {
   const [deposit, setDeposit] = useState("");
   const [condition, setCondition] = useState("Good");
   const [lateFeePerDay, setLateFeePerDay] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
@@ -45,6 +47,7 @@ const StudentDashboard = () => {
     fetchMyProducts();
   }, []);
   const fetchMyProducts = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
 
@@ -58,6 +61,8 @@ const StudentDashboard = () => {
       setMyProducts(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -197,7 +202,9 @@ const StudentDashboard = () => {
     <Card.Body>
       <h3>My Products</h3>
 
-      {myProducts.length === 0 ? (
+      {isLoading ? (
+        <LoadingSpinner message="Loading your products..." minHeight="20vh" />
+      ) : myProducts.length === 0 ? (
         <p>No products uploaded yet.</p>
       ) : (
         <Table className="glass-table">

@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Card, Button, Badge, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 import "./SellerDashboard.css";
 import { MdOutlineMessage } from "react-icons/md";
 const SellerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [rentalRequests, setRentalRequests] = useState([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
+  const [isLoadingRentals, setIsLoadingRentals] = useState(true);
   const navigate = useNavigate();
 
   const handleChat = async (userId, productId) => {
@@ -24,6 +27,7 @@ const SellerDashboard = () => {
   };
 
   const fetchOrders = async () => {
+    setIsLoadingOrders(true);
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
@@ -33,10 +37,13 @@ const SellerDashboard = () => {
       setOrders(res.data);
     } catch (error) {
       console.error("Failed to fetch seller orders", error);
+    } finally {
+      setIsLoadingOrders(false);
     }
   };
 
   const fetchRentalRequests = async () => {
+    setIsLoadingRentals(true);
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get("https://academic-resource-sharing-platform.onrender.com/api/rentals/owner-requests", {
@@ -45,6 +52,8 @@ const SellerDashboard = () => {
       setRentalRequests(data);
     } catch (error) {
       console.error("Failed to fetch rental requests", error);
+    } finally {
+      setIsLoadingRentals(false);
     }
   };
 
@@ -95,89 +104,93 @@ const SellerDashboard = () => {
         <Card.Body>
           <h4>Incoming Orders (Buy)</h4>
 
-          {orders.length === 0 && <p>No incoming orders.</p>}
+          {isLoadingOrders ? (
+            <LoadingSpinner message="Loading incoming orders..." minHeight="10vh" />
+          ) : orders.length === 0 ? (
+            <p>No incoming orders.</p>
+          ) : (
+            orders.map((order) => (
+              <div key={order._id} className="order-card">
+                <Row className="align-items-center">
 
-          {orders.map((order) => (
-            <div key={order._id} className="order-card">
-              <Row className="align-items-center">
+                  <Col md={2}>
+                    {order.product?.image ? (
+                      <img
+                        src={
+                          order.product.image.startsWith("http")
+                            ? order.product.image
+                            : `https://academic-resource-sharing-platform.onrender.com${order.product.image}`
+                        }
+                        className="product-img-large"
+                        alt=""
+                      />
+                    ) : (
+                      <div className="no-img">No Image</div>
+                    )}
+                  </Col>
 
-                <Col md={2}>
-                  {order.product?.image ? (
-                    <img
-                      src={
-                        order.product.image.startsWith("http")
-                          ? order.product.image
-                          : `https://academic-resource-sharing-platform.onrender.com${order.product.image}`
+                  <Col md={6}>
+                    <h5>{order.product?.title || "Product Deleted"}</h5>
+                    <p>₹{order.product?.price}</p>
+                    <p>Buyer: {order.buyer?.name}</p>
+
+                    <span className={`status ${order.status.toLowerCase()}`}>
+                      {order.status}
+                    </span>
+                  </Col>
+
+                  <Col md={4} className="d-flex flex-column gap-2">
+
+                    <Button
+                      className="btn-chat"
+                      onClick={() =>
+                        handleChat(order.buyer._id, order.product._id)
                       }
-                      className="product-img-large"
-                      alt=""
-                    />
-                  ) : (
-                    <div className="no-img">No Image</div>
-                  )}
-                </Col>
+                    >
+                      <MdOutlineMessage /> Chat
+                    </Button>
 
-                <Col md={6}>
-                  <h5>{order.product?.title || "Product Deleted"}</h5>
-                  <p>₹{order.product?.price}</p>
-                  <p>Buyer: {order.buyer?.name}</p>
+                    {order.status === "Pending" && (
+                      <>
+                        <Button
+                          className="btn-success-custom"
+                          onClick={() => updateStatus(order._id, "Confirmed")}
+                        >
+                          Accept
+                        </Button>
 
-                  <span className={`status ${order.status.toLowerCase()}`}>
-                    {order.status}
-                  </span>
-                </Col>
+                        <Button
+                          className="btn-danger-custom"
+                          onClick={() => updateStatus(order._id, "Rejected")}
+                        >
+                          Reject
+                        </Button>
+                      </>
+                    )}
 
-                <Col md={4} className="d-flex flex-column gap-2">
+                    {order.status === "Confirmed" && (
+                      <>
+                        <Button
+                          className="btn-success-custom"
+                          onClick={() => updateStatus(order._id, "Completed")}
+                        >
+                          Complete
+                        </Button>
 
-                  <Button
-                    className="btn-chat"
-                    onClick={() =>
-                      handleChat(order.buyer._id, order.product._id)
-                    }
-                  >
-                    <MdOutlineMessage /> Chat
-                  </Button>
+                        <Button
+                          className="btn-secondary-custom"
+                          onClick={() => updateStatus(order._id, "Cancelled")}
+                        >
+                          Cancel
+                        </Button>
+                      </>
+                    )}
+                  </Col>
 
-                  {order.status === "Pending" && (
-                    <>
-                      <Button
-                        className="btn-success-custom"
-                        onClick={() => updateStatus(order._id, "Confirmed")}
-                      >
-                        Accept
-                      </Button>
-
-                      <Button
-                        className="btn-danger-custom"
-                        onClick={() => updateStatus(order._id, "Rejected")}
-                      >
-                        Reject
-                      </Button>
-                    </>
-                  )}
-
-                  {order.status === "Confirmed" && (
-                    <>
-                      <Button
-                        className="btn-success-custom"
-                        onClick={() => updateStatus(order._id, "Completed")}
-                      >
-                        Complete
-                      </Button>
-
-                      <Button
-                        className="btn-secondary-custom"
-                        onClick={() => updateStatus(order._id, "Cancelled")}
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  )}
-                </Col>
-
-              </Row>
-            </div>
-          ))}
+                </Row>
+              </div>
+            ))
+          )}
         </Card.Body>
       </Card>
 
@@ -186,106 +199,110 @@ const SellerDashboard = () => {
         <Card.Body>
           <h4>Rental Requests</h4>
 
-          {rentalRequests.length === 0 && <p>No rental requests yet.</p>}
+          {isLoadingRentals ? (
+            <LoadingSpinner message="Loading rental requests..." minHeight="10vh" />
+          ) : rentalRequests.length === 0 ? (
+            <p>No rental requests yet.</p>
+          ) : (
+            rentalRequests.map((req) => (
+              <div key={req._id} className="order-card warning-border">
+                <Row className="align-items-center">
 
-          {rentalRequests.map((req) => (
-            <div key={req._id} className="order-card warning-border">
-              <Row className="align-items-center">
+                  <Col md={2}>
+                    {req.product?.image ? (
+                      <img
+                        src={
+                          req.product.image.startsWith("http")
+                            ? req.product.image
+                            : `https://academic-resource-sharing-platform.onrender.com${req.product.image}`
+                        }
+                        className="product-img-large"
+                        alt=""
+                      />
+                    ) : (
+                      <div className="no-img">No Image</div>
+                    )}
+                  </Col>
 
-                <Col md={2}>
-                  {req.product?.image ? (
-                    <img
-                      src={
-                        req.product.image.startsWith("http")
-                          ? req.product.image
-                          : `https://academic-resource-sharing-platform.onrender.com${req.product.image}`
-                      }
-                      className="product-img-large"
-                      alt=""
-                    />
-                  ) : (
-                    <div className="no-img">No Image</div>
-                  )}
-                </Col>
-
-                <Col md={6}>
-                  <h5>{req.product?.title}</h5>
-                  <p>{req.renter?.name}</p>
-                  <p>
-                    {new Date(req.startDate).toLocaleDateString()} →{" "}
-                    {new Date(req.endDate).toLocaleDateString()}
-                  </p>
-
-                  {req.lateFee > 0 && (
-                    <p className="text-danger fw-bold m-0 mb-2">
-                      Late Fee Deducted: ₹{req.lateFee}
+                  <Col md={6}>
+                    <h5>{req.product?.title}</h5>
+                    <p>{req.renter?.name}</p>
+                    <p>
+                      {new Date(req.startDate).toLocaleDateString()} →{" "}
+                      {new Date(req.endDate).toLocaleDateString()}
                     </p>
-                  )}
 
-                  <span className={`status ${req.status.toLowerCase()}`}>
-                    {req.status}
-                  </span>
-                </Col>
+                    {req.lateFee > 0 && (
+                      <p className="text-danger fw-bold m-0 mb-2">
+                        Late Fee Deducted: ₹{req.lateFee}
+                      </p>
+                    )}
 
-                <Col md={4} className="d-flex flex-column gap-2">
+                    <span className={`status ${req.status.toLowerCase()}`}>
+                      {req.status}
+                    </span>
+                  </Col>
 
-                  <Button
-                    className="btn-chat"
-                    onClick={() =>
-                      handleChat(req.renter._id, req.product._id)
-                    }
-                  >
-                    <MdOutlineMessage /> Chat
-                  </Button>
+                  <Col md={4} className="d-flex flex-column gap-2">
 
-                  {req.status === "Requested" && (
-                    <>
-                      <Button
-                        className="btn-success-custom"
-                        onClick={() =>
-                          handleRentalStatus(req._id, "Approved")
-                        }
-                      >
-                        Approve
-                      </Button>
-
-                      <Button
-                        className="btn-danger-custom"
-                        onClick={() =>
-                          handleRentalStatus(req._id, "Rejected")
-                        }
-                      >
-                        Reject
-                      </Button>
-                    </>
-                  )}
-
-                  {req.status === "Approved" && (
                     <Button
-                      className="btn-info-custom"
+                      className="btn-chat"
                       onClick={() =>
-                        handleRentalStatus(req._id, "Active")
+                        handleChat(req.renter._id, req.product._id)
                       }
                     >
-                      Mark Active
+                      <MdOutlineMessage /> Chat
                     </Button>
-                  )}
 
-                  {(req.status === "Active" || req.status === "Overdue") && (
-                    <Button
-                      className="btn-primary-custom"
-                      onClick={() =>
-                        handleRentalStatus(req._id, "Returned")
-                      }
-                    >
-                      Confirm Return
-                    </Button>
-                  )}
-                </Col>
+                    {req.status === "Requested" && (
+                      <>
+                        <Button
+                          className="btn-success-custom"
+                          onClick={() =>
+                            handleRentalStatus(req._id, "Approved")
+                          }
+                        >
+                          Approve
+                        </Button>
 
-              </Row>
-            </div>
-          ))}
+                        <Button
+                          className="btn-danger-custom"
+                          onClick={() =>
+                            handleRentalStatus(req._id, "Rejected")
+                          }
+                        >
+                          Reject
+                        </Button>
+                      </>
+                    )}
+
+                    {req.status === "Approved" && (
+                      <Button
+                        className="btn-info-custom"
+                        onClick={() =>
+                          handleRentalStatus(req._id, "Active")
+                        }
+                      >
+                        Mark Active
+                      </Button>
+                    )}
+
+                    {(req.status === "Active" || req.status === "Overdue") && (
+                      <Button
+                        className="btn-primary-custom"
+                        onClick={() =>
+                          handleRentalStatus(req._id, "Returned")
+                        }
+                      >
+                        Confirm Return
+                      </Button>
+                    )}
+                  </Col>
+
+                </Row>
+              </div>
+            ))
+          )}
         </Card.Body>
       </Card>
 

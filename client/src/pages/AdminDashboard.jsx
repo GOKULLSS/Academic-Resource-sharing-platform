@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Button, Badge, Alert, Card } from 'react-bootstrap';
+import LoadingSpinner from '../components/LoadingSpinner';
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
     const [pendingProducts, setPendingProducts] = useState([]);
     const [contactMessages, setContactMessages] = useState([]);
     const [message, setMessage] = useState({ type: '', text: '' });
+    const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+    const [isLoadingMessages, setIsLoadingMessages] = useState(true);
 
     useEffect(() => {
         fetchPendingProducts();
@@ -14,6 +17,7 @@ const AdminDashboard = () => {
     }, []);
 
     const fetchContactMessages = async () => {
+        setIsLoadingMessages(true);
         try {
             const token = localStorage.getItem('token');
             const res = await axios.get('https://academic-resource-sharing-platform.onrender.com/api/contact', {
@@ -22,10 +26,13 @@ const AdminDashboard = () => {
             setContactMessages(res.data);
         } catch (error) {
             console.error("Failed to fetch contact messages");
+        } finally {
+            setIsLoadingMessages(false);
         }
     };
 
     const fetchPendingProducts = async () => {
+        setIsLoadingProducts(true);
         try {
             const token = localStorage.getItem('token');
             const res = await axios.get('https://academic-resource-sharing-platform.onrender.com/api/products/pending', {
@@ -34,6 +41,8 @@ const AdminDashboard = () => {
             setPendingProducts(res.data);
         } catch (error) {
             console.error("Failed to fetch pending products");
+        } finally {
+            setIsLoadingProducts(false);
         }
     };
 
@@ -93,7 +102,9 @@ const AdminDashboard = () => {
 
 <h3 className="section-title">Pending Products</h3>
 
-{pendingProducts.length === 0 ? (
+{isLoadingProducts ? (
+    <LoadingSpinner message="Loading pending products..." minHeight="10vh" />
+) : pendingProducts.length === 0 ? (
     <p className="empty-text">No pending products</p>
 ) : (
     pendingProducts.map((product) => (
@@ -154,7 +165,9 @@ const AdminDashboard = () => {
 
 <h3 className="section-title">Contact Messages</h3>
 
-{contactMessages.length === 0 ? (
+{isLoadingMessages ? (
+    <LoadingSpinner message="Loading messages..." minHeight="10vh" />
+) : contactMessages.length === 0 ? (
     <p className="empty-text">No messages</p>
 ) : (
     contactMessages.map((msg) => (

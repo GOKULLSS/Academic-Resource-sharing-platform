@@ -2,12 +2,13 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
-
+import LoadingSpinner from "./LoadingSpinner";
 
 
 const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
   const messagesEndRef = useRef(null);
@@ -63,6 +64,7 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
+    setIsLoadingMessages(true);
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
@@ -74,6 +76,8 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
       setMessages(res.data);
     } catch (error) {
       console.error("Failed to load messages", error);
+    } finally {
+      setIsLoadingMessages(false);
     }
   };
 
@@ -134,19 +138,23 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
         className="flex-grow-1 p-3"
         style={{ overflowY: "auto", backgroundColor: "#f8f9fa" }}
       >
-        {messages.map((m, i) => (
-          <div
-            key={m._id}
-            className={`d-flex mb-2 ${m.sender._id === user._id ? "justify-content-end" : "justify-content-start"}`}
-          >
+        {isLoadingMessages ? (
+          <LoadingSpinner message="Loading messages..." minHeight="10vh" />
+        ) : (
+          messages.map((m, i) => (
             <div
-              className={`p-2 rounded shadow-sm ${m.sender._id === user._id ? "bg-primary text-white" : "bg-white text-dark"}`}
-              style={{ maxWidth: "75%" }}
+              key={m._id}
+              className={`d-flex mb-2 ${m.sender._id === user._id ? "justify-content-end" : "justify-content-start"}`}
             >
-              {m.text}
+              <div
+                className={`p-2 rounded shadow-sm ${m.sender._id === user._id ? "bg-primary text-white" : "bg-white text-dark"}`}
+                style={{ maxWidth: "75%" }}
+              >
+                {m.text}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
         <div ref={messagesEndRef} />
       </div>
       <div className="p-3 border-top bg-white">
