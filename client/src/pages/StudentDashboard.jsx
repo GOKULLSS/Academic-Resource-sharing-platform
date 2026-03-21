@@ -403,21 +403,19 @@ const StudentDashboard = () => {
                 )}
                 <Form.Group className="mb-3">
                   <Form.Label>Product Image</Form.Label>
-                  {/* File Upload */}
+
                   <Form.Control
                     type="file"
                     accept="image/*"
+                    id="upload"
+                    style={{ display: "none" }}
                     onChange={(e) => setImage(e.target.files[0])}
-                    className="mb-2"
                   />
 
-                  {/* Camera Capture */}
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={(e) => setImage(e.target.files[0])}
-                  />
+                  <label htmlFor="upload" className="btn btn-primary mt-2">
+                    Upload Image
+                  </label>
+
                 </Form.Group>
                 <Button variant="primary" type="submit">
                   Submit Product
@@ -555,7 +553,7 @@ const StudentDashboard = () => {
           </Form>
         </Modal.Body>
       </Modal>
-    </Container>
+    </Container >
   );
 };
 
