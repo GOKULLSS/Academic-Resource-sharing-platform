@@ -20,7 +20,7 @@ const BuyerDashboard = () => {
         { userId, productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      navigate("/chat", { state: { chat: res.data } });
+      navigate(`/chat/${res.data._id}`, { state: { chat: res.data } });
     } catch (error) {
       console.error("Failed to start chat", error);
     }

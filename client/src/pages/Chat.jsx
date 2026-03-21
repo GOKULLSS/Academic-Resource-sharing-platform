@@ -1,9 +1,8 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { Container, Row, Col, ListGroup, Card } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
-import ChatInterface from '../components/ChatInterface';
 import LoadingSpinner from '../components/LoadingSpinner';
 import io from "socket.io-client";
 import "./Chat.css";
@@ -12,20 +11,14 @@ const Chat = () => {
     const { user } = useContext(AuthContext);
     const [chats, setChats] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedChat, setSelectedChat] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [socket, setSocket] = useState(null);
     const ENDPOINT = "https://academic-resource-sharing-platform.onrender.com";
-    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchChats();
-
-        // If navigated with a specific chat in state, auto-select it
-        if (location.state?.chat) {
-            setSelectedChat(location.state.chat);
-        }
-    }, [location.state]);
+    }, []);
 
     useEffect(() => {
         if (!user) return;
@@ -65,10 +58,10 @@ const Chat = () => {
 
     return (
         <Container className="mt-4" style={{ height: '80vh' }}>
-            <Row className="h-100">
+            <Row className="h-100 justify-content-center">
 
-                {/* Left Chat List */}
-                <Col xs={4} className="h-100">
+                {/* Central Chat List */}
+                <Col xs={12} md={8} lg={6} className="h-100">
                     <Card className="glass-card">
                         <Card.Header className="glass-card-header">My Chats</Card.Header>
 
@@ -81,14 +74,12 @@ const Chat = () => {
                                         <ListGroup.Item
                                             key={chat._id}
                                             action
-                                            onClick={() => setSelectedChat(chat)}
-                                            className={`chat-item ${
-                                                selectedChat?._id === chat._id ? 'active' : ''
-                                            }`}
+                                            onClick={() => navigate(`/chat/${chat._id}`, { state: { chat } })}
+                                            className="chat-item"
                                         >
                                             <div className="d-flex justify-content-between align-items-center">
                                                 <div>
-                                                    <span className="d-block fw-bold">{getChatName(user, chat.participants)}</span>
+                                                    <span className="d-block fw-bold text-white">{getChatName(user, chat.participants)}</span>
                                                     {chat.product && <small>Item: {chat.product.title}</small>}
                                                 </div>
 
@@ -111,23 +102,6 @@ const Chat = () => {
                                 </>
                             )}
                         </ListGroup>
-                    </Card>
-                </Col>
-
-                {/* Right Chat Interface */}
-                <Col xs={8} className="h-100">
-                    <Card className="glass-chat-panel h-100">
-                        {selectedChat ? (
-                            <ChatInterface
-                                selectedChat={selectedChat}
-                                onlineUsers={onlineUsers}
-                                socket={socket}
-                            />
-                        ) : (
-                            <div className="d-flex align-items-center justify-content-center h-100 text-muted no-chat-text">
-                                Select a user to start chatting
-                            </div>
-                        )}
                     </Card>
                 </Col>
 

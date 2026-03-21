@@ -65,7 +65,7 @@ const Home = () => {
       const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/chat', { userId: sellerId, productId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      navigate('/chat', { state: { chat: res.data } });
+      navigate(`/chat/${res.data._id}`, { state: { chat: res.data } });
     } catch (error) {
       console.error("Error creating/fetching chat", error);
     }

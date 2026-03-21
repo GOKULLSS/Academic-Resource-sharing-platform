@@ -8,6 +8,7 @@ import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Chat from './pages/Chat';
+import ChatPage from './pages/ChatPage';
 import SellerDashboard from "./pages/SellerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import Checkout from "./pages/Checkout";
@@ -27,6 +28,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/student" element={<StudentDashboard />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/:chatId" element={<ChatPage />} />
           </Route>
 
           <Route element={<ProtectedRoute adminOnly={true} />}>
