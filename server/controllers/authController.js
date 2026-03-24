@@ -17,10 +17,10 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
-    // Force a swift error if connection takes too long
-    connectionTimeout: 5000, 
-    greetingTimeout: 5000,
-    socketTimeout: 5000,
+    // Increased timeouts to 3 minutes for slower Render connections
+    connectionTimeout: 180000, 
+    greetingTimeout: 180000,
+    socketTimeout: 180000,
 });
 
 const registerUser = async (req, res) => {
