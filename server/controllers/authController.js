@@ -10,11 +10,17 @@ const generateToken = (id) => {
 };
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    // Force a swift error if connection takes too long
+    connectionTimeout: 5000, 
+    greetingTimeout: 5000,
+    socketTimeout: 5000,
 });
 
 const registerUser = async (req, res) => {
@@ -55,7 +61,7 @@ const registerUser = async (req, res) => {
                     return res.status(201).json({ message: 'Registration updated. Please verify your new OTP sent to email.', email: userExists.email });
                 } catch (mailError) {
                     console.error("Error sending email:", mailError);
-                    return res.status(201).json({ message: 'Registration completed but failed to send email. Check logs.', email: userExists.email });
+                    return res.status(500).json({ message: 'Failed to send OTP email. Please ensure the server has correct EMAIL_USER and EMAIL_PASS variables.' });
                 }
             }
         }
@@ -89,7 +95,8 @@ const registerUser = async (req, res) => {
                 res.status(201).json({ message: 'Registration successful. Please verify your OTP sent to email.', email: user.email });
             } catch (mailError) {
                 console.error("Error sending email:", mailError);
-                res.status(201).json({ message: 'Registration completed but failed to send email. Check logs.', email: user.email });
+                // Return explicitly as a 500 error so frontend stops correctly
+                res.status(500).json({ message: 'Failed to send OTP email. Please ensure the server has correct EMAIL_USER and EMAIL_PASS variables.' });
             }
         } else {
             res.status(400).json({ message: 'Invalid user data' });
