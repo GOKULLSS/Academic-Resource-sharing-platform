@@ -38,7 +38,7 @@ const Home = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      let url = 'http://localhost:5000/api/products?';
+      let url = 'https://academic-resource-sharing-platform.onrender.com/api/products?';
       if (category) url += `category=${category}&`;
       if (type) url += `type=${type}&`;
       if (searchQuery) url += `search=${searchQuery}&`;
@@ -74,7 +74,7 @@ const Home = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:5000/api/chat', { userId: sellerId, productId }, {
+      const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/chat', { userId: sellerId, productId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       navigate(`/chat/${res.data._id}`, { state: { chat: res.data } });
@@ -86,7 +86,7 @@ const Home = () => {
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/contact', contactForm);
+      await axios.post('https://academic-resource-sharing-platform.onrender.com/api/contact', contactForm);
 
       const subject = encodeURIComponent("Contact Message from " + contactForm.name);
       const body = encodeURIComponent(contactForm.message);
@@ -280,7 +280,7 @@ const Home = () => {
                   {product.image && (
                     <Card.Img
                       variant="top"
-                      src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                      src={product.image.startsWith('http') ? product.image : `https://academic-resource-sharing-platform.onrender.com${product.image}`}
                       className="product-image"
                     />
                   )}

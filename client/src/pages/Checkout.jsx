@@ -46,7 +46,7 @@ const Checkout = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/orders",
+        "https://academic-resource-sharing-platform.onrender.com/api/orders",
         {
           productId: product._id,
           pickupPreference: pickup,
@@ -100,7 +100,7 @@ const Checkout = () => {
               <div className="d-flex flex-column flex-sm-row gap-3">
                 {product.image ? (
                   <img
-                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                    src={product.image.startsWith('http') ? product.image : `https://academic-resource-sharing-platform.onrender.com${product.image}`}
                     alt={product.title}
                     style={{ width: "120px", height: "120px", objectFit: "cover", borderRadius: "8px" }}
                   />
