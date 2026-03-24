@@ -68,7 +68,7 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        `https://academic-resource-sharing-platform.onrender.com/api/chat/${selectedChat._id}/messages`,
+        `http://localhost:5000/api/chat/${selectedChat._id}/messages`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -97,7 +97,7 @@ const ChatInterface = ({ selectedChat, onlineUsers, socket }) => {
       setNewMessage("");
 
       const res = await axios.post(
-        "https://academic-resource-sharing-platform.onrender.com/api/chat/messages",
+        "http://localhost:5000/api/chat/messages",
         { content, chatId: selectedChat._id },
         { headers: { Authorization: `Bearer ${token}` } },
       );

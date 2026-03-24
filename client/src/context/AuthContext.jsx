@@ -32,13 +32,14 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/auth/login', { email, password });
+            const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
             localStorage.setItem('token', res.data.token);
             const userData = {
                 _id: res.data._id,
                 name: res.data.name,
                 email: res.data.email,
-                role: res.data.role
+                role: res.data.role,
+                college: res.data.college
             };
             localStorage.setItem('user', JSON.stringify(userData));
             setUser(userData);
@@ -49,21 +50,32 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (name, email, password, role) => {
+    const register = async (name, email, password, role, college) => {
         try {
-            const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/auth/register', { name, email, password, role });
+            const res = await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role, college });
+            return res.data; 
+        } catch (error) {
+            console.error("Registration failed:", error.response?.data?.message || error.message);
+            throw error;
+        }
+    };
+
+    const verifyOtp = async (email, otp) => {
+        try {
+            const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
             localStorage.setItem('token', res.data.token);
             const userData = {
                 _id: res.data._id,
                 name: res.data.name,
                 email: res.data.email,
-                role: res.data.role
+                role: res.data.role,
+                college: res.data.college
             };
             localStorage.setItem('user', JSON.stringify(userData));
             setUser(userData);
             return true;
         } catch (error) {
-            console.error("Registration failed:", error.response?.data?.message || error.message);
+            console.error("OTP verification failed:", error.response?.data?.message || error.message);
             throw error;
         }
     };
@@ -75,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, register, verifyOtp, logout }}>
             {children}
         </AuthContext.Provider>
     );

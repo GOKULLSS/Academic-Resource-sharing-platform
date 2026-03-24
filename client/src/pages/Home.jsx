@@ -16,6 +16,8 @@ const Home = () => {
   const [type, setType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
+  const [collegeFilterType, setCollegeFilterType] = useState('My College');
+  const [specificCollege, setSpecificCollege] = useState('');
 
   const categoryRef = useRef(null);
 
@@ -31,15 +33,25 @@ const Home = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [category, type, searchQuery]);
+  }, [category, type, searchQuery, collegeFilterType, specificCollege, user]); // Include filter states
 
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      let url = 'https://academic-resource-sharing-platform.onrender.com/api/products?';
+      let url = 'http://localhost:5000/api/products?';
       if (category) url += `category=${category}&`;
       if (type) url += `type=${type}&`;
       if (searchQuery) url += `search=${searchQuery}&`;
+      
+      let currentCollegeFilter = 'All Colleges';
+      if (collegeFilterType === 'My College' && user?.college) {
+          currentCollegeFilter = user.college;
+      } else if (collegeFilterType === 'Specific College' && specificCollege) {
+          currentCollegeFilter = specificCollege;
+      }
+      if (currentCollegeFilter !== 'All Colleges') {
+          url += `college=${encodeURIComponent(currentCollegeFilter)}&`;
+      }
 
       const res = await axios.get(url);
       setProducts(res.data);
@@ -62,7 +74,7 @@ const Home = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/chat', { userId: sellerId, productId }, {
+      const res = await axios.post('http://localhost:5000/api/chat', { userId: sellerId, productId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       navigate(`/chat/${res.data._id}`, { state: { chat: res.data } });
@@ -74,7 +86,7 @@ const Home = () => {
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://academic-resource-sharing-platform.onrender.com/api/contact', contactForm);
+      await axios.post('http://localhost:5000/api/contact', contactForm);
 
       const subject = encodeURIComponent("Contact Message from " + contactForm.name);
       const body = encodeURIComponent(contactForm.message);
@@ -208,7 +220,7 @@ const Home = () => {
 
         {/* 🔎 Search and Filter Section */}
         <Row className="align-items-center mb-5 g-3 glass-search">
-          <Col xs={6} md={8}>
+          <Col xs={12} md={4}>
             <Form.Control
               type="text"
               placeholder="Search products by title..."
@@ -217,7 +229,7 @@ const Home = () => {
               className="glass-input"
             />
           </Col>
-          <Col xs={6} md={4}>
+          <Col xs={12} md={4}>
             <Form.Select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -227,6 +239,26 @@ const Home = () => {
               <option value="Buy">For Sale Only</option>
               <option value="Rent">For Rent Only</option>
             </Form.Select>
+          </Col>
+          <Col xs={12} md={4}>
+            <Form.Select
+              value={collegeFilterType}
+              onChange={(e) => setCollegeFilterType(e.target.value)}
+              className="glass-input mb-2"
+            >
+              {user && <option value="My College">My College</option>}
+              <option value="All Colleges">All Colleges</option>
+              <option value="Specific College">Specific College</option>
+            </Form.Select>
+            {collegeFilterType === 'Specific College' && (
+              <Form.Control
+                type="text"
+                placeholder="Enter exact college name..."
+                value={specificCollege}
+                onChange={(e) => setSpecificCollege(e.target.value)}
+                className="glass-input mt-2"
+              />
+            )}
           </Col>
         </Row>
 
@@ -248,7 +280,7 @@ const Home = () => {
                   {product.image && (
                     <Card.Img
                       variant="top"
-                      src={product.image.startsWith('http') ? product.image : `https://academic-resource-sharing-platform.onrender.com${product.image}`}
+                      src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
                       className="product-image"
                     />
                   )}

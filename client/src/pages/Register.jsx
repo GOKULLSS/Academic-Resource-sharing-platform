@@ -8,6 +8,7 @@ const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [college, setCollege] = useState('');
     const [error, setError] = useState('');
     const { register, user } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -22,8 +23,8 @@ const Register = () => {
         e.preventDefault();
         setError('');
         try {
-            await register(name, email, password);
-            navigate('/');
+            await register(name, email, password, 'student', college);
+            navigate('/verify-otp', { state: { email } });
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to register');
         }
@@ -62,6 +63,17 @@ const Register = () => {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                                            required
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group className="mb-3">
+                                        <Form.Label style={{ color: 'white' }}>College Name</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Enter your college name"
+                                            value={college}
+                                            onChange={(e) => setCollege(e.target.value)}
                                             required
                                         />
                                     </Form.Group>

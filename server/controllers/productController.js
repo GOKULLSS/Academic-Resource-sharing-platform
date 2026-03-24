@@ -19,6 +19,7 @@ const createProduct = async (req, res) => {
             description,
             price,
             category,
+            college: req.user.college,
             transactionType,
             deposit: deposit || 0,
             condition,
@@ -97,8 +98,13 @@ const deleteProduct = async (req, res) => {
 // @access  Public
 const getLiveProducts = async (req, res) => {
     try {
-        const { category, type, search } = req.query;
+        const { category, type, search, college } = req.query;
         let query = { status: 'live' };
+        
+        if (college && college !== 'All Colleges') {
+            // Case-insensitive and unconcerned with trailing spaces
+            query.college = { $regex: college.trim(), $options: 'i' };
+        }
 
         if (category) query.category = category;
         if (type) query.transactionType = type;

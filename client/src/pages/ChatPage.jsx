@@ -13,7 +13,7 @@ const ChatPage = () => {
     const navigate = useNavigate();
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [socket, setSocket] = useState(null);
-    const ENDPOINT = "https://academic-resource-sharing-platform.onrender.com";
+    const ENDPOINT = "http://localhost:5000";
 
     // Reconstruct the chat object from location state, or if missing we'd normally fetch it.
     // Assuming location state contains chat because we navigated from /chat list.
