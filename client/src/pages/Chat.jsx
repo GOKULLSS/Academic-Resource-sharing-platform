@@ -53,7 +53,9 @@ const Chat = () => {
     };
 
     const getChatName = (loggedUser, users) => {
-        return users[0]._id === loggedUser._id ? users[1].name : users[0].name;
+        if (!loggedUser || !users) return "Unknown Chat";
+        const otherUser = users.find(u => u && u._id !== loggedUser._id);
+        return otherUser ? otherUser.name : "Deleted User";
     };
 
     return (
@@ -84,9 +86,10 @@ const Chat = () => {
                                                 </div>
 
                                                 {onlineUsers.some(
-                                                    (id) =>
-                                                        id.toString() ===
-                                                        chat.participants.find((p) => p._id !== user._id)._id.toString()
+                                                    (id) => {
+                                                        const otherParticipant = chat.participants.find((p) => p && p._id !== user._id);
+                                                        return otherParticipant && id.toString() === otherParticipant._id.toString();
+                                                    }
                                                 ) ? (
                                                     <span className="badge chat-badge online">Online</span>
                                                 ) : (

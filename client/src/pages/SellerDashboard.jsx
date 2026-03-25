@@ -13,6 +13,10 @@ const SellerDashboard = () => {
   const navigate = useNavigate();
 
   const handleChat = async (userId, productId) => {
+    if (!userId || !productId) {
+      alert("Cannot start chat: Missing user or product information.");
+      return;
+    }
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
@@ -144,7 +148,7 @@ const SellerDashboard = () => {
                     <Button
                       className="btn-chat"
                       onClick={() =>
-                        handleChat(order.buyer._id, order.product._id)
+                        handleChat(order.buyer?._id, order.product?._id)
                       }
                     >
                       <MdOutlineMessage /> Chat
@@ -248,7 +252,7 @@ const SellerDashboard = () => {
                     <Button
                       className="btn-chat"
                       onClick={() =>
-                        handleChat(req.renter._id, req.product._id)
+                        handleChat(req.renter?._id, req.product?._id)
                       }
                     >
                       <MdOutlineMessage /> Chat
