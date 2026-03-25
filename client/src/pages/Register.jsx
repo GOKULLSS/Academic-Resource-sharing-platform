@@ -26,7 +26,7 @@ const Register = () => {
         setLoading(true);
         try {
             await register(name, email, password, 'student', college);
-            navigate('/verify-otp', { state: { email } });
+            navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to register');
         } finally {

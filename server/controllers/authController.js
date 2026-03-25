@@ -1,16 +1,12 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { Resend } = require('resend');
-
+// Removed Resend and OTP dependencies
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '3d',
     });
 };
-
-// Initialize Resend with the API key from environment variables
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const registerUser = async (req, res) => {
     try {
@@ -23,76 +19,30 @@ const registerUser = async (req, res) => {
         const userExists = await User.findOne({ email });
 
         if (userExists) {
-            if (userExists.isVerified) {
-                return res.status(400).json({ message: 'User already exists and is verified. Please login.' });
-            } else {
-                // Resend OTP for unverified user
-                const otp = Math.floor(100000 + Math.random() * 900000).toString();
-                const otpExpires = Date.now() + 5 * 60 * 1000; // 5 mins
-                
-                const salt = await bcrypt.genSalt(10);
-                userExists.password = await bcrypt.hash(password, salt);
-                userExists.name = name;
-                userExists.college = college;
-                userExists.otp = otp;
-                userExists.otpExpires = otpExpires;
-                await userExists.save();
-
-                try {
-                    const emailResponse = await resend.emails.send({
-                        from: 'OnCampusMart OTP <onboarding@resend.dev>',
-                        to: userExists.email,
-                        subject: 'OnCampusMart - OTP Verification',
-                        html: `<p>Your OTP for registration is <strong>${otp}</strong>. It will expire in 5 minutes.</p>`
-                    });
-
-                    if (emailResponse.error) {
-                        return res.status(500).json({ message: 'Failed to send OTP email: ' + emailResponse.error.message });
-                    }
-
-                    return res.status(201).json({ message: 'Registration updated. Please verify your new OTP sent to email.', email: userExists.email });
-                } catch (mailError) {
-                    console.error("Error sending email:", mailError);
-                    return res.status(500).json({ message: 'Failed to send OTP email. Please ensure the server has correct EMAIL_USER and EMAIL_PASS variables.' });
-                }
-            }
+            return res.status(400).json({ message: 'User already exists. Please login.' });
         }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const otpExpires = Date.now() + 5 * 60 * 1000; // 5 mins
 
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
             college,
-            role: role || 'student', // Default to student
-            otp,
-            otpExpires
+            role: role || 'student',
+            isVerified: true
         });
 
         if (user) {
-            try {
-                const emailResponse = await resend.emails.send({
-                    from: 'OnCampusMart OTP <onboarding@resend.dev>',
-                    to: user.email,
-                    subject: 'OnCampusMart - OTP Verification',
-                    html: `<p>Your OTP for registration is <strong>${otp}</strong>. It will expire in 5 minutes.</p>`
-                });
-
-                if (emailResponse.error) {
-                    return res.status(500).json({ message: 'Failed to send OTP email: ' + emailResponse.error.message });
-                }
-
-                res.status(201).json({ message: 'Registration successful. Please verify your OTP sent to email.', email: user.email });
-            } catch (mailError) {
-                console.error("Error sending email:", mailError);
-                // Return explicitly as a 500 error so frontend stops correctly
-                res.status(500).json({ message: 'Failed to send OTP email. Please ensure the server has correct EMAIL_USER and EMAIL_PASS variables.' });
-            }
+            res.status(201).json({
+                _id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                college: user.college,
+                token: generateToken(user._id)
+            });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
         }
@@ -108,9 +58,6 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await bcrypt.compare(password, user.password))) {
-            if (!user.isVerified) {
-                return res.status(401).json({ message: 'Account not verified. Please verify OTP first.' });
-            }
             res.json({
                 _id: user.id,
                 name: user.name,

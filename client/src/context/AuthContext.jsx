@@ -58,7 +58,17 @@ export const AuthProvider = ({ children }) => {
     const register = async (name, email, password, role, college) => {
         try {
             const res = await axios.post(`${API_URL}/register`, { name, email, password, role, college });
-            return res.data; 
+            localStorage.setItem('token', res.data.token);
+            const userData = {
+                _id: res.data._id,
+                name: res.data.name,
+                email: res.data.email,
+                role: res.data.role,
+                college: res.data.college
+            };
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+            return true;
         } catch (error) {
             console.error("Registration failed:", error.response?.data?.message || error.message);
             throw error;
