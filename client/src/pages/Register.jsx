@@ -75,11 +75,19 @@ const Register = () => {
                                         <Form.Label style={{ color: 'white' }}>College Name</Form.Label>
                                         <Form.Control
                                             type="text"
-                                            placeholder="Enter your college name"
+                                            list="college-options"
+                                            placeholder="Select or enter your college name"
                                             value={college}
                                             onChange={(e) => setCollege(e.target.value)}
                                             required
                                         />
+                                        <datalist id="college-options">
+                                            <option value="Marian Engineering College" />
+                                            <option value="SCT" />
+                                            <option value="CET" />
+                                            <option value="TKM" />
+                                            <option value="Mar Baselios College of Engineering And Technology" />
+                                        </datalist>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">

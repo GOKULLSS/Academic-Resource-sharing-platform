@@ -295,6 +295,11 @@ const Home = () => {
                     </Card.Text>
 
                     <div className="mb-3">
+                      {collegeFilterType === 'All Colleges' && product.college && (
+                        <Badge bg="secondary" className="custom-badge me-2 border">
+                          🏫 {product.college}
+                        </Badge>
+                      )}
                       <Badge bg="light" text="dark" className="custom-badge me-2 border">
                         {product.category}
                       </Badge>
