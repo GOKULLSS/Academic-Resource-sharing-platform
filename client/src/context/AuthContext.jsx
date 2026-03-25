@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/auth';
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/auth/login', { email, password });
+            const res = await axios.post(`${API_URL}/login`, { email, password });
             localStorage.setItem('token', res.data.token);
             const userData = {
                 _id: res.data._id,
@@ -52,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (name, email, password, role, college) => {
         try {
-            const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/auth/register', { name, email, password, role, college });
+            const res = await axios.post(`${API_URL}/register`, { name, email, password, role, college });
             return res.data; 
         } catch (error) {
             console.error("Registration failed:", error.response?.data?.message || error.message);
@@ -62,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
     const verifyOtp = async (email, otp) => {
         try {
-            const res = await axios.post('https://academic-resource-sharing-platform.onrender.com/api/auth/verify-otp', { email, otp });
+            const res = await axios.post(`${API_URL}/verify-otp`, { email, otp });
             localStorage.setItem('token', res.data.token);
             const userData = {
                 _id: res.data._id,

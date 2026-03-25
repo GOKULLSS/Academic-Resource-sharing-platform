@@ -7,6 +7,7 @@ import './Login.css'; // Reusing Login CSS for simple styling
 const VerifyOtp = () => {
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { verifyOtp, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,11 +28,14 @@ const VerifyOtp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         try {
             await verifyOtp(email, otp);
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to verify OTP');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -62,8 +66,8 @@ const VerifyOtp = () => {
                                         />
                                     </Form.Group>
 
-                                    <Button variant="success" type="submit" className="w-100">
-                                        Verify & Login
+                                    <Button variant="success" type="submit" className="w-100" disabled={loading}>
+                                        {loading ? 'Verifying...' : 'Verify & Login'}
                                     </Button>
                                 </Form>
                                 <div className="mt-3 text-center">

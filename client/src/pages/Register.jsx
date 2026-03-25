@@ -10,6 +10,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [college, setCollege] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { register, user } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -22,11 +23,14 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         try {
             await register(name, email, password, 'student', college);
             navigate('/verify-otp', { state: { email } });
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to register');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -94,8 +98,9 @@ const Register = () => {
                                         type="submit"
                                         className="w-100 register-btn"
                                         style={{ color: 'white' }}
+                                        disabled={loading}
                                     >
-                                        Register
+                                        {loading ? 'Registering...' : 'Register'}
                                     </Button>
                                 </Form>
 
