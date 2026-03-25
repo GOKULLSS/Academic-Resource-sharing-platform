@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -9,19 +9,8 @@ const generateToken = (id) => {
     });
 };
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    // Increased timeouts to 3 minutes for slower Render connections
-    connectionTimeout: 180000, 
-    greetingTimeout: 180000,
-    socketTimeout: 180000,
-});
+// Initialize Resend with the API key from environment variables
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const registerUser = async (req, res) => {
     try {
@@ -49,15 +38,18 @@ const registerUser = async (req, res) => {
                 userExists.otpExpires = otpExpires;
                 await userExists.save();
 
-                const mailOptions = {
-                    from: process.env.EMAIL_USER,
-                    to: userExists.email,
-                    subject: 'OnCampusMart - OTP Verification',
-                    text: `Your OTP for registration is ${otp}. It will expire in 5 minutes.`
-                };
-                
                 try {
-                    await transporter.sendMail(mailOptions);
+                    const emailResponse = await resend.emails.send({
+                        from: 'OnCampusMart OTP <onboarding@resend.dev>',
+                        to: userExists.email,
+                        subject: 'OnCampusMart - OTP Verification',
+                        html: `<p>Your OTP for registration is <strong>${otp}</strong>. It will expire in 5 minutes.</p>`
+                    });
+
+                    if (emailResponse.error) {
+                        return res.status(500).json({ message: 'Failed to send OTP email: ' + emailResponse.error.message });
+                    }
+
                     return res.status(201).json({ message: 'Registration updated. Please verify your new OTP sent to email.', email: userExists.email });
                 } catch (mailError) {
                     console.error("Error sending email:", mailError);
@@ -83,15 +75,18 @@ const registerUser = async (req, res) => {
         });
 
         if (user) {
-            const mailOptions = {
-                from: process.env.EMAIL_USER,
-                to: user.email,
-                subject: 'OnCampusMart - OTP Verification',
-                text: `Your OTP for registration is ${otp}. It will expire in 5 minutes.`
-            };
-            
             try {
-                await transporter.sendMail(mailOptions);
+                const emailResponse = await resend.emails.send({
+                    from: 'OnCampusMart OTP <onboarding@resend.dev>',
+                    to: user.email,
+                    subject: 'OnCampusMart - OTP Verification',
+                    html: `<p>Your OTP for registration is <strong>${otp}</strong>. It will expire in 5 minutes.</p>`
+                });
+
+                if (emailResponse.error) {
+                    return res.status(500).json({ message: 'Failed to send OTP email: ' + emailResponse.error.message });
+                }
+
                 res.status(201).json({ message: 'Registration successful. Please verify your OTP sent to email.', email: user.email });
             } catch (mailError) {
                 console.error("Error sending email:", mailError);
