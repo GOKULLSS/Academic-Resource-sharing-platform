@@ -4,7 +4,10 @@ import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/auth';
+const API_URL = import.meta.env.VITE_API_URL || 
+    (window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000/api/auth' 
+        : 'https://academic-resource-sharing-platform.onrender.com/api/auth');
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
