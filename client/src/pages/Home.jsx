@@ -8,7 +8,7 @@ import './Home.css';
 import { FaInstagram, FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa"; import { MdOutlineMessage } from "react-icons/md";
 
 const Home = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading: authLoading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +32,10 @@ const Home = () => {
   ];
 
   useEffect(() => {
-    fetchProducts();
-  }, [category, type, searchQuery, collegeFilterType, specificCollege, user]); // Include filter states
+    if (!authLoading) {
+      fetchProducts();
+    }
+  }, [category, type, searchQuery, collegeFilterType, specificCollege, user, authLoading]); // Include filter states
 
   const fetchProducts = async () => {
     setIsLoading(true);
