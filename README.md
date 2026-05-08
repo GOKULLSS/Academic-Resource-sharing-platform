@@ -6,7 +6,9 @@
 ---
 
 ## 📖 Description
-OnCampusMart is a secure, localized e-commerce platform built exclusively for college students. It enables users to trade academic resources, electronics, and daily essentials with their peers. By implementing OTP-based college email verification and campus-specific filtering, it ensures a safe and trustworthy environment for all transactions.
+OnCampusMart is a secure, campus-focused e-commerce platform designed exclusively for college students. It enables users to buy, sell, and rent academic resources, electronics, and daily essentials within their campus community. The platform promotes sustainability by encouraging the reuse and recycling of unused products.
+
+All product deliveries are verified by an admin before reaching the buyer, ensuring trust and safety within the system. It also includes a rental feature with automatic late fee calculation.
 
 ## 🚀 Live Demo
 
