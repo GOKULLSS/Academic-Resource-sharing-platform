@@ -76,112 +76,112 @@ const AdminDashboard = () => {
     return (
         <Container className="mt-4">
 
-{/* HEADER CARD */}
-<div className="dashboard-header">
-    <h2>Admin Dashboard</h2>
-    <p>Verify and manage product listings before they go live.</p>
+            {/* HEADER CARD */}
+            <div className="dashboard-header">
+                <h2>Admin Dashboard</h2>
+                <p>Verify and manage product listings before they go live.</p>
 
-    <div className="info-box">
-        Admin verification ensures only quality items appear in marketplace.
-    </div>
-</div>
-
-{/* ALERT */}
-{message.text && (
-    <Alert
-        variant={message.type}
-        onClose={() => setMessage({ type: '', text: '' })}
-        dismissible
-    >
-        {message.text}
-    </Alert>
-)}
-
-{/* PRODUCTS SECTION */}
-<div className="products-card">
-
-<h3 className="section-title">Pending Products</h3>
-
-{isLoadingProducts ? (
-    <LoadingSpinner message="Loading pending products..." minHeight="10vh" />
-) : pendingProducts.length === 0 ? (
-    <p className="empty-text">No pending products</p>
-) : (
-    pendingProducts.map((product) => (
-
-        <div key={product._id} className="product-row">
-
-            {/* IMAGE */}
-            <img
-                src={
-                    product.image?.startsWith('http')
-                        ? product.image
-                        : `https://academic-resource-sharing-platform.onrender.com${product.image}`
-                }
-                alt={product.title}
-                className="product-img"
-            />
-
-            {/* TITLE */}
-            <div className="product-title">{product.title}</div>
-
-            {/* PRICE */}
-            <div className="product-price">₹{product.price}{product.transactionType === "Rent" && " / day"}</div>
-
-            {/* STATUS */}
-            <div className="status-badge pending">
-                Pending
+                <div className="info-box">
+                    Admin verification ensures only quality items appear in marketplace.
+                </div>
             </div>
 
-            {/* ACTIONS */}
-            <div className="action-buttons">
-
-                <Button
-                    size="sm"
-                    className="approve-btn"
-                    onClick={() => handleApprove(product._id)}
+            {/* ALERT */}
+            {message.text && (
+                <Alert
+                    variant={message.type}
+                    onClose={() => setMessage({ type: '', text: '' })}
+                    dismissible
                 >
-                    Approve
-                </Button>
+                    {message.text}
+                </Alert>
+            )}
 
-                <Button
-                    size="sm"
-                    className="reject-btn"
-                    onClick={() => handleReject(product._id)}
-                >
-                    Reject
-                </Button>
+            {/* PRODUCTS SECTION */}
+            <div className="products-card">
+
+                <h3 className="section-title">Pending Products</h3>
+
+                {isLoadingProducts ? (
+                    <LoadingSpinner message="Loading pending products..." minHeight="10vh" />
+                ) : pendingProducts.length === 0 ? (
+                    <p className="empty-text">No pending products</p>
+                ) : (
+                    pendingProducts.map((product) => (
+
+                        <div key={product._id} className="product-row">
+
+                            {/* IMAGE */}
+                            <img
+                                src={
+                                    product.image?.startsWith('http')
+                                        ? product.image
+                                        : `https://academic-resource-sharing-platform.onrender.com${product.image}`
+                                }
+                                alt={product.title}
+                                className="admin-product-img"
+                            />
+
+                            {/* TITLE */}
+                            <div className="product-title">{product.title}</div>
+
+                            {/* PRICE */}
+                            <div className="product-price">₹{product.price}{product.transactionType === "Rent" && " / day"}</div>
+
+                            {/* STATUS */}
+                            <div className="status-badge pending">
+                                Pending
+                            </div>
+
+                            {/* ACTIONS */}
+                            <div className="action-buttons">
+
+                                <Button
+                                    size="sm"
+                                    className="approve-btn"
+                                    onClick={() => handleApprove(product._id)}
+                                >
+                                    Approve
+                                </Button>
+
+                                <Button
+                                    size="sm"
+                                    className="reject-btn"
+                                    onClick={() => handleReject(product._id)}
+                                >
+                                    Reject
+                                </Button>
+
+                            </div>
+
+                        </div>
+                    ))
+                )}
 
             </div>
 
-        </div>
-    ))
-)}
+            {/* CONTACT SECTION */}
+            <div className="products-card mt-4">
 
-</div>
+                <h3 className="section-title">Contact Messages</h3>
 
-{/* CONTACT SECTION */}
-<div className="products-card mt-4">
+                {isLoadingMessages ? (
+                    <LoadingSpinner message="Loading messages..." minHeight="10vh" />
+                ) : contactMessages.length === 0 ? (
+                    <p className="empty-text">No messages</p>
+                ) : (
+                    contactMessages.map((msg) => (
+                        <div key={msg._id} className="message-row">
+                            <div>{msg.name}</div>
+                            <div>{msg.email}</div>
+                            <div>{msg.message}</div>
+                        </div>
+                    ))
+                )}
 
-<h3 className="section-title">Contact Messages</h3>
+            </div>
 
-{isLoadingMessages ? (
-    <LoadingSpinner message="Loading messages..." minHeight="10vh" />
-) : contactMessages.length === 0 ? (
-    <p className="empty-text">No messages</p>
-) : (
-    contactMessages.map((msg) => (
-        <div key={msg._id} className="message-row">
-            <div>{msg.name}</div>
-            <div>{msg.email}</div>
-            <div>{msg.message}</div>
-        </div>
-    ))
-)}
-
-</div>
-
-</Container>
+        </Container>
     );
 };
 
