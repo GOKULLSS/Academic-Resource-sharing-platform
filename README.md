@@ -27,9 +27,13 @@ All product deliveries are verified by an admin before reaching the buyer, ensur
 - **Responsive Design:** Mobile-friendly UI for easy access on any device.
 
 
-## 👨‍💻 Author
+## 👨‍💻 Team Members
 **Gokul.S**
 - GitHub: [gokullss](https://github.com/gokullss)
+**Gowtham Krishna**
+- GitHub: [mysterio05](https://github.com/mysterio05)
+**Leo Philip Joseph**
+- GitHub: [LINTAMARYJOSEPH](https://github.com/LINTAMARYJOSEPH)
 
 ---
 <div align="center">
