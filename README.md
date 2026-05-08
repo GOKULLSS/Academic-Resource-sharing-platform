@@ -28,11 +28,14 @@ All product deliveries are verified by an admin before reaching the buyer, ensur
 
 
 ## 👨‍💻 Team Members
-**Gokul.S**
+
+### Gokul.S
 - GitHub: [gokullss](https://github.com/gokullss)
-**Gowtham Krishna**
+
+### Gowtham Krishna
 - GitHub: [mysterio05](https://github.com/mysterio05)
-**Leo Philip Joseph**
+
+### Leo Philip Joseph
 - GitHub: [LINTAMARYJOSEPH](https://github.com/LINTAMARYJOSEPH)
 
 ---
