@@ -40,7 +40,7 @@ const Login = () => {
     <div className="login-page">
       <Card className="login-card p-4">
         <Card.Body>
-          <h2 className="text-center mb-4 fw-bold">Login</h2>
+          <h2 className="text-center mb-4 login-title">Login</h2>
 
           {error && <Alert variant="danger">{error}</Alert>}
 
@@ -65,14 +65,14 @@ const Login = () => {
               />
             </Form.Group>
 
-            <Button variant="success" type="submit" className="w-100">
+            <Button type="submit" className="login-btn">
               Login
             </Button>
           </Form>
 
-          <div className="mt-3 text-center">
+          <div className="mt-3 text-center bottom-text">
             Don't have an account?{" "}
-            <Link to="/register" className="fw-bold text-decoration-none">
+            <Link to="/register" className="register-link text-decoration-none">
               Register here
             </Link>
           </div>
