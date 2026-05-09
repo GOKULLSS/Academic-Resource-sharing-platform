@@ -76,7 +76,7 @@
    LABELS
 ========================= */
 
-.form-label {
+.register-page .form-label {
     color: rgb(189, 232, 245);
     font-weight: 500;
     margin-bottom: 8px;
@@ -87,8 +87,8 @@
    INPUT FIELDS
 ========================= */
 
-.form-control,
-.form-select {
+.register-page .form-control,
+.register-page .form-select {
     background: rgba(255, 255, 255, 0.14);
     border: 1px solid rgba(255, 255, 255, 0.2);
 
@@ -102,12 +102,12 @@
     backdrop-filter: blur(6px);
 }
 
-.form-control::placeholder {
+.register-page .form-control::placeholder {
     color: rgba(255, 255, 255, 0.65);
 }
 
-.form-control:focus,
-.form-select:focus {
+.register-page .form-control:focus,
+.register-page .form-select:focus {
     background: rgba(255, 255, 255, 0.18);
 
     border-color: rgb(189, 232, 245);
@@ -162,7 +162,7 @@
    ALERT
 ========================= */
 
-.alert-danger {
+.register-page .alert-danger {
     border-radius: 10px;
     border: none;
 }

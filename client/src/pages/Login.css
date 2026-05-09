@@ -41,7 +41,6 @@
   animation-delay: 2s;
 }
 
-
 .login-card {
   position: relative;
   z-index: 2;
@@ -79,7 +78,8 @@
   font-weight: 500;
 }
 
-.form-control {
+/* Scoped form control */
+.login-page .form-control {
   background: rgba(255, 255, 255, 0.18) !important;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 12px;
@@ -88,11 +88,11 @@
   transition: all 0.3s ease;
 }
 
-.form-control::placeholder {
+.login-page .form-control::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.form-control:focus {
+.login-page .form-control:focus {
   border-color: rgb(189, 232, 245);
   box-shadow: 0 0 12px rgba(189, 232, 245, 0.6);
   background: rgba(255, 255, 255, 0.22) !important;
@@ -133,6 +133,7 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
-.alert {
+/* Scoped alert */
+.login-page .alert {
   border-radius: 12px;
 }
