@@ -75,7 +75,7 @@ const Checkout = () => {
       <Row className="g-4">
         {/* Left Column - Product info, Delivery, Buyer Info */}
         <Col md={7}>
-          
+
           {/* 1. Buyer Information */}
           <Card className="mb-4 shadow-sm border-0 rounded-3">
             <Card.Header className="bg-white border-bottom-0 pt-3 pb-0">
@@ -102,10 +102,10 @@ const Checkout = () => {
                   <img
                     src={product.image.startsWith('http') ? product.image : `https://academic-resource-sharing-platform.onrender.com${product.image}`}
                     alt={product.title}
-                    style={{ width: "120px", height: "120px", objectFit: "cover", borderRadius: "8px" }}
+                    style={{ width: "120px", height: "120px", objectFit: "contain", borderRadius: "8px" }}
                   />
                 ) : (
-                  <div 
+                  <div
                     style={{ width: "120px", height: "120px", backgroundColor: "#f8f9fa", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}
                   >
                     <span className="text-muted">No Image</span>
@@ -134,33 +134,33 @@ const Checkout = () => {
             <Card.Body>
               <Form>
                 <div className="p-3 border rounded mb-2 bg-light">
-                  <Form.Check 
+                  <Form.Check
                     type="radio"
                     id="delivery-campus"
                     name="deliveryMethod"
-                    label={<><strong className="ms-1">Meet on campus</strong><br/><span className="text-muted small ms-1">Meet at a common location inside the campus.</span></>}
+                    label={<><strong className="ms-1">Meet on campus</strong><br /><span className="text-muted small ms-1">Meet at a common location inside the campus.</span></>}
                     value="Meet on campus"
                     checked={pickup === "Meet on campus"}
                     onChange={(e) => setPickup(e.target.value)}
                   />
                 </div>
                 <div className="p-3 border rounded mb-2">
-                  <Form.Check 
+                  <Form.Check
                     type="radio"
                     id="delivery-pickup"
                     name="deliveryMethod"
-                    label={<><strong className="ms-1">Pickup from seller</strong><br/><span className="text-muted small ms-1">Go to the seller's location to collect the item.</span></>}
+                    label={<><strong className="ms-1">Pickup from seller</strong><br /><span className="text-muted small ms-1">Go to the seller's location to collect the item.</span></>}
                     value="Pickup from seller"
                     checked={pickup === "Pickup from seller"}
                     onChange={(e) => setPickup(e.target.value)}
                   />
                 </div>
                 <div className="p-3 border rounded">
-                  <Form.Check 
+                  <Form.Check
                     type="radio"
                     id="delivery-hostel"
                     name="deliveryMethod"
-                    label={<><strong className="ms-1">Hostel Delivery (if available)</strong><br/><span className="text-muted small ms-1">Request the seller to deliver it to your hostel.</span></>}
+                    label={<><strong className="ms-1">Hostel Delivery (if available)</strong><br /><span className="text-muted small ms-1">Request the seller to deliver it to your hostel.</span></>}
                     value="Hostel delivery"
                     checked={pickup === "Hostel delivery"}
                     onChange={(e) => setPickup(e.target.value)}
@@ -209,9 +209,9 @@ const Checkout = () => {
               </div>
 
               <Form.Group className="mb-4" controlId="termsCheckbox">
-                <Form.Check 
-                  type="checkbox" 
-                  label={<span className={error && !agreed ? "text-danger fw-bold" : "text-dark"}>I agree to the Terms and Conditions</span>} 
+                <Form.Check
+                  type="checkbox"
+                  label={<span className={error && !agreed ? "text-danger fw-bold" : "text-dark"}>I agree to the Terms and Conditions</span>}
                   checked={agreed}
                   onChange={(e) => {
                     setAgreed(e.target.checked);
@@ -221,9 +221,9 @@ const Checkout = () => {
                 />
               </Form.Group>
 
-              <Button 
-                variant="primary" 
-                size="lg" 
+              <Button
+                variant="primary"
+                size="lg"
                 className="w-100 py-3 fw-bold shadow-sm rounded-pill"
                 onClick={handleConfirmClick}
               >
