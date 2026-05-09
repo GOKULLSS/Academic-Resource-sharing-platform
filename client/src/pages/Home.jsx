@@ -44,15 +44,15 @@ const Home = () => {
       if (category) url += `category=${category}&`;
       if (type) url += `type=${type}&`;
       if (searchQuery) url += `search=${searchQuery}&`;
-      
+
       let currentCollegeFilter = 'All Colleges';
       if (collegeFilterType === 'My College' && user?.college) {
-          currentCollegeFilter = user.college;
+        currentCollegeFilter = user.college;
       } else if (collegeFilterType === 'Specific College' && specificCollege) {
-          currentCollegeFilter = specificCollege;
+        currentCollegeFilter = specificCollege;
       }
       if (currentCollegeFilter !== 'All Colleges') {
-          url += `college=${encodeURIComponent(currentCollegeFilter)}&`;
+        url += `college=${encodeURIComponent(currentCollegeFilter)}&`;
       }
 
       const res = await axios.get(url);
@@ -157,10 +157,6 @@ const Home = () => {
                 src="/connecting.jpg"
                 alt="University Campus"
               />
-              <Carousel.Caption>
-                <h3>Connect with your Campus</h3>
-                <p>Buy,Rent and sell directly with students in your university.</p>
-              </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item interval={2500}>
               <img
@@ -168,10 +164,6 @@ const Home = () => {
                 src="/exchanging.jpg"
                 alt="Study Materials"
               />
-              <Carousel.Caption>
-                <h3>Affordable Study Materials</h3>
-                <p>Find second-hand books and notes at a fraction of the cost.</p>
-              </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item interval={2500}>
               <img
@@ -179,10 +171,6 @@ const Home = () => {
                 src="/throwing.jpg"
                 alt="Student Life"
               />
-              <Carousel.Caption>
-                <h3>Easy Renting</h3>
-                <p>Rent your items effortlessly.</p>
-              </Carousel.Caption>
             </Carousel.Item>
           </Carousel>
         </div>
@@ -267,7 +255,7 @@ const Home = () => {
         {/* 🛒 Products Grid */}
         <Row>
           {isLoading ? (
-            <LoadingSpinner message="Fetching products from campus..." />
+            <LoadingSpinner message="Fetching products from campus please wait..." />
           ) : products.length === 0 ? (
             <Col>
               <div className="text-center text-muted py-5 empty-state">
