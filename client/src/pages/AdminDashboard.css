@@ -52,21 +52,23 @@
 
 /* IMAGE */
 .admin-product-img {
-    width: 60px;
-    height: 60px;
+    width: 10vw;
+    height: 10vw;
     object-fit: contain;
     border-radius: 10px;
+    flex-shrink: 0;
 }
 
 /* TITLE */
 .product-title {
     flex: 1;
-    margin-left: 20px;
+    min-width: 0;
+    overflow-wrap: anywhere
 }
 
 /* PRICE */
 .product-price {
-    width: 100px;
+    white-space: nowrap;
 }
 
 /* STATUS */
@@ -92,11 +94,41 @@
 
 /* BUTTONS */
 .action-buttons button {
-    margin-left: 10px;
     border: none;
     padding: 6px 12px;
     border-radius: 8px;
     transition: 0.3s;
+    margin: 0;
+}
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+    .admin-product-img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .product-title {
+        font-size: 15px;
+    }
+
+    .product-price {
+        font-size: 14px;
+    }
+
+    .status-badge {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .action-buttons button {
+        flex: 1;
+        padding: 8px;
+    }
 }
 
 /* APPROVE */

@@ -429,6 +429,7 @@ body {
   -ms-overflow-style: none;
   scrollbar-color: var(--primary-medium) transparent;
   padding-left: 12px;
+  justify-content: center;
 }
 
 .category-bar:hover {
